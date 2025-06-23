@@ -1,0 +1,6 @@
+# ninja log v5
+1	12	0	/Users/apple/Documents/MobileApplication/appConstruction/android/app/.cxx/Debug/4u673m23/armeabi-v7a/CMakeFiles/cmake.verify_globs	e8e98f6542e38149
+0	1270	1750690542205898672	CMakeFiles/appmodules.dir/Users/apple/Documents/MobileApplication/appConstruction/android/app/build/generated/autolinking/src/main/jni/autolinking.cpp.o	fc3f661af676ab5b
+0	1418	1750690542353140024	CMakeFiles/appmodules.dir/OnLoad.cpp.o	5aae028e1c67c659
+1418	1476	1750690542414949164	/Users/apple/Documents/MobileApplication/appConstruction/android/app/build/intermediates/cxx/Debug/4u673m23/obj/armeabi-v7a/libappmodules.so	616e831397db8753
+1	11	0	/Users/apple/Documents/MobileApplication/appConstruction/android/app/.cxx/Debug/4u673m23/armeabi-v7a/CMakeFiles/cmake.verify_globs	e8e98f6542e38149

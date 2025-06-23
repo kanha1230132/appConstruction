@@ -1,0 +1,1 @@
+/Users/apple/Documents/MobileApplication/appConstruction/android/app/build/intermediates/cxx/Debug/4u673m23/obj/arm64-v8a
