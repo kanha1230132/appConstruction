@@ -1,0 +1,5 @@
+# ninja log v5
+0	9	0	/Users/apple/Desktop/mobileApp/appConstruction/android/app/.cxx/Debug/1v3s2c3m/x86_64/CMakeFiles/cmake.verify_globs	884a2eac34ad5ab0
+0	1293	1750688080191950196	CMakeFiles/appmodules.dir/Users/apple/Desktop/mobileApp/appConstruction/android/app/build/generated/autolinking/src/main/jni/autolinking.cpp.o	f6a06bcf4da47a48
+0	1418	1750688080314308712	CMakeFiles/appmodules.dir/OnLoad.cpp.o	6da10d556e2c407b
+1418	1470	1750688080370972926	/Users/apple/Desktop/mobileApp/appConstruction/android/app/build/intermediates/cxx/Debug/1v3s2c3m/obj/x86_64/libappmodules.so	e05968dafc581bd4

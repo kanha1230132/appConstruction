@@ -1,0 +1,4 @@
+/Users/apple/Desktop/mobileApp/appConstruction/android/app/.cxx/Debug/1v3s2c3m/armeabi-v7a/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/foo.dir
+/Users/apple/Desktop/mobileApp/appConstruction/android/app/.cxx/Debug/1v3s2c3m/armeabi-v7a/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/boo.dir
+/Users/apple/Desktop/mobileApp/appConstruction/android/app/.cxx/Debug/1v3s2c3m/armeabi-v7a/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/edit_cache.dir
+/Users/apple/Desktop/mobileApp/appConstruction/android/app/.cxx/Debug/1v3s2c3m/armeabi-v7a/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/rebuild_cache.dir
