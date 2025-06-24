@@ -1,16 +1,29 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React from "react";
+import { SafeAreaWrapper } from "../../components/SafeAreaWrapper/SafeAreaWrapper";
+import Icon from "react-native-vector-icons/MaterialIcons";
+import { AppColor } from "../../themes/AppColor";
+import { HomeScreenProps } from "../../types/navigation";
+import { DrawerActions } from "@react-navigation/native";
 
-interface HomeScreenProps {}
-
-const HomeScreen: React.FC<HomeScreenProps> = () => {
+const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   return (
-    <View>
-      <Text>HomeScreen</Text>
-    </View>
-  )
-}
+    <>
+      <SafeAreaWrapper>
+        <View>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.dispatch(DrawerActions.toggleDrawer());
+            }}
+          >
+            <Icon name="dehaze" size={24} color={AppColor.PRIMARY} />
+          </TouchableOpacity>
+        </View>
+      </SafeAreaWrapper>
+    </>
+  );
+};
 
-export default HomeScreen
+export default HomeScreen;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

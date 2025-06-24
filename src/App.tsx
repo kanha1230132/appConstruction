@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import {Platform, StatusBar, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';

@@ -22,6 +22,7 @@ const DynamicSafeAreaView = ({ children, style }: { children: ReactNode; style?:
           paddingLeft: insets.left,
           paddingRight: insets.right,
           flex: 1,
+          backgroundColor: AppColor.WHITE
         },
         style
       ]}

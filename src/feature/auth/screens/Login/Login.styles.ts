@@ -49,12 +49,13 @@ const styles = StyleSheet.create({
   divider: {
     height: 1,
     backgroundColor: AppColor.DISABLED,
-    width: '43%',
+    width: '40%',
   },
   orText: {
     color: AppColor.BLACK,
     fontFamily: AppFonts.Medium,
     fontSize: 16,
+    marginHorizontal:10
   },
   signupContainer: {
     flexDirection: 'row',

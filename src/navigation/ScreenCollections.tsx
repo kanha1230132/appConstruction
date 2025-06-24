@@ -1,8 +1,10 @@
-import React from "react";
+import React, { Component } from "react";
 import { ForgotPasswordScreen, LoginScreen, RegisterScreen } from "../feature/auth";
 import SplashScreen from "../feature/splash/SplashScreen";
 import { screenNames } from "./ScreenNames";
 import HomeScreen from "../feature/home/HomeScreen";
+import DrawerNavigator from "./DrawerNavigator";
+import BottomTabNavigator from "./BottomTabNavigator";
 
 export const authStack = [
   {
@@ -22,9 +24,17 @@ export const authStack = [
     component: ForgotPasswordScreen,
   },
   {
+    name: screenNames.MainApp,
+    component: DrawerNavigator,
+  },
+  {
     name: screenNames.HomeScreen,
     component: HomeScreen,
   
+  },
+  {
+    name:screenNames.HomeTabs,
+    component:BottomTabNavigator
   }
 
 ];
