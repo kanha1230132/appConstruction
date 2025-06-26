@@ -46,10 +46,13 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/Users/apple/Documents/MobileApplication/appConstruction/android/app/.cxx/Debug/4u673m23/armeabi-v7a/rnasyncstorage_autolinked_build/cmake_install.cmake")
   include("/Users/apple/Documents/MobileApplication/appConstruction/android/app/.cxx/Debug/4u673m23/armeabi-v7a/rngesturehandler_codegen_autolinked_build/cmake_install.cmake")
+  include("/Users/apple/Documents/MobileApplication/appConstruction/android/app/.cxx/Debug/4u673m23/armeabi-v7a/RNPermissionsSpec_autolinked_build/cmake_install.cmake")
   include("/Users/apple/Documents/MobileApplication/appConstruction/android/app/.cxx/Debug/4u673m23/armeabi-v7a/rnreanimated_autolinked_build/cmake_install.cmake")
   include("/Users/apple/Documents/MobileApplication/appConstruction/android/app/.cxx/Debug/4u673m23/armeabi-v7a/safeareacontext_autolinked_build/cmake_install.cmake")
   include("/Users/apple/Documents/MobileApplication/appConstruction/android/app/.cxx/Debug/4u673m23/armeabi-v7a/rnscreens_autolinked_build/cmake_install.cmake")
   include("/Users/apple/Documents/MobileApplication/appConstruction/android/app/.cxx/Debug/4u673m23/armeabi-v7a/RNVectorIconsSpec_autolinked_build/cmake_install.cmake")
+  include("/Users/apple/Documents/MobileApplication/appConstruction/android/app/.cxx/Debug/4u673m23/armeabi-v7a/RNVoiceToTextSpec_autolinked_build/cmake_install.cmake")
+  include("/Users/apple/Documents/MobileApplication/appConstruction/android/app/.cxx/Debug/4u673m23/armeabi-v7a/RNCWebViewSpec_autolinked_build/cmake_install.cmake")
 
 endif()
 

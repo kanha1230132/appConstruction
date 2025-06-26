@@ -11,9 +11,10 @@ import {images} from '../../../../assets';
 import {AppColor} from '../../../../themes/AppColor';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {ForgotPasswordScreenProps} from '../../../../types/navigation';
-import {goBack} from '../../../../utils/NavigationUtil';
+import {goBack, navigate} from '../../../../utils/NavigationUtil';
 import LoaderButton from '../../../../components/Button/LoaderButton';
 import { styles } from './ForgotPassword.styles';
+import { screenNames } from '../../../../navigation/ScreenNames';
 
 const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({}) => {
   const [isFocus, setIsFocus] = useState(false);
@@ -62,7 +63,7 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({}) => {
       </SafeAreaWrapper>
       
       <View style={styles.button}>
-        <LoaderButton title="Continue" onPress={() => {}} loading={IsLoading} />
+        <LoaderButton title="Continue" onPress={() => navigate(screenNames.VerifyOTPScreen)} loading={IsLoading} />
       </View>
     </>
   );

@@ -5,6 +5,11 @@ import { screenNames } from "./ScreenNames";
 import HomeScreen from "../feature/home/HomeScreen";
 import DrawerNavigator from "./DrawerNavigator";
 import BottomTabNavigator from "./BottomTabNavigator";
+import VerifyOtpScreen from "../feature/auth/screens/VerifyOtp/VerifyOtpScreen";
+import WebViewScreen from "../feature/webview/WebViewScreen";
+import AddUserScreen from "../feature/addUser/AddUserScreen";
+import LogoScreen from "../feature/logo/LogoScreen";
+import LogoUploadScreen from "../feature/logo/screens/logoUpload/LogoUploadScreen";
 
 export const authStack = [
   {
@@ -35,7 +40,28 @@ export const authStack = [
   {
     name:screenNames.HomeTabs,
     component:BottomTabNavigator
+  },
+  {
+     name:screenNames.VerifyOTPScreen,
+    component:VerifyOtpScreen
+  },
+  {
+     name:screenNames.WebViewScreen,
+    component:WebViewScreen
+  },
+  {
+     name:screenNames.AddUserScreen,
+    component:AddUserScreen
+  },
+  {
+     name:screenNames.LogoScreen,
+    component:LogoScreen
+  },
+  {
+    name:screenNames.LogoUploadScreen,
+    component:LogoUploadScreen
   }
+  
 
 ];
 

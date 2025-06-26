@@ -3,18 +3,35 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   UserId: '',
   UserToken: '',
+  IsBoss: false,
+  UserName: '',
+  UserEmail:''
 };
 
 export const UserSlice = createSlice({
-  name: 'User',
+  name: "User",
   initialState,
   reducers: {
-    updateUserDetails: (state,action) => {
-        const {token} = action.payload
-    }
+    updateUserDetails: (state, action) => {
+      console.log("first", action.payload);
+      const { email, isBoss, token, userId, userName } = action.payload;
+      state.UserId = userId;
+      state.UserToken = token;
+      state.IsBoss = isBoss;
+      state.UserName = userName;
+      state.UserEmail = email;
+    },
+    logoutUser: (state) => {
+      state.UserId = '';
+      state.UserToken = '';
+      state.IsBoss = false;
+    },
+     rehydrate: (state, action) => {
+      return { ...state, ...action.payload };
+    },
   },
 });
 
-export const { updateUserDetails } = UserSlice.actions;
+export const { updateUserDetails,rehydrate,logoutUser } = UserSlice.actions;
 
 export default UserSlice.reducer;

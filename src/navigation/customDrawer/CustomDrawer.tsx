@@ -1,20 +1,57 @@
 // components/CustomDrawer.js
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Linking,
+  ScrollView,
+} from "react-native";
 import { DrawerContentScrollView } from "@react-navigation/drawer";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { Avatar, Card, Divider, Drawer } from "react-native-paper";
+import { Divider, Switch } from "react-native-paper";
 import { AppColor } from "../../themes/AppColor";
 import { AppFonts } from "../../themes/AppFonts";
 import { images } from "../../assets";
 import { Image } from "react-native";
 import TabButton from "../components/TabButton";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store/store";
+import { useConfirmationPopup } from "../../components/Popup/confirmationPopup";
+import { logoutUser } from "../../store/slice/UserSlice";
+import { navigate, resetAndNavigate } from "../../utils/NavigationUtil";
+import { screenNames } from "../ScreenNames";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 export interface CustomDrawerProps {
   navigation: any;
 }
 
 export default function CustomDrawer(props: CustomDrawerProps) {
+  const { UserName, UserEmail } = useSelector((state: RootState) => state.User);
+  const { showConfirmationPopup, ConfirmationPopup, popupVisible } =
+    useConfirmationPopup();
+  const [isSwitchOn, setIsSwitchOn] = React.useState(false);
+
+  const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
+  const dispatch = useDispatch();
+
+  const callToLogout = async () => {
+    props.navigation.closeDrawer();
+    const result = await showConfirmationPopup(
+      "Logout",
+      "Are you sure you want to logout?",
+      "Logout",
+      "Cancel"
+    );
+    if (!result) {
+      return;
+    }
+    dispatch(logoutUser());
+    resetAndNavigate(screenNames.LoginScreen);
+  };
+
   return (
     <DrawerContentScrollView {...props} contentContainerStyle={{ flex: 1 }}>
       <View style={styles.container}>
@@ -43,7 +80,7 @@ export default function CustomDrawer(props: CustomDrawerProps) {
               color: AppColor.BLACK,
             }}
           >
-            Kanhaiya Lal
+            {UserName}
           </Text>
 
           <Text
@@ -53,22 +90,89 @@ export default function CustomDrawer(props: CustomDrawerProps) {
               color: AppColor.BLACK_70,
             }}
           >
-            klv@kps.ca
+            {UserEmail}
           </Text>
+
+
+           <TouchableOpacity
+                  onPress={() => {
+                  }}
+                  style={{
+                    width:'100%',
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    paddingHorizontal: 10,
+                    borderRadius: 6,
+                    marginTop:10
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: 15,
+                    }}
+                  >
+                    <FontAwesome5 name={"user-tie"} size={24} color={AppColor.PRIMARY} />
+                    <Text>{"Is Boss"}</Text>
+                  </View>
+                 <Switch color={AppColor.PRIMARY} value={isSwitchOn} onValueChange={onToggleSwitch} />
+                </TouchableOpacity>
+
+        
         </View>
 
-        <View
+        <ScrollView
+          showsVerticalScrollIndicator={false}
           style={{
+            flex: 1,
             width: "100%",
             marginTop: 20,
             padding: 0,
-            justifyContent: "space-around",
+            // justifyContent: "space-around",
           }}
         >
           <TabButton
+            label={"Add User"}
+            onPress={() => navigate(screenNames.AddUserScreen)}
+            icon={"person-add-alt-1"}
+          />
+          <Divider
+            style={{
+              marginVertical: 10,
+            }}
+          />
+
+
+          <TabButton
+            label={"Logos"}
+            onPress={() => navigate(screenNames.LogoScreen)}
+            icon={"photo-size-select-actual"}
+          />
+          <Divider
+            style={{
+              marginVertical: 10,
+            }}
+          />
+
+          <TabButton
+            label={"About Us"}
+            onPress={() => navigate(screenNames.WebViewScreen, {
+              url: "https://www.kps.ca/about",
+              title: "About Us",
+            })}
+            icon={"info"}
+          />
+          <Divider
+            style={{
+              marginVertical: 10,
+            }}
+          />
+          <TabButton
             label={"Change Password"}
             onPress={() => {}}
-            icon={"password"}
+            icon={"lock"}
           />
           <Divider
             style={{
@@ -96,9 +200,35 @@ export default function CustomDrawer(props: CustomDrawerProps) {
               marginVertical: 10,
             }}
           />
-        </View>
+
+          <TabButton
+            label={"Contact Us"}
+            onPress={() => navigate(screenNames.WebViewScreen,{
+              url: "https://www.kps.ca/contact",
+              title: "Contact Us",})}
+            icon={"contacts"}
+          />
+          <Divider
+            style={{
+              marginVertical: 10,
+            }}
+          />
+
+          <TabButton label={"Help"} onPress={() => {}} icon={"help"} />
+          <Divider
+            style={{
+              marginVertical: 10,
+            }}
+          />
+        </ScrollView>
       </View>
-      <TabButton label={"Logout"} onPress={() => {}} icon={"logout"} />
+      <TabButton
+        label={"Logout"}
+        onPress={() => callToLogout()}
+        icon={"logout"}
+      />
+
+      {popupVisible && <ConfirmationPopup />}
     </DrawerContentScrollView>
   );
 }

@@ -8,23 +8,61 @@ import styles from "./Login.styles";
 import { LoginScreenProps } from "../../../../types/navigation";
 import CustomTextInput from "../../../../components/CustomTextInput/CustomTextInput";
 import IconTextInput from "../../../../components/CustomTextInput/CustomIconTextInput";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
-import { navigate } from "../../../../utils/NavigationUtil";
+import { navigate, resetAndNavigate } from "../../../../utils/NavigationUtil";
 import { screenNames } from "../../../../navigation/ScreenNames";
 import PoweredText from "../../components/PoweredText";
+import { startSpeechToText } from "react-native-voice-to-text";
+import useToastHook from "../../../../hooks/toast";
+import RestClient from "../../../../api/restClient";
+import { updateUserDetails } from "../../../../store/slice/UserSlice";
+import { delay } from "../../../../utils/delay";
+import { useIsFocused } from "@react-navigation/native";
 
 const LoginScreen: React.FC<LoginScreenProps> = () => {
   const [Email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
   const [IsLoading, setIsLoading] = useState(false);
   const [IsSecure, setIsSecure] = useState(false);
+  const { showToast } = useToastHook();
+  const dispatch = useDispatch();
+  const isFocused = useIsFocused();
+  const { UserEmail } = useSelector((state: RootState) => state.User);
 
-  const { UserId } = useSelector((state: RootState) => state.UserSlice);
+  useEffect(()=>{
+    if(isFocused){
+      if(UserEmail){
+        setEmail(UserEmail);
+      }
+    }
+  },[isFocused])
 
-  useEffect(() => {
-    console.log("UserId : ", UserId);
-  }, []);
+  const callToLogin = async () => {
+    try {
+      if(!Email || !Password){
+        showToast("Please enter email and password", 'warning');
+        return;
+      }
+      setIsLoading(true);
+      const restClient = new RestClient();
+      const response = await restClient.login(Email, Password);
+      if (response && typeof response != "string") {
+        dispatch(updateUserDetails({ ...response, email: Email }));
+        showToast(response.message || "Login Successfully", "success");
+      setIsLoading(false);
+        await delay(1000);
+        resetAndNavigate(screenNames.MainApp);
+      } else {
+        showToast(response || "Something went wrong", "danger");
+      }
+      setIsLoading(false);
+    } catch (error) {
+      showToast("Something went wrong", "danger");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>
@@ -63,15 +101,21 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
           style={styles.forgotPassword}
           onPress={() => {
             navigate(screenNames.ForgotPasswordScreen);
+            // showToast('Under Development', 'success');
           }}
         >
           <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
         </TouchableOpacity>
 
         <View style={styles.buttonContainer}>
-          <LoaderButton title="Login" onPress={() => {
-            navigate(screenNames.MainApp);
-          }} loading={IsLoading} />
+          <LoaderButton
+            title="Login"
+            onPress={async () => {
+              callToLogin();
+              // navigate(screenNames.MainApp);
+            }}
+            loading={IsLoading}
+          />
         </View>
 
         <View style={styles.orContainer}>
@@ -82,13 +126,14 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
 
         <View style={styles.signupContainer}>
           <Text style={styles.signupText}>Don't have an account?</Text>
-          <TouchableOpacity onPress={() => navigate(screenNames.RegisterScreen)}>
+          <TouchableOpacity
+            onPress={() => navigate(screenNames.RegisterScreen)}
+          >
             <Text style={styles.signupLink}>Sign Up</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaWrapper>
       <PoweredText />
-    
     </>
   );
 };

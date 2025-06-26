@@ -4,14 +4,14 @@ import { AppColor } from "../../../../themes/AppColor";
 
 export const styles = StyleSheet.create({
   heading: {
-    fontSize: 30,
+    fontSize: 20,
     fontFamily: AppFonts.Bold,
-    textAlign: "center",
+    textAlign: 'left',
     color: AppColor.BLACK, // Darker color for contrast
-    marginBottom: 40, // Increased margin to separate from form fields
+    marginBottom: 20, // Increased margin to separate from form fields
   },
   buttonContainer: {
-    marginTop: 50,
+    marginTop: 30,
   },
    orContainer: {
     flexDirection: 'row',
@@ -45,5 +45,24 @@ export const styles = StyleSheet.create({
     fontFamily: AppFonts.Medium,
     fontSize: 16,
     marginLeft: 5,
+  },
+    logoContainer: {
+    alignItems: 'center',
+    marginVertical: 30,
+  },
+  logo: {
+    width: 100,
+    height: 100,
+  },
+  companyName: {
+    fontSize: 20,
+    fontFamily: AppFonts.Bold,
+    color: AppColor.PRIMARY,
+    marginTop: 10,
+  },
+   checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10,
   },
 });

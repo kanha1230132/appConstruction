@@ -6,6 +6,13 @@ export type RootStackParamList = {
   RegisterScreen: undefined;
   ForgotPasswordScreen: undefined;
   HomeScreen: undefined;
+  WebViewScreen: {
+    url: string,
+    title: string
+  };
+  AddUserScreen: undefined;
+  LogoScreen:undefined;
+  LogoUploadScreen:undefined
 };
 
 
@@ -29,4 +36,24 @@ export type ForgotPasswordScreenProps = NativeStackScreenProps<
 export type HomeScreenProps = NativeStackScreenProps<
   RootStackParamList,
   'HomeScreen'
+>;
+export type WebViewScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'WebViewScreen'
+>;
+
+
+export type AddUserScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'AddUserScreen'
+>;
+
+export type LogoScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'LogoScreen'
+>;
+
+export type LogoUploadScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'LogoUploadScreen'
 >;

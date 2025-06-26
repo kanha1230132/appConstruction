@@ -3,6 +3,7 @@ import { Platform, StatusBar } from 'react-native';
 import { SafeAreaProvider, SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AppColor } from '../../themes/AppColor';
 import { ScrollView } from 'react-native-gesture-handler';
+import { View } from 'react-native';
 
 
 
@@ -38,19 +39,29 @@ export const SafeAreaWrapper = ({ children }: SafeAreaWrapperProps) => {
     <SafeAreaProvider>
       
       <StatusBar
-        barStyle='default'
-        backgroundColor={AppColor.PRIMARY}
+        barStyle='dark-content'
+        backgroundColor={AppColor.WHITE}
         translucent
       />
       <DynamicSafeAreaView >
-        <ScrollView
+        <View style={{
+          flex:1,
+          paddingHorizontal: 15,
+        }}>
+          {children}
+
+        </View>
+        {/* <ScrollView
+          showsVerticalScrollIndicator={false}
+          automaticallyAdjustKeyboardInsets
+          automaticallyAdjustsScrollIndicatorInsets
+          contentContainerStyle={{ flexGrow: 1 }}
           style={{
-            flex: 1,
+            flex: 1 ,
             backgroundColor: AppColor.WHITE,
             paddingHorizontal: 15,
-          }}>
-          {children}
-        </ScrollView>
+          }}> */}
+        {/* </ScrollView> */}
       </DynamicSafeAreaView>
     </SafeAreaProvider>
   );

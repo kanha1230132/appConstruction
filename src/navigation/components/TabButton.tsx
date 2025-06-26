@@ -34,10 +34,10 @@ const TabButton: React.FC<TabButtonProps> = ({ label, onPress, icon }) => {
             gap: 15,
           }}
         >
-          <Ionicons name={icon} size={24} color="#000" />
+          <Ionicons name={icon} size={24} color={AppColor.PRIMARY} />
           <Text>{label}</Text>
         </View>
-        <Ionicons name="chevron-right" size={24} color="#000" />
+        <Ionicons name="chevron-right" size={24} color={AppColor.BLACK} />
       </TouchableOpacity>
     </>
   );

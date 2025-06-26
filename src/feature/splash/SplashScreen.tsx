@@ -13,12 +13,20 @@ import { screenNames } from "../../navigation/ScreenNames";
 import { Text } from "react-native";
 import { styles } from "./Splash.styles";
 import { Constants } from "../../constants/constants";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
 
 const SplashScreen: React.FC = () => {
+  const { UserToken } = useSelector((state: RootState) => state.User);
+  
   useEffect(() => {
     const initializeApp = async () => {
       await delay(3000);
-      await resetAndNavigate(screenNames.LoginScreen);
+      if(UserToken){
+         resetAndNavigate(screenNames.MainApp);
+      }else{
+        resetAndNavigate(screenNames.LoginScreen);
+      }
     };
     initializeApp();
   }, []);

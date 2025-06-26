@@ -1,6 +1,7 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { AppFonts } from '../../../themes/AppFonts'
+import { AppColor } from '../../../themes/AppColor'
 
 interface PoweredTextProps {
 
@@ -10,7 +11,7 @@ const PoweredText: React.FC<PoweredTextProps> = () => {
   return (
    <View style={styles.footerContainer}>
         <Text style={styles.footerText}>Powered by</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={()=>Linking.openURL('https://www.kps.ca/')}>
           <Text style={styles.companyLink}>Kusiar Project Services Inc.</Text>
         </TouchableOpacity>
       </View>
@@ -23,9 +24,11 @@ const styles = StyleSheet.create({
       footerContainer: {
         width:'100%',
         position: 'absolute',
-        bottom: 20,
+        bottom: 0,
+        paddingBottom:20,
         alignItems: 'center',
-        marginHorizontal:'auto'
+        marginHorizontal:'auto',
+        backgroundColor:AppColor.WHITE
       },
       footerText: {
         textAlign: 'center',

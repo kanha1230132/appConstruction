@@ -10,5 +10,10 @@ export enum screenNames {
     ReportScreen = "ReportScreen",
     MileageScreen = "MileageScreen",
     ExpenseScreen = "ExpenseScreen",
-    InvoiceScreen = "InvoiceScreen"
+    InvoiceScreen = "InvoiceScreen",
+    VerifyOTPScreen = "VerifyOTPScreen",
+    WebViewScreen = "WebViewScreen",
+    AddUserScreen = "AddUserScreen",
+    LogoScreen = "LogoScreen",
+    LogoUploadScreen = "LogoUploadScreen"
 }

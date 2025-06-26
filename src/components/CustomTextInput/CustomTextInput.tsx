@@ -1,7 +1,7 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {AppFonts} from '../../themes/AppFonts';
-import {TextInput} from 'react-native-paper';
+import {TextInput, TextInputProps} from 'react-native-paper';
 import { AppColor } from '../../themes/AppColor';
 
 interface CustomTextInputProps {
@@ -9,7 +9,8 @@ interface CustomTextInputProps {
   textValue: string;
   label: string;
   [key: string]: any; // To allow for additional props
-  IsSecure?: boolean
+  IsSecure?: boolean;
+  props?:TextInputProps
 }
 
 const CustomTextInput: React.FC<CustomTextInputProps> = ({
@@ -24,7 +25,7 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({
       <TextInput
         label={label}
         style={{
-            backgroundColor:AppColor.WHITE
+            backgroundColor:AppColor.WHITE,
         }}
         onChangeText={onChangeTextValue}
         value={textValue}
@@ -32,6 +33,7 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({
         mode='outlined'
         activeOutlineColor={AppColor.PRIMARY}
         secureTextEntry = {IsSecure}
+        outlineColor={AppColor.BLACK_30}
         {...props}
       />
     </View>

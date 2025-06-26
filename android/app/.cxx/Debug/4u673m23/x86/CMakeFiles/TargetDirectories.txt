@@ -7,6 +7,9 @@
 /Users/apple/Documents/MobileApplication/appConstruction/android/app/.cxx/Debug/4u673m23/x86/rngesturehandler_codegen_autolinked_build/CMakeFiles/react_codegen_rngesturehandler_codegen.dir
 /Users/apple/Documents/MobileApplication/appConstruction/android/app/.cxx/Debug/4u673m23/x86/rngesturehandler_codegen_autolinked_build/CMakeFiles/edit_cache.dir
 /Users/apple/Documents/MobileApplication/appConstruction/android/app/.cxx/Debug/4u673m23/x86/rngesturehandler_codegen_autolinked_build/CMakeFiles/rebuild_cache.dir
+/Users/apple/Documents/MobileApplication/appConstruction/android/app/.cxx/Debug/4u673m23/x86/RNPermissionsSpec_autolinked_build/CMakeFiles/react_codegen_RNPermissionsSpec.dir
+/Users/apple/Documents/MobileApplication/appConstruction/android/app/.cxx/Debug/4u673m23/x86/RNPermissionsSpec_autolinked_build/CMakeFiles/edit_cache.dir
+/Users/apple/Documents/MobileApplication/appConstruction/android/app/.cxx/Debug/4u673m23/x86/RNPermissionsSpec_autolinked_build/CMakeFiles/rebuild_cache.dir
 /Users/apple/Documents/MobileApplication/appConstruction/android/app/.cxx/Debug/4u673m23/x86/rnreanimated_autolinked_build/CMakeFiles/react_codegen_rnreanimated.dir
 /Users/apple/Documents/MobileApplication/appConstruction/android/app/.cxx/Debug/4u673m23/x86/rnreanimated_autolinked_build/CMakeFiles/edit_cache.dir
 /Users/apple/Documents/MobileApplication/appConstruction/android/app/.cxx/Debug/4u673m23/x86/rnreanimated_autolinked_build/CMakeFiles/rebuild_cache.dir
@@ -19,3 +22,9 @@
 /Users/apple/Documents/MobileApplication/appConstruction/android/app/.cxx/Debug/4u673m23/x86/RNVectorIconsSpec_autolinked_build/CMakeFiles/react_codegen_RNVectorIconsSpec.dir
 /Users/apple/Documents/MobileApplication/appConstruction/android/app/.cxx/Debug/4u673m23/x86/RNVectorIconsSpec_autolinked_build/CMakeFiles/edit_cache.dir
 /Users/apple/Documents/MobileApplication/appConstruction/android/app/.cxx/Debug/4u673m23/x86/RNVectorIconsSpec_autolinked_build/CMakeFiles/rebuild_cache.dir
+/Users/apple/Documents/MobileApplication/appConstruction/android/app/.cxx/Debug/4u673m23/x86/RNVoiceToTextSpec_autolinked_build/CMakeFiles/react_codegen_RNVoiceToTextSpec.dir
+/Users/apple/Documents/MobileApplication/appConstruction/android/app/.cxx/Debug/4u673m23/x86/RNVoiceToTextSpec_autolinked_build/CMakeFiles/edit_cache.dir
+/Users/apple/Documents/MobileApplication/appConstruction/android/app/.cxx/Debug/4u673m23/x86/RNVoiceToTextSpec_autolinked_build/CMakeFiles/rebuild_cache.dir
+/Users/apple/Documents/MobileApplication/appConstruction/android/app/.cxx/Debug/4u673m23/x86/RNCWebViewSpec_autolinked_build/CMakeFiles/react_codegen_RNCWebViewSpec.dir
+/Users/apple/Documents/MobileApplication/appConstruction/android/app/.cxx/Debug/4u673m23/x86/RNCWebViewSpec_autolinked_build/CMakeFiles/edit_cache.dir
+/Users/apple/Documents/MobileApplication/appConstruction/android/app/.cxx/Debug/4u673m23/x86/RNCWebViewSpec_autolinked_build/CMakeFiles/rebuild_cache.dir

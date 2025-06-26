@@ -15,7 +15,7 @@ const Tab = createBottomTabNavigator();
 
 export interface BottomTabNavigatorProps {}
 
-export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
+const  BottomTabNavigator: React.FC<BottomTabNavigatorProps> = (props)=> {
   return (
     <Tab.Navigator screenOptions={{ headerShown: false,tabBarStyle:Platform.OS == "android" ? { height:60}:{}}}>
       <Tab.Screen
@@ -100,3 +100,5 @@ export default function BottomTabNavigator(props: BottomTabNavigatorProps) {
     </Tab.Navigator>
   );
 }
+
+export default BottomTabNavigator
