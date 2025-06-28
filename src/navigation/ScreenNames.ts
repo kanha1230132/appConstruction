@@ -15,5 +15,11 @@ export enum screenNames {
     WebViewScreen = "WebViewScreen",
     AddUserScreen = "AddUserScreen",
     LogoScreen = "LogoScreen",
-    LogoUploadScreen = "LogoUploadScreen"
+    LogoUploadScreen = "LogoUploadScreen",
+    ScheduleScreen = "ScheduleScreen",
+    CreateScheduleScreen = "CreateScheduleScreen",
+    ResetPasswordScreen = "ResetPasswordScreen",
+    ScheduleListScreen = "ScheduleListScreen",
+    PhotoFilesScreen = "PhotoFilesScreen"
+
 }

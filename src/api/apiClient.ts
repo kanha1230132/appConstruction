@@ -36,6 +36,8 @@ apiClient.interceptors.request.use(async config => {
         }
     }
 
+    console.log("config : ", config)
+
     return config;
   });
   
@@ -58,7 +60,7 @@ apiClient.interceptors.request.use(async config => {
         return e.response;
       }
     },
-    post: async (url:string, data:any, config?:any) => {
+    post: async (url:string, data?:any, config?:any) => {
       try {
         return await apiClient.post(url, data, config);
       } catch (e:any) {

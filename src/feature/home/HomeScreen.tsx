@@ -19,6 +19,9 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { Divider } from "react-native-paper";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { AppFonts } from "../../themes/AppFonts";
+import { navigate } from "../../utils/NavigationUtil";
+import { screenNames } from "../../navigation/ScreenNames";
+import { ScreenType } from "../../types/screenTypes";
 
 const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   const { UserId } = useSelector((state: RootState) => state.User);
@@ -71,7 +74,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
             {/* Baseline Schedules */}
             <TouchableOpacity
               style={styles.exploreCardContainer}
-              // onPress={() => navigation.navigate(SCREENS.BASELINE_SCHEDULE_LIST)}
+              onPress={() => navigate(screenNames.ScheduleScreen)}
             >
               <ImageBackground
                 source={images.SCHEDULE}
@@ -95,6 +98,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
             {/* Photo Files */}
             <TouchableOpacity
               style={styles.exploreCardContainer}
+              onPress={()=> navigate(screenNames.ScheduleListScreen,{type:ScreenType.PHOTO_FILE})}
               // onPress={() => navigation.navigate("PhotosF")}>
               // onPress={() => navigation.navigate(SCREENS.PHOTO_FILES)}
             >

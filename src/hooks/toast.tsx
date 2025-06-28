@@ -12,7 +12,7 @@ const useToastHook = () => {
     toast.show(message, {
       type: type,
       placement: "bottom",
-      duration: 2000,
+      duration: 1500,
       swipeEnabled: true,
     });
   };

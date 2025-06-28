@@ -10,12 +10,15 @@ import ExpenseScreen from "../feature/expense/ExpenseScreen";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { AppColor } from "../themes/AppColor";
 import { Platform } from "react-native";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
 
 const Tab = createBottomTabNavigator();
 
 export interface BottomTabNavigatorProps {}
 
 const  BottomTabNavigator: React.FC<BottomTabNavigatorProps> = (props)=> {
+  const {IsBoss} = useSelector((state: RootState) => state.User);
   return (
     <Tab.Navigator screenOptions={{ headerShown: false,tabBarStyle:Platform.OS == "android" ? { height:60}:{}}}>
       <Tab.Screen
@@ -81,7 +84,10 @@ const  BottomTabNavigator: React.FC<BottomTabNavigatorProps> = (props)=> {
           ),
         }}
       />
-      <Tab.Screen
+      {
+        IsBoss ?
+
+<Tab.Screen
         name={screenNames.InvoiceScreen}
         component={InvoiceScreen}
         options={{
@@ -97,6 +103,9 @@ const  BottomTabNavigator: React.FC<BottomTabNavigatorProps> = (props)=> {
           ),
         }}
       />
+        : null
+      }
+      
     </Tab.Navigator>
   );
 }

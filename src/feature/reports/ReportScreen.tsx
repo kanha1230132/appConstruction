@@ -7,6 +7,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { Image } from 'react-native'
 import { images } from '../../assets'
 import ReportButton from './components/ReportButton'
+import ScrollViewWrapper from '../../components/ScrollViewWrapper/ScrollViewWrapper'
 
 interface ReportScreenProps {
 
@@ -33,6 +34,9 @@ const ReportScreen: React.FC<ReportScreenProps> = () => {
     <>
       <SafeAreaWrapper>
         <Text style={styles.headerLeftBlue}>Reports</Text>
+
+        <ScrollViewWrapper>
+
 
         <View
           style={{
@@ -69,6 +73,8 @@ const ReportScreen: React.FC<ReportScreenProps> = () => {
           <ReportButton onPress={() => {}} title="Add a Weekly Entry" />
           <ReportButton onPress={() => {}} title="Add a Daily Diary " />
         </View>
+        </ScrollViewWrapper>
+
       </SafeAreaWrapper>
     </>
   );

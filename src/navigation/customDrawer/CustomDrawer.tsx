@@ -1,5 +1,5 @@
 // components/CustomDrawer.js
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -19,22 +19,22 @@ import TabButton from "../components/TabButton";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { useConfirmationPopup } from "../../components/Popup/confirmationPopup";
-import { logoutUser } from "../../store/slice/UserSlice";
+import { logoutUser, userIsBoss } from "../../store/slice/UserSlice";
 import { navigate, resetAndNavigate } from "../../utils/NavigationUtil";
 import { screenNames } from "../ScreenNames";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import { AppText } from "../../constants/appText";
 
 export interface CustomDrawerProps {
   navigation: any;
 }
 
 export default function CustomDrawer(props: CustomDrawerProps) {
-  const { UserName, UserEmail } = useSelector((state: RootState) => state.User);
+  const { UserName, UserEmail,IsBoss } = useSelector((state: RootState) => state.User);
   const { showConfirmationPopup, ConfirmationPopup, popupVisible } =
     useConfirmationPopup();
-  const [isSwitchOn, setIsSwitchOn] = React.useState(false);
 
-  const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
+  const onToggleSwitch = (value: boolean) => dispatch(userIsBoss(value));
   const dispatch = useDispatch();
 
   const callToLogout = async () => {
@@ -51,6 +51,10 @@ export default function CustomDrawer(props: CustomDrawerProps) {
     dispatch(logoutUser());
     resetAndNavigate(screenNames.LoginScreen);
   };
+
+  // useEffect(()=>{
+  //   dispatch(userIsBoss(!IsBoss))
+  // },[IsBoss])
 
   return (
     <DrawerContentScrollView {...props} contentContainerStyle={{ flex: 1 }}>
@@ -117,7 +121,7 @@ export default function CustomDrawer(props: CustomDrawerProps) {
                     <FontAwesome5 name={"user-tie"} size={24} color={AppColor.PRIMARY} />
                     <Text>{"Is Boss"}</Text>
                   </View>
-                 <Switch color={AppColor.PRIMARY} value={isSwitchOn} onValueChange={onToggleSwitch} />
+                 <Switch color={AppColor.PRIMARY} value={IsBoss} onValueChange={(value)=>onToggleSwitch(value)} />
                 </TouchableOpacity>
 
         
@@ -171,7 +175,12 @@ export default function CustomDrawer(props: CustomDrawerProps) {
           />
           <TabButton
             label={"Change Password"}
-            onPress={() => {}}
+            onPress={() => {
+               navigate(screenNames.ResetPasswordScreen, {
+                        UserEmail,
+                        title: AppText.ChangePassword,
+                      });
+            }}
             icon={"lock"}
           />
           <Divider

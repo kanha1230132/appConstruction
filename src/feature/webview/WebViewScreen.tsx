@@ -8,6 +8,7 @@ import WebView from "react-native-webview";
 import { useIsFocused } from "@react-navigation/native";
 import { ActivityIndicator } from "react-native-paper";
 import { AppColor } from "../../themes/AppColor";
+import ActivityLoader from "../../components/Loader/ActivityLoader";
 
 const WebViewScreen: React.FC<WebViewScreenProps> = ({ route }) => {
   const [WebUrl, setWebUrl] = useState("");
@@ -35,15 +36,7 @@ const WebViewScreen: React.FC<WebViewScreenProps> = ({ route }) => {
         />
 
         {isLoading ? (
-          <View
-            style={{
-              flex: 1,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <ActivityIndicator color={AppColor.PRIMARY} />
-          </View>
+         <ActivityLoader />
         ) : null}
 
         {!isLoading && WebUrl ? (

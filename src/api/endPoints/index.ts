@@ -36,7 +36,9 @@ export const endPoints = {
     URL_UPDATE_LOCATION :'/auth/update-location',
     URL_EXPENSE_APPROVE: '/expense/approve',
     URL_CREATE_EXPENSE: '/expense/addExpense',
-    URL_NOTIFICATIONS:'/notification/getNotifications'
+    URL_NOTIFICATIONS:'/notification/getNotifications',
+    URL_ADD_LOGO:'/logos/add-logo'
+
 }
 export const GOOGLE_MAPS_API_KEY = "AIzaSyCQa4c8csh5QpPOiOSu8TktFToybBr996k";
 export const MILAGE_API_KEY = "AIzaSyD8G5BZegL44sB2ZTkczF4wc2VCnVhnnj4"

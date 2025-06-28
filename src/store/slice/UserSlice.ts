@@ -26,12 +26,15 @@ export const UserSlice = createSlice({
       state.UserToken = '';
       state.IsBoss = false;
     },
+    userIsBoss: (state, action) => {
+      state.IsBoss = action.payload;
+    },
      rehydrate: (state, action) => {
       return { ...state, ...action.payload };
     },
   },
 });
 
-export const { updateUserDetails,rehydrate,logoutUser } = UserSlice.actions;
+export const { updateUserDetails,rehydrate,logoutUser,userIsBoss } = UserSlice.actions;
 
 export default UserSlice.reducer;

@@ -1,4 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { CompanyLogoResponse, SchedulesResponse } from "../api/apiInterface";
 
 export type RootStackParamList = {
   SplashScreen: undefined;
@@ -12,7 +13,14 @@ export type RootStackParamList = {
   };
   AddUserScreen: undefined;
   LogoScreen:undefined;
-  LogoUploadScreen:undefined
+  LogoUploadScreen:{logo?: CompanyLogoResponse};
+  ScheduleScreen:undefined;
+  CreateScheduleScreen:undefined;
+  VerifyOTPScreen:{email:string};
+  ResetPasswordScreen:{email:string,title:string};
+  ScheduleListScreen :{type:string};
+  PhotoFilesScreen: {project:SchedulesResponse};
+
 };
 
 
@@ -56,4 +64,33 @@ export type LogoScreenProps = NativeStackScreenProps<
 export type LogoUploadScreenProps = NativeStackScreenProps<
   RootStackParamList,
   'LogoUploadScreen'
+>;
+
+export type ScheduleScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'ScheduleScreen'
+>;
+
+export type CreateScheduleScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'CreateScheduleScreen'
+>;
+
+export type VerifyOTPScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'VerifyOTPScreen'
+>;
+
+export type ResetPasswordScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'ResetPasswordScreen'
+>;
+
+export type ScheduleListScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'ScheduleListScreen'
+>;
+export type PhotoFilesScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'PhotoFilesScreen'
 >;

@@ -52,8 +52,8 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   icon: {
-    width: 200, // Adjust size as needed
-    height: 200, // Adjust size as needed
+    width: 150, // Adjust size as needed
+    height: 150, // Adjust size as needed
     resizeMode: 'contain', // Ensures the image maintains its aspect ratio
   },
   inputContainer: {

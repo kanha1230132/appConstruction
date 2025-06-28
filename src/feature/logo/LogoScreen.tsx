@@ -1,4 +1,4 @@
-import { FlatList, Image, StyleSheet, Text, View } from "react-native";
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { LogoScreenProps } from "../../types/navigation";
 import { SafeAreaWrapper } from "../../components/SafeAreaWrapper/SafeAreaWrapper";
@@ -43,6 +43,11 @@ const LogoScreen: React.FC<LogoScreenProps> = () => {
     }
   };
 
+  const onClickLogo = (item:CompanyLogoResponse) => {
+    navigate(screenNames.LogoUploadScreen, {
+      logo: item,});
+  };
+
   const renderLogo = ({
     item,
     index,
@@ -61,7 +66,8 @@ const LogoScreen: React.FC<LogoScreenProps> = () => {
             marginHorizontal:2
           }}
         >
-          <View
+          <TouchableOpacity
+          onPress={()=> {onClickLogo(item)}}
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
@@ -90,7 +96,7 @@ const LogoScreen: React.FC<LogoScreenProps> = () => {
               size={24}
               color={AppColor.BLACK}
             />
-          </View>
+          </TouchableOpacity>
         </Card>
       </>
     );

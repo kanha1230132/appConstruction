@@ -1,5 +1,12 @@
-import { Platform, StyleSheet, Text, TextInput, View } from "react-native";
-import React, { useRef, useState } from "react";
+import {
+  Image,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
+import React, { useEffect, useRef, useState } from "react";
 import { SafeAreaWrapper } from "../../../../components/SafeAreaWrapper/SafeAreaWrapper";
 import HeaderWithBackButton from "../../../../components/Button/HeaderWithBackButton";
 import { goBack, navigate } from "../../../../utils/NavigationUtil";
@@ -8,19 +15,32 @@ import { screenNames } from "../../../../navigation/ScreenNames";
 import { AppColor } from "../../../../themes/AppColor";
 import { AppFonts } from "../../../../themes/AppFonts";
 import { TouchableOpacity } from "react-native";
+import { VerifyOTPScreenProps } from "../../../../types/navigation";
+import { images } from "../../../../assets";
+import useToastHook from "../../../../hooks/toast";
+import RestClient from "../../../../api/restClient";
+import { delay } from "../../../../utils/delay";
+import LoadingText from "../../../../components/CustomText/LoadingText";
 
-interface VerifyOtpScreenProps {}
-
-const VerifyOtpScreen: React.FC<VerifyOtpScreenProps> = () => {
+const VerifyOtpScreen: React.FC<VerifyOTPScreenProps> = ({ route }) => {
   const [IsLoading, setIsLoading] = useState(false);
+  const { showToast } = useToastHook();
   const [email, setEmail] = useState("abc@gmail.com");
   const [code, setCode] = useState(["", "", "", ""]);
+  const [loadingText, setLoadingText] = useState(false)
   const inputRefs = [
     useRef<any>(null),
     useRef<any>(null),
     useRef<any>(null),
     useRef<any>(null),
   ];
+
+  useEffect(() => {
+    if (route.params) {
+      const { email } = route.params;
+      setEmail(email);
+    }
+  }, []);
 
   const handleInputChange = (index: number, value: string) => {
     if (value.length <= 1) {
@@ -36,6 +56,61 @@ const VerifyOtpScreen: React.FC<VerifyOtpScreenProps> = () => {
     }
   };
 
+  const verifyOtp = async () => {
+    try {
+
+        navigate(screenNames.ResetPasswordScreen, {
+          email,
+          title: "Reset your Password",
+        });
+        return;
+      const enteredCode = code.join("");
+      if (enteredCode.length < 4) {
+        showToast("Please enter a valid code", "warning");
+        return;
+      }
+      const restClient = new RestClient();
+      setIsLoading(true);
+      const response = await restClient.verifyOtp({ email, code: enteredCode });
+      if (response && typeof response != "string") {
+        showToast(response.message || "Email sent successfully", "success");
+        setIsLoading(false);
+        await delay(1000);
+        navigate(screenNames.ResetPasswordScreen, {
+          email,
+          title: "Reset your Password",
+        });
+      } else {
+        showToast(response || "Something went wrong", "danger");
+      }
+      setIsLoading(false);
+    } catch (error) {
+      showToast("Something went wrong", "danger");
+      console.log("Error verifyOtp : ", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const callToResendOtp = async () => {
+    try {
+      const restClient = new RestClient();
+      setLoadingText(true);
+      const response = await restClient.sendPasswordOtp(email);
+      console.log("response : ", response);
+      if (response && typeof response != "string") {
+        showToast(response.message || "Email sent successfully", "success");
+        setLoadingText(false);
+      } else {
+        showToast(response || "Something went wrong", "danger");
+      }
+    } catch (error) {
+      setLoadingText(false);
+    } finally {
+      setLoadingText(false);
+    }
+  };
+
   return (
     <>
       <SafeAreaWrapper>
@@ -43,6 +118,16 @@ const VerifyOtpScreen: React.FC<VerifyOtpScreenProps> = () => {
           title={"Verify Email"}
           onBackClick={() => goBack()}
           customStyle={undefined}
+        />
+
+        <Image
+          source={images.PIN_CODE}
+          style={{
+            width: 70,
+            height: 70,
+            alignSelf: "center",
+            marginTop: 20,
+          }}
         />
 
         <Text style={styles.header}>Enter Verification Code</Text>
@@ -83,14 +168,14 @@ const VerifyOtpScreen: React.FC<VerifyOtpScreenProps> = () => {
           }}
         >
           <Text style={styles.resendText}>Didn't you receive any code? </Text>
-          <TouchableOpacity>
-            <Text style={styles.resendLink}>Resend Code</Text>
+          <TouchableOpacity onPress={() => callToResendOtp()}>
+            <LoadingText style={styles.resendLink} isLoading={loadingText} text={"Resend Code"} />
           </TouchableOpacity>
         </View>
 
         <LoaderButton
           title="Verify Now"
-          onPress={() => navigate(screenNames.VerifyOTPScreen)}
+          onPress={() => verifyOtp()}
           loading={IsLoading}
         />
       </View>

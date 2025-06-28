@@ -1,5 +1,9 @@
 import React, { Component } from "react";
-import { ForgotPasswordScreen, LoginScreen, RegisterScreen } from "../feature/auth";
+import {
+  ForgotPasswordScreen,
+  LoginScreen,
+  RegisterScreen,
+} from "../feature/auth";
 import SplashScreen from "../feature/splash/SplashScreen";
 import { screenNames } from "./ScreenNames";
 import HomeScreen from "../feature/home/HomeScreen";
@@ -10,6 +14,11 @@ import WebViewScreen from "../feature/webview/WebViewScreen";
 import AddUserScreen from "../feature/addUser/AddUserScreen";
 import LogoScreen from "../feature/logo/LogoScreen";
 import LogoUploadScreen from "../feature/logo/screens/logoUpload/LogoUploadScreen";
+import ScheduleScreen from "../feature/schedule/ScheduleScreen";
+import ResetPasswordScreen from "../feature/auth/screens/ResetPassword/ResetPasswordScreen";
+import CreateScheduleScreen from "../feature/schedule/screens/createSchedule/CreateScheduleScreen";
+import ScheduleListScreen from "../feature/schedule/screens/scheduleList/ScheduleListScreen";
+import PhotoFilesScreen from "../feature/photoFiles/PhotoFilesScreen";
 
 export const authStack = [
   {
@@ -35,44 +44,63 @@ export const authStack = [
   {
     name: screenNames.HomeScreen,
     component: HomeScreen,
-  
   },
   {
-    name:screenNames.HomeTabs,
-    component:BottomTabNavigator
+    name: screenNames.HomeTabs,
+    component: BottomTabNavigator,
   },
   {
-     name:screenNames.VerifyOTPScreen,
-    component:VerifyOtpScreen
+    name: screenNames.VerifyOTPScreen,
+    component: VerifyOtpScreen,
   },
   {
-     name:screenNames.WebViewScreen,
-    component:WebViewScreen
+    name: screenNames.WebViewScreen,
+    component: WebViewScreen,
   },
   {
-     name:screenNames.AddUserScreen,
-    component:AddUserScreen
+    name: screenNames.AddUserScreen,
+    component: AddUserScreen,
   },
   {
-     name:screenNames.LogoScreen,
-    component:LogoScreen
+    name: screenNames.LogoScreen,
+    component: LogoScreen,
   },
   {
-    name:screenNames.LogoUploadScreen,
-    component:LogoUploadScreen
-  }
-  
+    name: screenNames.LogoUploadScreen,
+    component: LogoUploadScreen,
+  },
+  {
+    name: screenNames.CreateScheduleScreen,
+    component: CreateScheduleScreen,
+  },
 
+  {
+    name: screenNames.ScheduleScreen,
+    component: ScheduleScreen,
+  },
+  ,
+  {
+    name: screenNames.ResetPasswordScreen,
+    component: ResetPasswordScreen,
+  },
+  {
+    name: screenNames.ScheduleListScreen,
+    component: ScheduleListScreen,
+  },
+  {
+    name: screenNames.PhotoFilesScreen,
+    component: PhotoFilesScreen,
+  }
 ];
 
 export const dashboardStack = [
-//   {
-//     name: 'BottomTab',
-//     component: BottomTab,
-//   }
+  //   {
+  //     name: 'BottomTab',
+  //     component: BottomTab,
+  //   }
 ];
 
-export const allStackScreens:{
+export const allStackScreens: {
   name: string;
   component: React.FC<any>;
-}[] = [...dashboardStack, ...authStack];
+}[] = [ ...authStack];

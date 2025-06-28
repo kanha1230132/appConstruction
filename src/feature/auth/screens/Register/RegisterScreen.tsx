@@ -7,7 +7,7 @@ import IconTextInput from "../../../../components/CustomTextInput/CustomIconText
 import LoaderButton from "../../../../components/Button/LoaderButton";
 import PoweredText from "../../components/PoweredText";
 import { styles } from "./Register.styles";
-import { navigate } from "../../../../utils/NavigationUtil";
+import { navigate, resetAndNavigate } from "../../../../utils/NavigationUtil";
 import { screenNames } from "../../../../navigation/ScreenNames";
 import { Image } from "react-native";
 import { images } from "../../../../assets";
@@ -18,6 +18,7 @@ import { Checkbox } from "react-native-paper";
 import ScrollViewWrapper from "../../../../components/ScrollViewWrapper/ScrollViewWrapper";
 import useToastHook from "../../../../hooks/toast";
 import RestClient from "../../../../api/restClient";
+import { delay } from "../../../../utils/delay";
 
 const RegisterScreen: React.FC<RegisterScreenProps> = () => {
   const [Email, setEmail] = useState("");
@@ -26,45 +27,60 @@ const RegisterScreen: React.FC<RegisterScreenProps> = () => {
   const [IsSecure, setIsSecure] = useState(false);
   const [checked, setChecked] = useState(false);
   const [UserName, setUserName] = useState("");
-  const {showToast} = useToastHook()
+  const { showToast } = useToastHook();
 
-
-  const validateValues = ()=>{
-      // Input validation
+  const validateValues = () => {
+    // Input validation
     if (!UserName || !Email || !Password) {
-      showToast("Please fill all fields!",'warning');
+      showToast("Please fill all fields!", "warning");
       return false;
     }
 
     // Regex for email validation
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     if (!Email.match(emailPattern)) {
-      showToast("Invalid email format!",'warning');
+      showToast("Invalid email format!", "warning");
       return false;
     }
 
     // Password validation (at least 8 characters)
     if (Password.length < 8) {
-      showToast("Password must be at least 8 characters long!",'warning');
+      showToast("Password must be at least 8 characters long!", "warning");
       return false;
     }
 
     return true;
-  }
-
+  };
 
   const callToRegister = async () => {
-    if(validateValues()){
-const params = {
-      username: UserName,
-      email: Email,
-      password: Password,
-    };
+    try {
+       if (validateValues()) {
+      const params = {
+        username: UserName,
+        email: Email,
+        password: Password,
+      };
+      setIsLoading(true);
+      const restClient = new RestClient();
+      const response = await restClient.signup(params);
+      if (response && typeof response != "string") {
+        showToast(response.message || "Registration Successfully", "success");
+        setIsLoading(false);
+        await delay(1000);
+        resetAndNavigate(screenNames.LoginScreen);
 
-    const restClient = new RestClient();
-    const response = await restClient.signup(params);
-  }
-  }
+      } else {
+        showToast(response || "Something went wrong", "danger");
+      }
+    }
+    } catch (error) {
+      setIsLoading(false);
+      
+    }finally{
+      setIsLoading(false);
+    }
+   
+  };
   return (
     <>
       <SafeAreaWrapper>
@@ -85,7 +101,7 @@ const params = {
 
             <CustomTextInput
               onChangeTextValue={(text) => {
-                setUserName(text)
+                setUserName(text);
               }}
               textValue={UserName}
               label={"User Name"}

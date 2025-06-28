@@ -18,6 +18,7 @@ export enum AppColor {
   BLACK_20=  '#cccccc',
   BLACK_10=  '#e6e6e6',
   BLACK_5=   '#f2f2f2',
+  GREY_F9=  '#F9F9F9',
 
   PRIMARY_900= '#0e3f7f',
   PRIMARY_800= '#104e99',

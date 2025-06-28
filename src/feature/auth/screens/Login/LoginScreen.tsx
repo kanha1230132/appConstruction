@@ -1,4 +1,4 @@
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Image, Keyboard, Text, TouchableOpacity, View } from "react-native";
 import React, { useState, useEffect } from "react";
 import { SafeAreaWrapper } from "../../../../components/SafeAreaWrapper/SafeAreaWrapper";
 import { images } from "../../../../assets";
@@ -111,6 +111,7 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
           <LoaderButton
             title="Login"
             onPress={async () => {
+              Keyboard.dismiss();
               callToLogin();
               // navigate(screenNames.MainApp);
             }}
