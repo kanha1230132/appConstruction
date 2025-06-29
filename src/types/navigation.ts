@@ -9,17 +9,21 @@ export type RootStackParamList = {
   HomeScreen: undefined;
   WebViewScreen: {
     url: string,
-    title: string
+    title: string,
+    IsPdfViewer?: boolean
   };
   AddUserScreen: undefined;
   LogoScreen:undefined;
   LogoUploadScreen:{logo?: CompanyLogoResponse};
   ScheduleScreen:undefined;
-  CreateScheduleScreen:undefined;
+  CreateScheduleScreen:{schedule?:SchedulesResponse};
   VerifyOTPScreen:{email:string};
   ResetPasswordScreen:{email:string,title:string};
   ScheduleListScreen :{type:string};
   PhotoFilesScreen: {project:SchedulesResponse};
+  DailyEntryScreen:{project:SchedulesResponse};
+  WeeklyEntryScreen:{project:SchedulesResponse};
+  DailyDairyEntryScreen:{project:SchedulesResponse};
 
 };
 
@@ -93,4 +97,17 @@ export type ScheduleListScreenProps = NativeStackScreenProps<
 export type PhotoFilesScreenProps = NativeStackScreenProps<
   RootStackParamList,
   'PhotoFilesScreen'
+>;
+
+export type DailyEntryScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'DailyEntryScreen'
+>;
+export type WeeklyEntryScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'WeeklyEntryScreen'
+>;
+export type DailyDairyEntryScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'DailyDairyEntryScreen'
 >;

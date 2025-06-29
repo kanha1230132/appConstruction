@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   forgotPasswordText: {
-    color: '#486ECD',
+    color: AppColor.PRIMARY,
     fontSize: 16,
     fontFamily: AppFonts.Bold,
     marginTop: 10,

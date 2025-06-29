@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { DrawerContentScrollView } from "@react-navigation/drawer";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { Divider, Switch } from "react-native-paper";
+import { Switch } from "react-native-paper";
 import { AppColor } from "../../themes/AppColor";
 import { AppFonts } from "../../themes/AppFonts";
 import { images } from "../../assets";
@@ -24,6 +24,8 @@ import { navigate, resetAndNavigate } from "../../utils/NavigationUtil";
 import { screenNames } from "../ScreenNames";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { AppText } from "../../constants/appText";
+import Divider from "../components/Divider";
+import useToastHook from "../../hooks/toast";
 
 export interface CustomDrawerProps {
   navigation: any;
@@ -33,9 +35,14 @@ export default function CustomDrawer(props: CustomDrawerProps) {
   const { UserName, UserEmail,IsBoss } = useSelector((state: RootState) => state.User);
   const { showConfirmationPopup, ConfirmationPopup, popupVisible } =
     useConfirmationPopup();
+    const {showToast} = useToastHook();
 
   const onToggleSwitch = (value: boolean) => dispatch(userIsBoss(value));
   const dispatch = useDispatch();
+
+  const comingSoon = () => {
+    showToast(AppText.ComingSoon, "normal");
+  }
 
   const callToLogout = async () => {
     props.navigation.closeDrawer();
@@ -97,34 +104,38 @@ export default function CustomDrawer(props: CustomDrawerProps) {
             {UserEmail}
           </Text>
 
-
-           <TouchableOpacity
-                  onPress={() => {
-                  }}
-                  style={{
-                    width:'100%',
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    paddingHorizontal: 10,
-                    borderRadius: 6,
-                    marginTop:10
-                  }}
-                >
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      gap: 15,
-                    }}
-                  >
-                    <FontAwesome5 name={"user-tie"} size={24} color={AppColor.PRIMARY} />
-                    <Text>{"Is Boss"}</Text>
-                  </View>
-                 <Switch color={AppColor.PRIMARY} value={IsBoss} onValueChange={(value)=>onToggleSwitch(value)} />
-                </TouchableOpacity>
-
-        
+          <TouchableOpacity
+            onPress={() => {}}
+            style={{
+              width: "100%",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              paddingHorizontal: 10,
+              borderRadius: 6,
+              marginTop: 10,
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 15,
+              }}
+            >
+              <FontAwesome5
+                name={"user-tie"}
+                size={24}
+                color={AppColor.PRIMARY}
+              />
+              <Text>{"Is Boss"}</Text>
+            </View>
+            <Switch
+              color={AppColor.PRIMARY}
+              value={IsBoss}
+              onValueChange={(value) => onToggleSwitch(value)}
+            />
+          </TouchableOpacity>
         </View>
 
         <ScrollView
@@ -137,98 +148,75 @@ export default function CustomDrawer(props: CustomDrawerProps) {
             // justifyContent: "space-around",
           }}
         >
-          <TabButton
-            label={"Add User"}
-            onPress={() => navigate(screenNames.AddUserScreen)}
-            icon={"person-add-alt-1"}
-          />
-          <Divider
-            style={{
-              marginVertical: 10,
-            }}
-          />
-
+          {IsBoss ? (
+            <>
+              <TabButton
+                label={"Add User"}
+                onPress={() => navigate(screenNames.AddUserScreen)}
+                icon={"person-add-alt-1"}
+              />
+              <Divider />
+             
+            </>
+          ) : null}
 
           <TabButton
             label={"Logos"}
             onPress={() => navigate(screenNames.LogoScreen)}
             icon={"photo-size-select-actual"}
           />
-          <Divider
-            style={{
-              marginVertical: 10,
-            }}
-          />
+          <Divider />
 
           <TabButton
             label={"About Us"}
-            onPress={() => navigate(screenNames.WebViewScreen, {
-              url: "https://www.kps.ca/about",
-              title: "About Us",
-            })}
+            onPress={() =>
+              navigate(screenNames.WebViewScreen, {
+                url: "https://www.kps.ca/about",
+                title: "About Us",
+              })
+            }
             icon={"info"}
           />
-          <Divider
-            style={{
-              marginVertical: 10,
-            }}
-          />
+          <Divider />
           <TabButton
             label={"Change Password"}
             onPress={() => {
-               navigate(screenNames.ResetPasswordScreen, {
-                        UserEmail,
-                        title: AppText.ChangePassword,
-                      });
+              navigate(screenNames.ResetPasswordScreen, {
+                UserEmail,
+                title: AppText.ChangePassword,
+              });
             }}
             icon={"lock"}
           />
-          <Divider
-            style={{
-              marginVertical: 10,
-            }}
-          />
+          <Divider />
           <TabButton
             label={"Terms & Conditions"}
-            onPress={() => {}}
+            onPress={() => comingSoon()}
             icon={"description"}
           />
-          <Divider
-            style={{
-              marginVertical: 10,
-            }}
-          />
+          <Divider />
 
           <TabButton
             label={"Privacy Policy"}
-            onPress={() => {}}
+            onPress={() => comingSoon()}
             icon={"privacy-tip"}
           />
-          <Divider
-            style={{
-              marginVertical: 10,
-            }}
-          />
+          <Divider />
 
           <TabButton
             label={"Contact Us"}
-            onPress={() => navigate(screenNames.WebViewScreen,{
-              url: "https://www.kps.ca/contact",
-              title: "Contact Us",})}
+            onPress={() =>
+              navigate(screenNames.WebViewScreen, {
+                url: "https://www.kps.ca/contact",
+                title: "Contact Us",
+              })
+            }
             icon={"contacts"}
           />
-          <Divider
-            style={{
-              marginVertical: 10,
-            }}
-          />
+          <Divider />
 
-          <TabButton label={"Help"} onPress={() => {}} icon={"help"} />
-          <Divider
-            style={{
-              marginVertical: 10,
-            }}
-          />
+          <TabButton label={"Help"} onPress={() => comingSoon()} icon={"help"} />
+          <Divider />
         </ScrollView>
       </View>
       <TabButton

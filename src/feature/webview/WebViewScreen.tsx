@@ -9,6 +9,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { ActivityIndicator } from "react-native-paper";
 import { AppColor } from "../../themes/AppColor";
 import ActivityLoader from "../../components/Loader/ActivityLoader";
+import { endPoints } from "../../api/endPoints";
 
 const WebViewScreen: React.FC<WebViewScreenProps> = ({ route }) => {
   const [WebUrl, setWebUrl] = useState("");
@@ -19,8 +20,12 @@ const WebViewScreen: React.FC<WebViewScreenProps> = ({ route }) => {
   useEffect(() => {
     if (isFocused) {
       if (route.params) {
-        const { url, title } = route.params;
-        setWebUrl(url);
+        const { url, title, IsPdfViewer } = route.params;
+        if (IsPdfViewer) {
+          setWebUrl(`${endPoints.URL_PDF_VIEWER_BASE_URL}${url}`);
+        } else {
+          setWebUrl(url);
+        }
         setScreenTitle(title);
         setIsLoading(false);
       }
@@ -34,13 +39,17 @@ const WebViewScreen: React.FC<WebViewScreenProps> = ({ route }) => {
           onBackClick={() => goBack()}
           customStyle={undefined}
         />
-
-        {isLoading ? (
-         <ActivityLoader />
-        ) : null}
-
-        {!isLoading && WebUrl ? (
-          <WebView source={{ uri: WebUrl, cacheEnabled: true }} />
+        {WebUrl ? (
+          <WebView
+            style={{
+              marginBottom: 20,
+            }}
+            source={{ uri: WebUrl, cacheEnabled: true }}
+            startInLoadingState={true}
+            renderLoading={() => (
+              <ActivityIndicator size={20} color={AppColor.PRIMARY} />
+            )}
+          />
         ) : null}
       </SafeAreaWrapper>
     </>

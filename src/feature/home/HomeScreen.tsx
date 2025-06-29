@@ -99,8 +99,6 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
             <TouchableOpacity
               style={styles.exploreCardContainer}
               onPress={()=> navigate(screenNames.ScheduleListScreen,{type:ScreenType.PHOTO_FILE})}
-              // onPress={() => navigation.navigate("PhotosF")}>
-              // onPress={() => navigation.navigate(SCREENS.PHOTO_FILES)}
             >
               <ImageBackground
                 source={images.IMAGE_GALLERY}

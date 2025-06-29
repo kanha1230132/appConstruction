@@ -93,7 +93,7 @@ const LogoUploadScreen: React.FC<LogoUploadScreenProps> = ({ navigation,route })
       <SafeAreaWrapper>
         <HeaderWithBackButton
           title={IsNew ? "Upload Logo" : 'Logo'}
-          onBackClick={() => navigate(screenNames.LogoScreen)}
+          onBackClick={() => goBack()}
           customStyle={undefined}
         />
 

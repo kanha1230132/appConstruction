@@ -61,7 +61,7 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
         dispatch(updateUserDetails({ ...response, email: Email }));
         showToast(response.message || "Login Successfully", "success");
         setIsLoading(false);
-        await delay(1000);
+        await delay(700);
         resetAndNavigate(screenNames.MainApp);
       } else {
         showToast(response || "Something went wrong", "danger");
@@ -85,7 +85,7 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
 
           <Text style={styles.greeting}>Hey,</Text>
           <Text style={styles.greeting}>Login Now!</Text>
-          <View style={{ marginTop: 20, gap: 10 }}>
+          <View style={{ marginTop: 20 }}>
             <IconTextInput
               value={Email}
               label={"E-mail ID"}

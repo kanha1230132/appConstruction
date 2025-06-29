@@ -29,7 +29,10 @@ const IconTextInput = ({
 }: IconTextInputInterface) => {
   return (
     <TextInput
-      style={{ color: AppColor.BLACK, fontSize: inputFontSize,backgroundColor:AppColor.WHITE }}
+      style={{ color: AppColor.BLACK, fontSize: inputFontSize,backgroundColor:AppColor.WHITE,
+    marginBottom: 15,
+
+       }}
       value={value}
       editable={editable}
       onChangeText={onChangeText}

@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { SafeAreaWrapper } from "../../../../components/SafeAreaWrapper/SafeAreaWrapper";
 import ScrollViewWrapper from "../../../../components/ScrollViewWrapper/ScrollViewWrapper";
 import HeaderWithBackButton from "../../../../components/Button/HeaderWithBackButton";
@@ -19,18 +19,21 @@ import useToastHook from "../../../../hooks/toast";
 import { getUuid } from "../../../../utils/util";
 import moment from "moment";
 import RestClient from "../../../../api/restClient";
+import { CreateScheduleScreenProps } from "../../../../types/navigation";
+import { SchedulesResponse } from "../../../../api/apiInterface";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../store/store";
 
-interface CreateScheduleScreenProps {}
 
-const CreateScheduleScreen: React.FC<CreateScheduleScreenProps> = () => {
+const CreateScheduleScreen: React.FC<CreateScheduleScreenProps> = ({route}) => {
+  const {IsBoss} = useSelector((state:RootState)=> state.User)
   const [projectName, setProjectName] = useState("");
   const [projectNumber, setProjectNumber] = useState("");
   const [owner, setOwner] = useState("");
   const [rate, setRate] = useState(0);
   const [description, setDescription] = useState("");
-  const [file, setFile] = useState(
-    "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
-  );
+  const [invoiceTo, setInvoiceTo] = useState('')
+  const [file, setFile] = useState("");
   const [IsLoading, setIsLoading] = useState(false);
   const { showToast } = useToastHook();
 
@@ -38,6 +41,24 @@ const CreateScheduleScreen: React.FC<CreateScheduleScreenProps> = () => {
   const ownerRef = useRef<any>(null);
   const rateRef = useRef<any>(null);
   const descriptionRef = useRef<any>(null);
+  const invoiceToRef = useRef<any>(null);
+  const [IsEdit, setIsEdit] = useState(false)
+
+  useEffect(()=>{
+    const schedule = route?.params?.schedule
+    console.log("schedule : ", schedule)
+    if(schedule){
+      const {projectName, projectNumber, owner,pdfUrl} = schedule
+      setIsEdit(true)
+      setProjectName(projectName)
+      setProjectNumber(projectNumber)
+      setOwner(owner)
+      setRate(rate)
+      setDescription(description)
+      setInvoiceTo(invoiceTo);
+      setFile(pdfUrl)
+    }
+  },[])
 
   const callToUploadSchedule = async () => {
     try {
@@ -76,7 +97,6 @@ const CreateScheduleScreen: React.FC<CreateScheduleScreenProps> = () => {
         description: description,
       };
       setIsLoading(true);
-      console.log("body : ", body);
       const restClient = new RestClient();
       const response = await restClient.createSchedule(body);
       if (response && typeof response !== "string") {
@@ -97,7 +117,7 @@ const CreateScheduleScreen: React.FC<CreateScheduleScreenProps> = () => {
     <>
       <SafeAreaWrapper>
         <HeaderWithBackButton
-          title={"Upload Schedule"}
+          title={IsEdit ? "Edit Schedule" : "Upload Schedule"}
           onBackClick={() => goBack()}
           customStyle={undefined}
         />
@@ -109,6 +129,7 @@ const CreateScheduleScreen: React.FC<CreateScheduleScreenProps> = () => {
             label="Project Name"
             returnKeyType="next"
             onSubmitEditing={() => projectNumberRef.current?.focus()}
+            editable={!IsEdit}
           />
 
           <CustomTextInput
@@ -118,13 +139,14 @@ const CreateScheduleScreen: React.FC<CreateScheduleScreenProps> = () => {
             label="Project Number"
             returnKeyType="next"
             onSubmitEditing={() => ownerRef.current?.focus()}
+            editable={!IsEdit}
           />
 
           <CustomTextInput
             ref={ownerRef}
             onChangeTextValue={(text) => setOwner(text)}
             textValue={owner}
-            label="Owner"
+            label="Client/Owner"
             returnKeyType="next"
             onSubmitEditing={() => rateRef.current?.focus()}
           />
@@ -133,17 +155,26 @@ const CreateScheduleScreen: React.FC<CreateScheduleScreenProps> = () => {
             ref={rateRef}
             onChangeTextValue={(text) => setRate(text ? Number(text) : 0)}
             textValue={rate ? rate.toString() : ""}
-            label="Project Rate"
+            label="Rate"
             keyboardType="numeric"
+            returnKeyType="next"
+            onSubmitEditing={() => invoiceToRef.current?.focus()}
+          />
+           <CustomTextInput
+            ref={invoiceToRef}
+            onChangeTextValue={(text) => setInvoiceTo(text)}
+            textValue={invoiceTo}
+            label="Invoice To"
             returnKeyType="next"
             onSubmitEditing={() => descriptionRef.current?.focus()}
           />
+
 
           <CustomTextInput
             ref={descriptionRef}
             onChangeTextValue={(text) => setDescription(text)}
             textValue={description}
-            label="Project Description"
+            label="Description"
             numberOfLines={5}
             multiline
             returnKeyType="done"
@@ -151,17 +182,24 @@ const CreateScheduleScreen: React.FC<CreateScheduleScreenProps> = () => {
             onSubmitEditing={Keyboard.dismiss}
           />
 
-          <FileUploadCard file={file} setFile={setFile} />
+          <FileUploadCard file={file} setFile={setFile} IsBoss={IsBoss} />
         </ScrollViewWrapper>
       </SafeAreaWrapper>
 
-      <View style={styles.button}>
+      {
+        IsBoss ?
+<View style={styles.button}>
         <LoaderButton
-          title="Upload"
+          title={IsEdit ? "Update": "Upload"}
           onPress={() => callToUploadSchedule()}
           loading={IsLoading}
         />
       </View>
+
+        : null
+      }
+
+      
     </>
   );
 };

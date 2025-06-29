@@ -22,6 +22,7 @@ export default function Main() {
         successIcon={ <MaterialIcons name="check-circle" size={24} color="white" />}
         warningIcon={ <MaterialIcons name="warning" size={24} color="white" />}
         dangerIcon={ <MaterialIcons name="error" size={24} color="white" />}
+        normalColor={AppColor.PRIMARY}
     
         >
 

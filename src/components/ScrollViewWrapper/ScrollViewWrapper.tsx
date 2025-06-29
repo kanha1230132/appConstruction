@@ -12,9 +12,9 @@ const ScrollViewWrapper: React.FC<ScrollViewWrapperProps> = ({
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
-      automaticallyAdjustKeyboardInsets
-      automaticallyAdjustsScrollIndicatorInsets
-      contentContainerStyle={{ flexGrow: 1 }}
+       keyboardShouldPersistTaps="handled"
+        automaticallyAdjustKeyboardInsets={true}
+      contentContainerStyle={{ flex: 1 }}
       style={{
         flex: 1,
         backgroundColor: AppColor.WHITE,

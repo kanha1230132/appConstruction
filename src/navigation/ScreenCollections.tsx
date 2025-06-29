@@ -19,6 +19,9 @@ import ResetPasswordScreen from "../feature/auth/screens/ResetPassword/ResetPass
 import CreateScheduleScreen from "../feature/schedule/screens/createSchedule/CreateScheduleScreen";
 import ScheduleListScreen from "../feature/schedule/screens/scheduleList/ScheduleListScreen";
 import PhotoFilesScreen from "../feature/photoFiles/PhotoFilesScreen";
+import DailyEntryScreen from "../feature/reports/screens/dailyEntry/DailyEntryScreen";
+import DailyDairyEntryScreen from "../feature/reports/screens/dailyDairyEntry/DailyDairyEntryScreen";
+import WeeklyEntryScreen from "../feature/reports/screens/weeklyEntry/WeeklyEntryScreen";
 
 export const authStack = [
   {
@@ -90,7 +93,19 @@ export const authStack = [
   {
     name: screenNames.PhotoFilesScreen,
     component: PhotoFilesScreen,
-  }
+  },
+  {
+    name: screenNames.DailyEntryScreen,
+    component: DailyEntryScreen,
+  },
+  {
+    name: screenNames.DailyDairyEntryScreen,
+    component: DailyDairyEntryScreen,
+  },
+  {
+    name: screenNames.WeeklyEntryScreen,
+    component: WeeklyEntryScreen,
+  },
 ];
 
 export const dashboardStack = [
@@ -100,7 +115,4 @@ export const dashboardStack = [
   //   }
 ];
 
-export const allStackScreens: {
-  name: string;
-  component: React.FC<any>;
-}[] = [ ...authStack];
+export const allStackScreens = [...authStack];

@@ -2,7 +2,7 @@ import { FlatList, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaWrapper } from "../../../../components/SafeAreaWrapper/SafeAreaWrapper";
 import HeaderWithBackButton from "../../../../components/Button/HeaderWithBackButton";
-import { goBack } from "../../../../utils/NavigationUtil";
+import { goBack, navigate } from "../../../../utils/NavigationUtil";
 import { ScheduleListScreenProps } from "../../../../types/navigation";
 import { useIsFocused } from "@react-navigation/native";
 import RestClient from "../../../../api/restClient";
@@ -12,6 +12,8 @@ import ScrollViewWrapper from "../../../../components/ScrollViewWrapper/ScrollVi
 import ScheduleListCard from "../../components/ScheduleListCard";
 import ActivityLoader from "../../../../components/Loader/ActivityLoader";
 import NotFoundText from "../../../../components/CustomText/NotFoundText";
+import { screenNames } from "../../../../navigation/ScreenNames";
+import { ScreenType } from "../../../../types/screenTypes";
 
 
 const ScheduleListScreen: React.FC<ScheduleListScreenProps> = ({route}) => {
@@ -50,9 +52,21 @@ const ScheduleListScreen: React.FC<ScheduleListScreenProps> = ({route}) => {
     }
   };
 
+  const callToNavigate = (item: SchedulesResponse) => {
+    if (screenType == ScreenType.PHOTO_FILE) {
+      navigate(screenNames.PhotoFilesScreen, { project: item });
+    } else if (screenType == ScreenType.DAILY_ENTRY) {
+      navigate(screenNames.DailyEntryScreen, { project: item });
+    } else if (screenType == ScreenType.WEEKLY_ENTRY) {
+      navigate(screenNames.WeeklyEntryScreen, { project: item });
+    } else if (screenType == ScreenType.DAILY_DAIRY_ENTRY) {
+      navigate(screenNames.DailyDairyEntryScreen, { project: item });
+    }
+  };
+
   const renderItem = ({ item }: { item: SchedulesResponse }) => {
     return (
-     <ScheduleListCard item={item} />
+     <ScheduleListCard item={item} onPress={()=>  callToNavigate(item)} />
     );
   };
 

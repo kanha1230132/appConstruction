@@ -10,9 +10,10 @@ import { screenNames } from '../../../navigation/ScreenNames';
 
 interface ScheduleListCardProps {
   item: SchedulesResponse;
+  onPress: () => void;
 }
 
-const ScheduleListCard: React.FC<ScheduleListCardProps> = ({ item }) => {
+const ScheduleListCard: React.FC<ScheduleListCardProps> = ({ item,onPress }) => {
   return (
     <Card style={{
         marginVertical:7,
@@ -24,7 +25,7 @@ const ScheduleListCard: React.FC<ScheduleListCardProps> = ({ item }) => {
   <TouchableOpacity
         style={styles.card}
         onPress={async () => {
-          navigate(screenNames.PhotoFilesScreen, {project:item});
+          onPress()
         }}
       >
         <View style={styles.cardContent}>

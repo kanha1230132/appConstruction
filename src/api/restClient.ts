@@ -241,6 +241,28 @@ class RestClient {
   }
 
 
+  async uploadAttachments(body: any): Promise<{message: string, data: any} | string | null> {
+    try {
+      const response = await apiClient.post(endPoints.URL_UPLOAD_ATTACHMENTS,body);
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "success") {
+          return {data:output.data, message: output.message};
+        } else {
+          return output.message;
+        }
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      console.log("Error getLogo : ", error);
+      return null;
+    }
+  }
+
+
 }
 
 export default RestClient;

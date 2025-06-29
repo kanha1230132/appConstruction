@@ -1,6 +1,7 @@
 import ImagePicker from 'react-native-image-crop-picker';
 import uuid from 'react-native-uuid';
 import { Constants } from '../constants/constants';
+import * as DocumentPicker from '@react-native-documents/picker';
 
 export const openCamera = async () => {
   try {
@@ -53,4 +54,19 @@ export const getImageDimensions = (width : number, height : number) => {
 };
 
 export const getUuid = () => uuid.v4();
+
+
+export const openDocumentPicker = async (): Promise<DocumentPicker.DocumentPickerResponse | null> => {
+  try {
+    const result = await DocumentPicker.pick({
+      type: [DocumentPicker.types.pdf],
+    });
+    console.log("Document Picker : ",result);
+    return result[0];
+  } catch (err) {
+      console.log('User cancelled the picker');
+      console.log('Error:', err);
+      return null
+  }
+};
 

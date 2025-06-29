@@ -37,3 +37,9 @@ export interface SchedulesResponse {
   __v: number;
 }
 
+export interface AttachmentResponse{
+  fileName: string;
+  fileUrl: string;
+  type: string; // You can replace this with a union of possible types if there are more
+}
+

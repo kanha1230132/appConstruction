@@ -20,6 +20,9 @@ export enum screenNames {
     CreateScheduleScreen = "CreateScheduleScreen",
     ResetPasswordScreen = "ResetPasswordScreen",
     ScheduleListScreen = "ScheduleListScreen",
-    PhotoFilesScreen = "PhotoFilesScreen"
+    PhotoFilesScreen = "PhotoFilesScreen",
+    DailyEntryScreen = "DailyEntryScreen",
+    WeeklyEntryScreen = "WeeklyEntryScreen",
+    DailyDairyEntryScreen = "DailyDairyEntryScreen",
 
 }
