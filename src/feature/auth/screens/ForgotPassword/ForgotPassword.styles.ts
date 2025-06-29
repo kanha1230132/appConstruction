@@ -38,7 +38,7 @@ export const styles = StyleSheet.create({
     width: '95%',
     alignSelf: 'center',
     position: 'absolute',
-    bottom: Platform.OS == "ios" ? 30 : 10,
+    bottom: Platform.OS == "ios" ? 10 : 10,
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',

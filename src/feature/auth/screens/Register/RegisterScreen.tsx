@@ -19,6 +19,8 @@ import ScrollViewWrapper from "../../../../components/ScrollViewWrapper/ScrollVi
 import useToastHook from "../../../../hooks/toast";
 import RestClient from "../../../../api/restClient";
 import { delay } from "../../../../utils/delay";
+import PrivacyPolicyView from "../../components/PrivacyPolicyView";
+import PrivacyPolicyModal from "../../components/PrivacyPolicyModal";
 
 const RegisterScreen: React.FC<RegisterScreenProps> = () => {
   const [Email, setEmail] = useState("");
@@ -28,58 +30,57 @@ const RegisterScreen: React.FC<RegisterScreenProps> = () => {
   const [checked, setChecked] = useState(false);
   const [UserName, setUserName] = useState("");
   const { showToast } = useToastHook();
+  const [policyVisible, setPolicyVisible] = useState(false);
 
   const validateValues = () => {
-    // Input validation
     if (!UserName || !Email || !Password) {
       showToast("Please fill all fields!", "warning");
       return false;
     }
-
-    // Regex for email validation
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     if (!Email.match(emailPattern)) {
       showToast("Invalid email format!", "warning");
       return false;
     }
 
-    // Password validation (at least 8 characters)
     if (Password.length < 8) {
       showToast("Password must be at least 8 characters long!", "warning");
       return false;
     }
+
+    if(!checked){
+        showToast("Please accept our Privacy Policy to continue using the app.", "warning");
+        return false;
+      }
 
     return true;
   };
 
   const callToRegister = async () => {
     try {
-       if (validateValues()) {
-      const params = {
-        username: UserName,
-        email: Email,
-        password: Password,
-      };
-      setIsLoading(true);
-      const restClient = new RestClient();
-      const response = await restClient.signup(params);
-      if (response && typeof response != "string") {
-        showToast(response.message || "Registration Successfully", "success");
-        setIsLoading(false);
-        await delay(1000);
-        resetAndNavigate(screenNames.LoginScreen);
-
-      } else {
-        showToast(response || "Something went wrong", "danger");
+      if (validateValues()) {
+        const params = {
+          username: UserName,
+          email: Email,
+          password: Password,
+        };
+        setIsLoading(true);
+        const restClient = new RestClient();
+        const response = await restClient.signup(params);
+        if (response && typeof response != "string") {
+          showToast(response.message || "Registration Successfully", "success");
+          setIsLoading(false);
+          await delay(1000);
+          resetAndNavigate(screenNames.LoginScreen);
+        } else {
+          showToast(response || "Something went wrong", "danger");
+        }
       }
-    }
     } catch (error) {
       setIsLoading(false);
-      
-    }finally{
+    } finally {
       setIsLoading(false);
     }
-   
   };
   return (
     <>
@@ -128,43 +129,11 @@ const RegisterScreen: React.FC<RegisterScreenProps> = () => {
               }}
             />
 
-            <View style={styles.checkboxContainer}>
-              <Checkbox.Android
-                status={checked ? "checked" : "unchecked"}
-                onPress={() => setChecked(!checked)}
-                color="#155db2"
-              />
-
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 13,
-                    fontFamily: AppFonts.Regular,
-                    color: AppColor.BLACK_70,
-                  }}
-                >
-                  {" "}
-                  I agree to the{" "}
-                </Text>
-                <TouchableOpacity>
-                  <Text
-                    style={{
-                      fontSize: 13,
-                      fontFamily: AppFonts.Regular,
-                      color: AppColor.PRIMARY,
-                    }}
-                  >
-                    Privacy Policy
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-
+            <PrivacyPolicyView
+              checked={checked}
+              setChecked={() => setChecked(!checked)}
+              onPressPolicy={() => setPolicyVisible(true)}
+            />
             <View style={styles.buttonContainer}>
               <LoaderButton
                 title="Register"
@@ -189,6 +158,11 @@ const RegisterScreen: React.FC<RegisterScreenProps> = () => {
             </View>
           </ScrollView>
         </ScrollViewWrapper>
+        <PrivacyPolicyModal
+          visible={policyVisible}
+          setChecked={(v: boolean) => setChecked(v)}
+          setPolicyVisible={(v: boolean) => setPolicyVisible(v)}
+        />
       </SafeAreaWrapper>
 
       <PoweredText />

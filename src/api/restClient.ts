@@ -218,6 +218,28 @@ class RestClient {
     }
   }
 
+  async getAddress(url: string): Promise<{message: string} | string | null> {
+    try {
+      const response = await apiClient.get(url);
+      console.log("response getAddress : ", response)
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "success") {
+          return {message: output.message};
+        } else {
+          return output.message;
+        }
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      console.log("Error getLogo : ", error);
+      return null;
+    }
+  }
+
 
 }
 

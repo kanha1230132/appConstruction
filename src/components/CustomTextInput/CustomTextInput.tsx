@@ -31,6 +31,7 @@ const CustomTextInput = forwardRef<any, CustomTextInputProps>(({
         style={{
           width: '100%',
           backgroundColor: AppColor.WHITE,
+          color: AppColor.BLACK,
         }}
         onChangeText={onChangeTextValue}
         value={textValue}
@@ -44,6 +45,10 @@ const CustomTextInput = forwardRef<any, CustomTextInputProps>(({
         numberOfLines={numberOfLines}
         multiline={multiline}
         returnKeyType={returnKeyType}
+         contentStyle={{
+                color: AppColor.BLACK,
+                fontFamily: AppFonts.Regular,
+              }}
         {...props}
       />
     </View>

@@ -18,6 +18,7 @@ import RestClient from "../../../../api/restClient";
 import useToastHook from "../../../../hooks/toast";
 import { delay } from "../../../../utils/delay";
 import IconTextInput from "../../../../components/CustomTextInput/CustomIconTextInput";
+import ScrollViewWrapper from "../../../../components/ScrollViewWrapper/ScrollViewWrapper";
 
 const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({}) => {
   const [isFocus, setIsFocus] = useState(false);
@@ -57,7 +58,7 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({}) => {
           onBackClick={() => goBack()}
           customStyle={undefined}
         />
-
+        <ScrollViewWrapper>
         <View style={styles.iconContainer}>
           <Image
             source={images.FORGOT_PASSWORD_PHOTO} // Path to the image in the assets folder
@@ -79,6 +80,8 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({}) => {
           rightIconName={"email-outline"}
           onClickIcon={() => {}}
         />
+
+</ScrollViewWrapper>
       </SafeAreaWrapper>
 
       <View style={styles.button}>

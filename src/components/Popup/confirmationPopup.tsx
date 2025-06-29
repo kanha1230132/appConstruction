@@ -47,13 +47,13 @@ export const useConfirmationPopup = () => {
   }}>
       <Portal>
         <Dialog style={{backgroundColor:AppColor.WHITE,borderRadius:20}} visible={popupVisible} onDismiss={handleCancel}>
-          <Dialog.Title>{title}</Dialog.Title>
+          <Dialog.Title style={{color:AppColor.PRIMARY}}>{title}</Dialog.Title>
           <Dialog.Content>
             <Text>{message ? message : "Submission Failed"}</Text>
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={handleCancel} labelStyle={{color:AppColor.BLACK}} >{cancel}</Button>
-            <Button onPress={handleConfirm} labelStyle={{color:AppColor.WHITE}} color="red" style={{backgroundColor:AppColor.PRIMARY,paddingHorizontal:10}}>{ok}</Button>
+            <Button onPress={handleConfirm} labelStyle={{color:AppColor.WHITE}} style={{backgroundColor:AppColor.PRIMARY,paddingHorizontal:10}}>{ok}</Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>

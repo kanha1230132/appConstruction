@@ -29,18 +29,25 @@ const IconTextInput = ({
 }: IconTextInputInterface) => {
   return (
     <TextInput
-      style={{ color: value === '' ? 'grey' : 'black', fontSize: inputFontSize,backgroundColor:AppColor.WHITE }}
+      style={{ color: AppColor.BLACK, fontSize: inputFontSize,backgroundColor:AppColor.WHITE }}
       value={value}
       editable={editable}
       onChangeText={onChangeText}
       label={label}
       secureTextEntry={isSecure}
       returnKeyType="done"
+      contentStyle={{
+        color: AppColor.BLACK
+        ,
+                        fontFamily: AppFonts.Regular,
+        
+      }}
      right={ <TextInput.Icon
               icon={rightIconName}
               onPress={onClickIcon}
             />}
       mode="outlined"
+      
       activeOutlineColor={AppColor.PRIMARY}
       {...props}
     />

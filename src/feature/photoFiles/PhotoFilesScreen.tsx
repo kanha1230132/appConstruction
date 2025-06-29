@@ -1,4 +1,11 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { PhotoFilesScreenProps } from "../../types/navigation";
 import { SchedulesResponse } from "../../api/apiInterface";
@@ -9,9 +16,26 @@ import ScrollViewWrapper from "../../components/ScrollViewWrapper/ScrollViewWrap
 import { AppFonts } from "../../themes/AppFonts";
 import { AppColor } from "../../themes/AppColor";
 import { images } from "../../assets";
+import ImagePickerModal from "../../components/Modal/PhotoSelectorModal";
+import { openCamera, openImagePicker } from "../../utils/util";
+import useImageViewer from "../../components/Modal/ImageViewerModal";
+import { getLocation } from "../../utils/Location";
+import { delay } from "../../utils/delay";
+import useMultipleImageViewer from "../../components/Modal/MultipleImageViewerModal";
 
 const PhotoFilesScreen: React.FC<PhotoFilesScreenProps> = ({ route }) => {
   const [ProjectList, setProjectList] = useState<SchedulesResponse>();
+  const [imagePickerModal, setImagePickerModal] = useState(false);
+  const { showImageViewerPopup, ImageViewerPopup, imageViewerVisible } =
+    useImageViewer();
+  const {
+    showMultipleImageViewerPopup,
+    MultipleImageViewerPopup,
+    multipleImageViewerVisible,
+  } = useMultipleImageViewer();
+  
+
+
   useEffect(() => {
     if (route.params) {
       const { project } = route.params;
@@ -19,8 +43,54 @@ const PhotoFilesScreen: React.FC<PhotoFilesScreenProps> = ({ route }) => {
         setProjectList(project);
       }
       console.log(project);
+      getLocation(true);
     }
   }, []);
+
+  const handlePickImage = async () => {
+    try {
+      setImagePickerModal(false);
+      if (Platform.OS === "ios") {
+        await delay(900);
+      }
+      const result = await openImagePicker(true);
+      if (result) {
+        const imageList = await showMultipleImageViewerPopup(
+          result,
+          "Partap Nagar , Ellenabad, Sirsa"
+        );
+        console.log("imageList : ", imageList);
+      }
+    } catch (error) {
+      console.log("Error --> ", error);
+    }
+  };
+  const handleTakePicture = async () => {
+    try {
+      setImagePickerModal(false);
+      if (Platform.OS === "ios") {
+        await delay(900);
+      }
+      const result = await openCamera();
+      if (result) {
+        const { height, width } = result;
+        const tempUri = await showImageViewerPopup(
+          result.path,
+          "Partap Nagar , Ellenabad, Sirsa",
+          "OK",
+          height,
+          width
+        );
+      }
+    } catch (error) {
+      console.log("Error --> ", error);
+    }
+  };
+
+
+
+
+
   return (
     <>
       <SafeAreaWrapper>
@@ -50,7 +120,9 @@ const PhotoFilesScreen: React.FC<PhotoFilesScreenProps> = ({ route }) => {
               Photos
             </Text>
             <TouchableOpacity
-              onPress={() => {}}
+              onPress={() => {
+                setImagePickerModal(true);
+              }}
               style={{
                 flexDirection: "row",
                 alignItems: "center",
@@ -76,6 +148,19 @@ const PhotoFilesScreen: React.FC<PhotoFilesScreenProps> = ({ route }) => {
             </TouchableOpacity>
           </View>
         </ScrollViewWrapper>
+
+        {imagePickerModal ? (
+          <ImagePickerModal
+            pickImageFromLibrary={() => handlePickImage()}
+            takePhoto={() => handleTakePicture()}
+            isVisible={imagePickerModal}
+            onClose={() => setImagePickerModal(false)}
+          />
+        ) : null}
+
+        {imageViewerVisible && <ImageViewerPopup />}
+
+        {multipleImageViewerVisible && <MultipleImageViewerPopup />}
       </SafeAreaWrapper>
     </>
   );

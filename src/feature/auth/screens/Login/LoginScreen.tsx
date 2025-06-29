@@ -19,29 +19,39 @@ import RestClient from "../../../../api/restClient";
 import { updateUserDetails } from "../../../../store/slice/UserSlice";
 import { delay } from "../../../../utils/delay";
 import { useIsFocused } from "@react-navigation/native";
+import ScrollViewWrapper from "../../../../components/ScrollViewWrapper/ScrollViewWrapper";
+import PrivacyPolicyView from "../../components/PrivacyPolicyView";
+import PrivacyPolicyModal from "../../components/PrivacyPolicyModal";
 
 const LoginScreen: React.FC<LoginScreenProps> = () => {
   const [Email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
   const [IsLoading, setIsLoading] = useState(false);
   const [IsSecure, setIsSecure] = useState(false);
+  const [checked, setChecked] = useState(false);
   const { showToast } = useToastHook();
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const { UserEmail } = useSelector((state: RootState) => state.User);
+  const [policyVisible, setPolicyVisible] = useState(false);
 
-  useEffect(()=>{
-    if(isFocused){
-      if(UserEmail){
+  useEffect(() => {
+    if (isFocused) {
+      if (UserEmail) {
         setEmail(UserEmail);
       }
     }
-  },[isFocused])
+  }, [isFocused]);
 
   const callToLogin = async () => {
     try {
-      if(!Email || !Password){
-        showToast("Please enter email and password", 'warning');
+      if (!Email || !Password) {
+        showToast("Please enter email and password", "warning");
+        return;
+      }
+
+      if(!checked){
+        showToast("Please accept our Privacy Policy to continue using the app.", "warning");
         return;
       }
       setIsLoading(true);
@@ -50,7 +60,7 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
       if (response && typeof response != "string") {
         dispatch(updateUserDetails({ ...response, email: Email }));
         showToast(response.message || "Login Successfully", "success");
-      setIsLoading(false);
+        setIsLoading(false);
         await delay(1000);
         resetAndNavigate(screenNames.MainApp);
       } else {
@@ -67,72 +77,89 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
   return (
     <>
       <SafeAreaWrapper>
-        <View style={styles.logoContainer}>
-          <Image source={images.logo} style={styles.logo} />
-          <Text style={styles.companyName}>{AppText.appName}</Text>
-        </View>
+        <ScrollViewWrapper>
+          <View style={styles.logoContainer}>
+            <Image source={images.logo} style={styles.logo} />
+            <Text style={styles.companyName}>{AppText.appName}</Text>
+          </View>
 
-        <Text style={styles.greeting}>Hey,</Text>
-        <Text style={styles.greeting}>Login Now!</Text>
-        <View style={{ marginTop: 20 }}>
-          <CustomTextInput
-            onChangeTextValue={(text) => {
-              setEmail(text);
-            }}
-            textValue={Email}
-            label={"E-mail ID"}
-          />
-          <IconTextInput
-            value={Password}
-            label={"Password"}
-            onChangeText={(text) => {
-              setPassword(text);
-            }}
-            editable={true}
-            isSecure={IsSecure}
-            rightIconName={IsSecure ? "eye-off" : "eye"}
-            onClickIcon={() => {
-              setIsSecure(!IsSecure);
-            }}
-          />
-        </View>
+          <Text style={styles.greeting}>Hey,</Text>
+          <Text style={styles.greeting}>Login Now!</Text>
+          <View style={{ marginTop: 20, gap: 10 }}>
+            <IconTextInput
+              value={Email}
+              label={"E-mail ID"}
+              onChangeText={(text) => {
+                setEmail(text);
+              }}
+              rightIconName={"email-outline"}
+              onClickIcon={() => {
+                setIsSecure(!IsSecure);
+              }}
+            />
+            <IconTextInput
+              value={Password}
+              label={"Password"}
+              onChangeText={(text) => {
+                setPassword(text);
+              }}
+              editable={true}
+              isSecure={IsSecure}
+              rightIconName={IsSecure ? "eye-off" : "eye"}
+              onClickIcon={() => {
+                setIsSecure(!IsSecure);
+              }}
+            />
+          </View>
 
-        <TouchableOpacity
-          style={styles.forgotPassword}
-          onPress={() => {
-            navigate(screenNames.ForgotPasswordScreen);
-            // showToast('Under Development', 'success');
-          }}
-        >
-          <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-        </TouchableOpacity>
-
-        <View style={styles.buttonContainer}>
-          <LoaderButton
-            title="Login"
-            onPress={async () => {
-              Keyboard.dismiss();
-              callToLogin();
-              // navigate(screenNames.MainApp);
-            }}
-            loading={IsLoading}
-          />
-        </View>
-
-        <View style={styles.orContainer}>
-          <View style={styles.divider} />
-          <Text style={styles.orText}>OR</Text>
-          <View style={styles.divider} />
-        </View>
-
-        <View style={styles.signupContainer}>
-          <Text style={styles.signupText}>Don't have an account?</Text>
           <TouchableOpacity
-            onPress={() => navigate(screenNames.RegisterScreen)}
+            style={styles.forgotPassword}
+            onPress={() => {
+              navigate(screenNames.ForgotPasswordScreen);
+              // showToast('Under Development', 'success');
+            }}
           >
-            <Text style={styles.signupLink}>Sign Up</Text>
+            <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
           </TouchableOpacity>
-        </View>
+
+          <PrivacyPolicyView
+            checked={checked}
+            setChecked={() => setChecked(!checked)}
+            onPressPolicy={() => setPolicyVisible(true)}
+          />
+
+          <View style={styles.buttonContainer}>
+            <LoaderButton
+              title="Login"
+              onPress={async () => {
+                Keyboard.dismiss();
+                callToLogin();
+                // navigate(screenNames.MainApp);
+              }}
+              loading={IsLoading}
+            />
+          </View>
+
+          <View style={styles.orContainer}>
+            <View style={styles.divider} />
+            <Text style={styles.orText}>OR</Text>
+            <View style={styles.divider} />
+          </View>
+
+          <View style={styles.signupContainer}>
+            <Text style={styles.signupText}>Don't have an account?</Text>
+            <TouchableOpacity
+              onPress={() => navigate(screenNames.RegisterScreen)}
+            >
+              <Text style={styles.signupLink}>Sign Up</Text>
+            </TouchableOpacity>
+          </View>
+          <PrivacyPolicyModal
+            visible={policyVisible}
+            setChecked={(v: boolean) => setChecked(v)}
+            setPolicyVisible={(v: boolean) => setPolicyVisible(v)}
+          />
+        </ScrollViewWrapper>
       </SafeAreaWrapper>
       <PoweredText />
     </>

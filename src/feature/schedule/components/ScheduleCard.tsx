@@ -71,9 +71,8 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 16,
-        fontFamily:AppFonts.Medium,
-
-        color: AppColor.PRIMARY,
+        fontFamily:AppFonts.Bold,
+        color: AppColor.BLACK,
         marginBottom: 5,
         
     },
