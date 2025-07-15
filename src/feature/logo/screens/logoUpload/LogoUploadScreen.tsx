@@ -6,22 +6,13 @@ import {
   TouchableOpacity,
   Platform,
 } from "react-native";
-import {
-  Text,
-  Divider,
-  Button,
-  ProgressBar,
-  Card,
-  FAB,
-} from "react-native-paper";
+import { Text, Card } from "react-native-paper";
 import { SafeAreaWrapper } from "../../../../components/SafeAreaWrapper/SafeAreaWrapper";
 import HeaderWithBackButton from "../../../../components/Button/HeaderWithBackButton";
 import { goBack, navigate } from "../../../../utils/NavigationUtil";
 import CustomTextInput from "../../../../components/CustomTextInput/CustomTextInput";
 import ScrollViewWrapper from "../../../../components/ScrollViewWrapper/ScrollViewWrapper";
 import { LogoUploadScreenProps } from "../../../../types/navigation";
-import { screenNames } from "../../../../navigation/ScreenNames";
-import { images } from "../../../../assets";
 import { AppColor } from "../../../../themes/AppColor";
 import { AppFonts } from "../../../../themes/AppFonts";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -29,17 +20,28 @@ import LoaderButton from "../../../../components/Button/LoaderButton";
 import { openCamera, openImagePicker } from "../../../../utils/util";
 import useToastHook from "../../../../hooks/toast";
 import { useIsFocused } from "@react-navigation/native";
+import { moderateScale } from "react-native-size-matters";
+import { ImageType } from "../../../../types/ImageType";
+import RestClient from "../../../../api/restClient";
+import {
+  CompanyLogoResponse,
+  UploadAttachmentResponse,
+} from "../../../../api/apiInterface";
+import ActivityLoader from "../../../../components/Loader/ActivityLoader";
 
-const LogoUploadScreen: React.FC<LogoUploadScreenProps> = ({ navigation,route }) => {
-  const [isUploading, setIsUploading] = React.useState(false);
+const LogoUploadScreen: React.FC<LogoUploadScreenProps> = ({
+  navigation,
+  route,
+}) => {
   const [companyName, setCompanyName] = useState("");
   const [IsLoading, setIsLoading] = useState(false);
   const [SelectedImage, setSelectedImage] = useState<{
     path: string;
     filename: string;
   }>();
-  const [IsNew, setIsNew] = useState(true)
-  const { showToast } = useToastHook(); 
+  const [IsNew, setIsNew] = useState(true);
+  const [SelectedLogo, setSelectedLogo] = useState<CompanyLogoResponse>();
+  const { showToast } = useToastHook();
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -47,6 +49,7 @@ const LogoUploadScreen: React.FC<LogoUploadScreenProps> = ({ navigation,route })
       if (route?.params?.logo) {
         const clickedLogo = route.params.logo;
         console.log("first : ", clickedLogo);
+        setSelectedLogo(clickedLogo);
         setCompanyName(clickedLogo?.companyName);
         setIsNew(false);
         setSelectedImage({
@@ -61,19 +64,6 @@ const LogoUploadScreen: React.FC<LogoUploadScreenProps> = ({ navigation,route })
     }
   }, [isFocused]);
 
-  const clickOnCamera = async () => {
-    try {
-      const response = await openCamera();
-      if (response) {
-        const { path, filename } = response;
-        setSelectedImage({ path, filename: filename || "" });
-      } else {
-        showToast("Something went wrong", "danger");
-      }
-      console.log("first : ", response);
-    } catch (error) {}
-  };
-
   const clickOnGallery = async () => {
     try {
       const response = await openImagePicker();
@@ -87,28 +77,90 @@ const LogoUploadScreen: React.FC<LogoUploadScreenProps> = ({ navigation,route })
     } catch (error) {}
   };
 
+  const callToUploadLogo = async () => {
+    try {
+      if (!companyName) {
+        showToast("Please enter logo name", "warning");
+        return;
+      }
+      if (!SelectedImage) {
+        showToast("Please select logo", "warning");
+        return;
+      }
+      setIsLoading(true);
+      const formData = new FormData();
+      formData.append("file", {
+        uri: SelectedImage?.path,
+        name: "image.jpg",
+        type: "image/jpeg",
+      });
+      formData.append("type", ImageType.LOGO);
+      const restClient = new RestClient();
+      const response = await restClient.uploadAttachments(formData);
+      if (response && typeof response !== "string") {
+        const output: UploadAttachmentResponse[] = response.data;
+        let url = "";
+        url = output[0]?.fileUrl.replace(/^.*?\.net\//, "");
+        const param = {
+          companyName: companyName,
+          fileUrl: url,
+        };
+        const responsePhotos = await restClient.addLogo(param);
+        console.log("responsePhotos : ", responsePhotos);
+        if (responsePhotos && typeof responsePhotos !== "string") {
+          showToast("Logo uploaded successfully", "success");
+          goBack();
+        } else {
+          showToast("Something went wrong please try again", "danger");
+        }
+      } else {
+        showToast("Something went wrong please try again", "danger");
+      }
+    } catch (error) {
+      console.log("Error : ", error);
+      showToast("Something went wrong please try again", "danger");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const callToDeleteLogo = async () => {
+    try {
+      setIsLoading(true);
+      const restClient = new RestClient();
+      const resposne = await restClient.deleteLogo(SelectedLogo?.id || 0);
+      if (resposne && typeof resposne !== "string") {
+        showToast("Logo deleted successfully", "success");
+        goBack();
+      } else {
+        showToast("Something went wrong please try again", "danger");
+      }
+    } catch (error) {
+      console.log("Error : ", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>
       <SafeAreaWrapper>
         <HeaderWithBackButton
-          title={IsNew ? "Upload Logo" : 'Logo'}
+          title={IsNew ? "Upload Logo" : "Logo"}
           onBackClick={() => goBack()}
           customStyle={undefined}
         />
 
         <ScrollViewWrapper>
           <View style={{ marginTop: 10 }}>
-
-             <View style={{ marginVertical: 10 }}>
+            <View style={{ marginVertical: 10 }}>
               <CustomTextInput
                 onChangeTextValue={(text) => {
                   setCompanyName(text);
                 }}
                 textValue={companyName}
-                label={"Company Name"}
+                label={"Logo Name"}
                 editable={IsNew}
-                
               />
             </View>
 
@@ -116,11 +168,12 @@ const LogoUploadScreen: React.FC<LogoUploadScreenProps> = ({ navigation,route })
               <Card
                 elevation={1}
                 style={{
+                  width:'98%',
                   backgroundColor: AppColor.WHITE,
                   marginVertical: 5,
                   padding: 10,
                   alignItems: "center",
-                  marginHorizontal: 2,
+                  marginHorizontal: '1%',
                   paddingVertical: 20,
                   borderRadius: 10,
                 }}
@@ -131,7 +184,7 @@ const LogoUploadScreen: React.FC<LogoUploadScreenProps> = ({ navigation,route })
                       resizeMode="contain"
                       source={{ uri: SelectedImage.path }}
                       style={{
-                        width: 100,
+                        width: 200,
                         height: 200,
                         marginLeft: 15,
                         alignSelf: "center",
@@ -154,8 +207,8 @@ const LogoUploadScreen: React.FC<LogoUploadScreenProps> = ({ navigation,route })
                   <>
                     <View
                       style={{
-                        width: 80,
-                        height: 80,
+                        width: moderateScale(70),
+                        height: moderateScale(70),
                         justifyContent: "center",
                         alignItems: "center",
                         borderRadius: 100,
@@ -166,10 +219,13 @@ const LogoUploadScreen: React.FC<LogoUploadScreenProps> = ({ navigation,route })
                         alignSelf: "center",
                       }}
                     >
-                      <View
+                      <TouchableOpacity
+                        onPress={() => {
+                          clickOnGallery();
+                        }}
                         style={{
-                          width: 70,
-                          height: 70,
+                          width: moderateScale(60),
+                          height: moderateScale(60),
                           justifyContent: "center",
                           alignItems: "center",
                           borderRadius: 100,
@@ -181,14 +237,14 @@ const LogoUploadScreen: React.FC<LogoUploadScreenProps> = ({ navigation,route })
                           size={30}
                           color={AppColor.WHITE}
                         />
-                      </View>
+                      </TouchableOpacity>
                     </View>
                     <Text
                       style={{
                         marginTop: 10,
                         color: AppColor.BLACK_80,
                         fontFamily: AppFonts.Medium,
-                        fontSize: 20,
+                        fontSize: moderateScale(20),
                         textAlign: "center",
                       }}
                     >
@@ -209,48 +265,77 @@ const LogoUploadScreen: React.FC<LogoUploadScreenProps> = ({ navigation,route })
                     </Text>
                   </>
                 )}
-              </Card>
 
-                {
-                  IsNew ?
-
- <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginTop: 15,
-                }}
-              >
-                <Card
-                  style={{
-                    backgroundColor: AppColor.WHITE,
-                    borderRadius: 10,
-                    width: "40%",
-                    marginVertical: 10,
-                    alignItems: "center",
-                    paddingVertical: 8,
-                    marginHorizontal: 2,
-                  }}
-                >
+                {SelectedImage && IsNew ? (
                   <TouchableOpacity
-                    onPress={() => clickOnGallery()}
+                    onPress={() => {
+                      setSelectedImage(undefined);
+                    }}
                     style={{
                       flexDirection: "row",
                       alignItems: "center",
                       gap: 10,
+                      width: 50,
+                      height: 50,
+                      position: "absolute",
+                      top: -25,
+                      right: -90,
                     }}
                   >
                     <MaterialIcons
-                      name="photo-library"
-                      size={30}
-                      color={AppColor.PRIMARY}
+                      name="cancel"
+                      size={35}
+                      color={AppColor.REJECT}
                     />
-                    <Text>Gallery</Text>
                   </TouchableOpacity>
-                </Card>
+                ) : null}
+              </Card>
 
-                <Card
+              {/* {IsNew ? (
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginTop: 15,
+                  }}
+                >
+                  <Card
+                    style={{
+                      backgroundColor: AppColor.WHITE,
+                      borderRadius: 10,
+                      width: "100%",
+                      marginVertical: 10,
+                      alignItems: "center",
+                      paddingVertical: 8,
+                      marginHorizontal: 2,
+                    }}
+                  >
+                    <TouchableOpacity
+                      onPress={() => clickOnGallery()}
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 10,
+                      }}
+                    >
+                      <MaterialIcons
+                        name="photo-library"
+                        size={30}
+                        color={AppColor.PRIMARY}
+                      />
+                      <Text
+                        style={{
+                          fontFamily: AppFonts.Medium,
+                          color: AppColor.BLACK,
+                        }}
+                      >
+                        Gallery
+                      </Text>
+                    </TouchableOpacity>
+                  </Card>
+
+                  {/* <Card
                   style={{
                     backgroundColor: AppColor.WHITE,
                     borderRadius: 10,
@@ -274,33 +359,28 @@ const LogoUploadScreen: React.FC<LogoUploadScreenProps> = ({ navigation,route })
                       size={30}
                       color={AppColor.PRIMARY}
                     />
-                    <Text>Camera</Text>
+                    <Text style={{
+                      fontFamily: AppFonts.Medium,
+                      color:AppColor.BLACK
+                    }}>Camera</Text>
                   </TouchableOpacity>
-                </Card>
-              </View> : null
-                }
-             
+                </Card> */}
+              {/* </View> */}
+              {/* ) : null} */}
             </View>
-
-           
           </View>
         </ScrollViewWrapper>
       </SafeAreaWrapper>
-      {
-        IsNew ?
 
-   <View style={styles.button}>
+      {/* {IsNew ? ( */}
+      <View style={styles.button}>
         <LoaderButton
-          title="Upload"
-          onPress={() => navigate(screenNames.VerifyOTPScreen)}
+          title={IsNew ? "Upload" : "Delete Logo"}
+          onPress={() => (IsNew ? callToUploadLogo() : callToDeleteLogo())}
           loading={IsLoading}
         />
       </View>
-
-        : null
-      }
-
-   
+      {/* ) : null} */}
     </>
   );
 };
@@ -379,13 +459,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#e0e0e0",
   },
   button: {
-    width: "95%",
+    width: "100%",
     alignSelf: "center",
     position: "absolute",
-    bottom: Platform.OS == "ios" ? 30 : 10,
+    bottom: 0,
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
+    paddingHorizontal: Platform.OS === "ios" ? "4%" : "2%",
+    backgroundColor: AppColor.WHITE,
+    paddingBottom: Platform.OS === "ios" ? 35 : 15,
   },
 });
 

@@ -9,6 +9,7 @@ import { ImageType } from "../../../types/ImageType";
 import RestClient from "../../../api/restClient";
 import { AttachmentResponse } from "../../../api/apiInterface";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { AppFonts } from "../../../themes/AppFonts";
 
 interface FileUploadCardProps {
   file: any;
@@ -154,7 +155,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontFamily:AppFonts.Bold,
+    color:AppColor.BLACK,
     marginBottom: 10,
   },
   fileTypes: {

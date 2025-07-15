@@ -1,74 +1,130 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { SchedulesResponse } from '../../../api/apiInterface';
-import { AppColor } from '../../../themes/AppColor';
-import { AppFonts } from '../../../themes/AppFonts';
-import { Card } from 'react-native-paper';
-import { navigate } from '../../../utils/NavigationUtil';
-import { screenNames } from '../../../navigation/ScreenNames';
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React from "react";
+import { SchedulesResponse } from "../../../api/apiInterface";
+import { AppColor } from "../../../themes/AppColor";
+import { AppFonts } from "../../../themes/AppFonts";
+import { Card } from "react-native-paper";
+import moment from "moment";
+import { DateFormat } from "../../../utils/dateUtil";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { Image } from "react-native";
+import { images } from "../../../assets";
+import { moderateScale } from "react-native-size-matters";
 
 interface ScheduleListCardProps {
   item: SchedulesResponse;
   onPress: () => void;
 }
 
-const ScheduleListCard: React.FC<ScheduleListCardProps> = ({ item,onPress }) => {
+const ScheduleListCard: React.FC<ScheduleListCardProps> = ({
+  item,
+  onPress,
+}) => {
   return (
-    <Card style={{
-        marginVertical:7,
-        paddingVertical:10,
-        marginHorizontal:2,
-        paddingHorizontal:10,
-        backgroundColor:AppColor.GREY_F9
-    }}>
-  <TouchableOpacity
+    <Card
+      style={{
+        marginVertical: 7,
+        paddingVertical: 10,
+        marginHorizontal: 2,
+        paddingHorizontal: 10,
+        backgroundColor: AppColor.GREY_F9,
+      }}
+    >
+      <TouchableOpacity
         style={styles.card}
         onPress={async () => {
-          onPress()
+          onPress();
         }}
       >
         <View style={styles.cardContent}>
           <View style={styles.textContainer}>
-            <Text style={styles.title}>{item.projectName}</Text>
-            <Text style={styles.subtitle}>Project Number: {item.projectNumber}</Text>
-            <Text style={styles.subtitle}>Owner: {item.owner}</Text>
+            <Text style={styles.title}>{item.project_name}</Text>
+
+            <Text style={styles.subtitle}>
+              <Text style={styles.titleHeading}>Project No./Client PO :</Text>
+              {item.project_number}
+            </Text>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <Text style={styles.subtitle}>
+                <Text style={styles.titleHeading}>Client/Owner :</Text> {item.owner}
+              </Text>
+              {/* <Text style={[styles.subtitle, , { width: "40%" }]}>
+                <Text style={styles.titleHeading}>Invoice to : </Text>
+                {item.invoice_to}
+              </Text> */}
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              {/* <Text style={styles.subtitle}>
+                <Text style={styles.titleHeading}>Rate :</Text> {item.rate}
+              </Text> */}
+              <Text style={[styles.subtitle, { width: "50%" }]}>
+                <Text style={styles.titleHeading}>Date :</Text>
+                {moment(item?.created_at).format(DateFormat.DD_MM_YYYY)}
+              </Text>
+            </View>
+
+            {/* <Text
+              style={[styles.subtitle, { width: "90%" }]}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
+              <Text style={styles.titleHeading}>Description :</Text>{" "}
+              {item.description}
+            </Text> */}
           </View>
-          <Ionicons name="arrow-forward" size={24} color={AppColor.PRIMARY} />
+
+          <MaterialIcons name="chevron-right" size={24} color={AppColor.PRIMARY} />
         </View>
       </TouchableOpacity>
-      </Card>
+
+      <Image source={images.PHOTO_FILES} style={{width:20,height:20,position:'absolute',right:0,tintColor:AppColor.PRIMARY}}  />
+    </Card>
   );
 };
 
-export default ScheduleListCard
+export default ScheduleListCard;
 
 const styles = StyleSheet.create({
-      card: {
+  card: {
     borderRadius: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   cardContent: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: "100%"
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
   },
   textContainer: {
     flex: 1,
   },
   title: {
-    fontSize: 16,
-    fontFamily:AppFonts.Bold,
+    fontSize: moderateScale(16),
+    fontFamily: AppFonts.Medium,
     color: AppColor.BLACK,
     marginBottom: 5,
   },
   subtitle: {
-    fontSize: 14,  // Keep it the same size as Project No
-    fontFamily:AppFonts.Medium,  // Make it bold if needed
-    color: '#666666',
+    fontSize:moderateScale(14), // Keep it the same size as Project No
+    fontFamily: AppFonts.Regular, // Make it bold if needed
+    color: AppColor.BLACK_80,
     marginBottom: 5,
   },
-})
+  titleHeading: {
+    color: AppColor.BLACK,
+    fontFamily: AppFonts.Medium,
+    fontSize: moderateScale(13),
+  },
+});

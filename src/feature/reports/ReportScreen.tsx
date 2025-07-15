@@ -12,6 +12,7 @@ import { navigate } from "../../utils/NavigationUtil";
 import { screenNames } from "../../navigation/ScreenNames";
 import { ScreenType } from "../../types/screenTypes";
 import { AppText } from "../../constants/appText";
+import { moderateScale } from "react-native-size-matters";
 
 interface ReportScreenProps {}
 
@@ -58,16 +59,16 @@ const ReportScreen: React.FC<ReportScreenProps> = () => {
               resizeMode="contain"
               source={images.REPORTS}
               style={{
-                width: "80%",
+                width: moderateScale(250),
+                
                 alignSelf: "center",
               }}
             />
           </View>
           <View
             style={{
-              flex: 1,
               width: "100%",
-              alignSelf: "flex-end",
+              justifyContent: "flex-end",
             }}
           >
             <ReportButton

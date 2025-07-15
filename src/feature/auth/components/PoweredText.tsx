@@ -1,4 +1,4 @@
-import { Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Linking, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { AppFonts } from '../../../themes/AppFonts'
 import { AppColor } from '../../../themes/AppColor'
@@ -25,10 +25,11 @@ const styles = StyleSheet.create({
         width:'100%',
         position: 'absolute',
         bottom: 0,
-        paddingBottom:20,
         alignItems: 'center',
         marginHorizontal:'auto',
-        backgroundColor:AppColor.WHITE
+         paddingHorizontal: Platform.OS === "ios" ? "4%" : "2%",
+                backgroundColor: AppColor.WHITE,
+                paddingBottom: Platform.OS === "ios" ? 35 : 15,
       },
       footerText: {
         textAlign: 'center',

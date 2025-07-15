@@ -1,7 +1,9 @@
 import React from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
-import { Button, Dialog, Portal, Paragraph, Title } from 'react-native-paper';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { Button, Dialog, Portal, Paragraph, Title, Modal } from 'react-native-paper';
 import { AppColor } from '../../../themes/AppColor';
+import { AppFonts } from '../../../themes/AppFonts';
+import { moderateScale } from 'react-native-size-matters';
 
 interface PrivacyPolicyModalProps {
   visible: boolean;
@@ -61,39 +63,55 @@ const PrivacyPolicyModal: React.FC<PrivacyPolicyModalProps> = ({
 
     
     return (
-  <Portal>
-    <Dialog style={{
-        backgroundColor:AppColor.WHITE
+  <Portal >
+    <Modal contentContainerStyle={{
+        backgroundColor:AppColor.WHITE,
+        height:'90%',
+        width:'90%',
+       marginHorizontal:'5%',
+       paddingHorizontal:10,
+       borderRadius:20
+    
+        
     }} visible={visible} onDismiss={onDecline}>
-      <Dialog.Content style={styles.content}>
         <Title style={styles.title}>PRIVACY POLICY</Title>
+
+      <View style={styles.content}>
         <ScrollView style={styles.scroll}>
           <Paragraph style={styles.paragraph}>{PRIVACY_POLICY_TEXT}</Paragraph>
         </ScrollView>
-      </Dialog.Content>
+      </View>
 
-      <Dialog.Actions>
+      <View style={{backgroundColor:AppColor.WHITE,marginBottom:0,padding:0,flexDirection:'row',justifyContent:'flex-end'}}>
         {onDecline && <Button labelStyle={{color:AppColor.BLACK}} onPress={onDecline}>Decline</Button>}
         <Button labelStyle={{color:AppColor.WHITE}} onPress={onAccept} style={{backgroundColor:AppColor.PRIMARY,paddingHorizontal:10}}>Accept</Button>
-      </Dialog.Actions>
-    </Dialog>
+      </View>
+
+    </Modal>
   </Portal>
 )};
 
 const styles = StyleSheet.create({
   content: {
-    maxHeight: '80%',
+    height: '80%',
     paddingVertical: 0,
+    backgroundColor:AppColor.WHITE
   },
   scroll: {
     marginVertical: 8,
   },
   title: {
-    fontSize: 20,
+    fontSize: moderateScale(20),
     marginBottom: 12,
+    color:AppColor.PRIMARY,
+    fontFamily: AppFonts.Medium,
+    marginHorizontal:moderateScale(15)
   },
   paragraph: {
     lineHeight: 20,
+    color:AppColor.BLACK,
+    paddingHorizontal:moderateScale(15),
+
   },
 });
 

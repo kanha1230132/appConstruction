@@ -13,16 +13,21 @@ import { AppColor } from "../../themes/AppColor";
 import ScrollViewWrapper from "../../components/ScrollViewWrapper/ScrollViewWrapper";
 import { screenNames } from "../../navigation/ScreenNames";
 import ActivityLoader from "../../components/Loader/ActivityLoader";
+import { moderateScale } from "react-native-size-matters";
+import { useIsFocused } from "@react-navigation/native";
 
 const LogoScreen: React.FC<LogoScreenProps> = () => {
   const [Logos, setLogos] = useState<CompanyLogoResponse[]>([]);
   const [Loading, setLoading] = useState(false);
   const { showToast } = useToastHook();
+  const isFocused = useIsFocused();
 
 
   useEffect(() => {
+    if(isFocused){
     getLogos();
-  }, []);
+    }
+  }, [isFocused]);
 
   const getLogos = async () => {
     try {
@@ -62,7 +67,7 @@ const LogoScreen: React.FC<LogoScreenProps> = () => {
           style={{
             backgroundColor: AppColor.WHITE,
             marginVertical: 5,
-            padding: 10,
+            padding: moderateScale(6),
             marginHorizontal:2
           }}
         >
@@ -125,7 +130,7 @@ const LogoScreen: React.FC<LogoScreenProps> = () => {
               keyExtractor={(item, index) => index.toString()}
               renderItem={renderLogo}
               showsVerticalScrollIndicator={false}
-              style={{ marginBottom: 40 }}
+              style={{ paddingBottom:40}}
             />
           ) : null}
         </ScrollViewWrapper>

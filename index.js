@@ -10,7 +10,7 @@ import { persistor, store } from './src/store/store';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ToastProvider } from 'react-native-toast-notifications';
-
+import { KeyboardProvider } from "react-native-keyboard-controller";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { AppColor } from './src/themes/AppColor';
 
@@ -18,6 +18,7 @@ export default function Main() {
   return (
 
     <PaperProvider>
+      <KeyboardProvider>
        <ToastProvider 
         successIcon={ <MaterialIcons name="check-circle" size={24} color="white" />}
         warningIcon={ <MaterialIcons name="warning" size={24} color="white" />}
@@ -34,7 +35,7 @@ export default function Main() {
       </PersistGate>
       </Provider>
         </ToastProvider>
-
+</KeyboardProvider>
     </PaperProvider>
   );
 }

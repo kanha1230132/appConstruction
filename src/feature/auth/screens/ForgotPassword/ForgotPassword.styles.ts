@@ -1,5 +1,6 @@
 import { Platform, StyleSheet } from "react-native";
 import { AppFonts } from "../../../../themes/AppFonts";
+import { AppColor } from "../../../../themes/AppColor";
 
 export const styles = StyleSheet.create({
   container: {
@@ -35,13 +36,17 @@ export const styles = StyleSheet.create({
     fontSize: 16,
   },
   button: {
-    width: '95%',
+    width: '100%',
     alignSelf: 'center',
     position: 'absolute',
-    bottom: Platform.OS == "ios" ? 10 : 10,
+    bottom: 0,
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
+
+     paddingHorizontal: Platform.OS === "ios" ? "4%" : "2%",
+        backgroundColor: AppColor.WHITE,
+        paddingBottom: Platform.OS === "ios" ? 35 : 15,
   },
   buttonText: {
     color: 'white',
@@ -54,7 +59,7 @@ export const styles = StyleSheet.create({
   icon: {
     width: 150, // Adjust size as needed
     height: 150, // Adjust size as needed
-    resizeMode: 'contain', // Ensures the image maintains its aspect ratio
+    resizeMode: 'contain', // Ensures the image maintains its aspect ratio,
   },
   inputContainer: {
     flexDirection: 'row',

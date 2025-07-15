@@ -15,13 +15,14 @@ import RestClient from "../../../../api/restClient";
 import { delay } from "../../../../utils/delay";
 import { AppText } from "../../../../constants/appText";
 import { screenNames } from "../../../../navigation/ScreenNames";
+import { moderateScale } from "react-native-size-matters";
 
 const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({ route }) => {
   const [email, setEmail] = useState("");
   const [title, setTitle] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [currentPassword, setCurrentPassword] = useState("")
+  const [currentPassword, setCurrentPassword] = useState("");
   const { showToast } = useToastHook();
   const [IsSecure1, setIsSecure1] = useState(true);
   const [IsSecure2, setIsSecure2] = useState(true);
@@ -29,33 +30,31 @@ const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({ route }) => {
   const [IsLoading, setIsLoading] = useState(false);
   const [IsChangePassword, setIsChangePassword] = useState(false);
 
-
   useEffect(() => {
     if (route.params) {
       const { email, title } = route.params;
       setEmail(email);
       setTitle(title);
-      if(title == AppText.ChangePassword){
+      if (title == AppText.ChangePassword) {
         setIsChangePassword(true);
       }
-
     }
   }, []);
 
   const validate = () => {
-    if(IsChangePassword && !currentPassword){
-      showToast("Please enter current password", 'warning');
+    if (IsChangePassword && !currentPassword) {
+      showToast("Please enter current password", "warning");
       return false;
     }
-    if(!newPassword || !confirmPassword){
-      showToast("Please enter password", 'warning');
+    if (!newPassword || !confirmPassword) {
+      showToast("Please enter password", "warning");
       return false;
     }
     if (newPassword !== confirmPassword) {
-      showToast("Password doesn't match", 'warning');
+      showToast("Password doesn't match", "warning");
       return false;
     }
-     if (newPassword.length < 8) {
+    if (newPassword.length < 8) {
       showToast("Password must be at least 8 characters long!", "warning");
       return false;
     }
@@ -64,20 +63,31 @@ const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({ route }) => {
 
   const callToSubmit = async () => {
     try {
-      if(validate()){
+      if (validate()) {
         setIsLoading(true);
         const restClient = new RestClient();
-        const response = await restClient.resetPassword({email, newPassword});
-        if(response && typeof response != "string"){
-          showToast(response.message || "Password changed successfully", "success");
+        const response = IsChangePassword
+          ? await restClient.changePassword({
+              currentPassword: currentPassword,
+              newPassword: newPassword,
+            })
+          : await restClient.resetPassword({ email, newPassword });
+        if (response && typeof response != "string") {
+          showToast(
+            response.message || "Password changed successfully",
+            "success"
+          );
           setIsLoading(false);
           await delay(1000);
-          resetAndNavigate(screenNames.LoginScreen);
+          if (IsChangePassword) {
+            goBack();
+          } else {
+            resetAndNavigate(screenNames.LoginScreen);
+          }
         } else {
           showToast(response || "Something went wrong", "danger");
         }
       }
-      
     } catch (error) {
       console.log("Error : ", error);
       setIsLoading(false);
@@ -98,10 +108,10 @@ const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({ route }) => {
           <Image
             source={images.RESET_PASSWORD}
             style={{
-              width: 100,
-              height: 100,
+              width: moderateScale(90),
+              height: moderateScale(90),
               alignSelf: "center",
-              marginTop: 20,
+              marginTop: moderateScale(15),
             }}
           />
           <Text style={styles.subHeader}>
@@ -111,31 +121,24 @@ const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({ route }) => {
           <View
             style={{
               marginTop: 20,
-              gap: 20,
+              gap: 5,
             }}
           >
-
-            {
-              IsChangePassword ?
-
-<IconTextInput
-              value={currentPassword}
-              label={AppText.CurrentPassword}
-              onChangeText={(text) => {
-                setCurrentPassword(text);
-              }}
-              editable={true}
-              isSecure={IsSecure3}
-              rightIconName={IsSecure3 ? "eye-off" : "eye"}
-              onClickIcon={() => {
-                setIsSecure3(!IsSecure3);
-              }}
-            />
-
-              : null
-            }
-
-            
+            {IsChangePassword ? (
+              <IconTextInput
+                value={currentPassword}
+                label={AppText.CurrentPassword}
+                onChangeText={(text) => {
+                  setCurrentPassword(text);
+                }}
+                editable={true}
+                isSecure={IsSecure3}
+                rightIconName={IsSecure3 ? "eye-off" : "eye"}
+                onClickIcon={() => {
+                  setIsSecure3(!IsSecure3);
+                }}
+              />
+            ) : null}
 
             <IconTextInput
               value={newPassword}
@@ -164,14 +167,16 @@ const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({ route }) => {
                 setIsSecure2(!IsSecure2);
               }}
             />
-
-
           </View>
         </ScrollViewWrapper>
       </SafeAreaWrapper>
 
       <View style={styles.button}>
-        <LoaderButton title="Submit" onPress={() => callToSubmit()} loading={IsLoading} />
+        <LoaderButton
+          title="Submit"
+          onPress={() => callToSubmit()}
+          loading={IsLoading}
+        />
       </View>
     </>
   );
@@ -181,20 +186,23 @@ export default ResetPasswordScreen;
 
 const styles = StyleSheet.create({
   subHeader: {
-    fontSize: 16,
+    fontSize: moderateScale(16),
     color: AppColor.BLACK_70,
     fontFamily: AppFonts.Regular,
     textAlign: "left",
     width: "80%",
-    marginTop: 40,
+    marginTop: moderateScale(30),
   },
   button: {
-    width: "95%",
+    width: "100%",
     alignSelf: "center",
     position: "absolute",
-    bottom: Platform.OS == "ios" ? 30 : 10,
+    bottom: 0,
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
+     paddingHorizontal: Platform.OS === "ios" ? "4%" : "2%",
+    backgroundColor: AppColor.WHITE,
+    paddingBottom: Platform.OS === "ios" ? 35 : 15,
   },
 });

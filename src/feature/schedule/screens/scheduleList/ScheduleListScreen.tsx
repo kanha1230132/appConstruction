@@ -38,7 +38,7 @@ const ScheduleListScreen: React.FC<ScheduleListScreenProps> = ({route}) => {
       if (response && typeof response != "string") {
         const list = response.sort(
           (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
         );
         setScheduleList(list);
       } else {
@@ -92,7 +92,7 @@ const ScheduleListScreen: React.FC<ScheduleListScreenProps> = ({route}) => {
         !isLoading && scheduleList.length > 0 && (
           <FlatList
             data={scheduleList}
-            keyExtractor={(item) => item._id}
+            keyExtractor={(item) => item.id.toString()}
             renderItem={renderItem}
             refreshing={isLoading}
             onRefresh={fetchSchedules}
@@ -113,6 +113,5 @@ export default ScheduleListScreen;
 const styles = StyleSheet.create({
     listContainer: {
     paddingBottom: 30,
-    paddingTop:20,
   },
 });

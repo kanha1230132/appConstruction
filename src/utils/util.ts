@@ -8,9 +8,8 @@ export const openCamera = async () => {
     const image = await ImagePicker.openCamera({
       cropping: true, // enable cropping
       compressImageQuality: 0.8,
-      includeBase64: false,
+      includeExif: true,
       mediaType: 'photo',
-    
     });
     console.log(image);
     return image;
@@ -24,8 +23,10 @@ export const openImagePicker = async (IsMultiple: boolean = false) => {
   try {
     const image = await ImagePicker.openPicker({
       multiple: IsMultiple, // set to true to allow multiple selection
-      compressImageQuality: 0.8,
+      compressImageQuality: 0.6,
       mediaType: 'photo', // 'photo', 'video', or 'any'
+      includeExif: true,
+      
 
     });
     return image;

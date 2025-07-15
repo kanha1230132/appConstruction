@@ -111,12 +111,10 @@ const useImageViewer = () => {
                 ) : null}
                 <View
                   style={{
-                    width: ImgWidth / 2,
                     position: "absolute",
                     top: 0,
-                    right: 0,
+                    right: 5,
                     alignSelf: "flex-end",
-                    paddingHorizontal: 10,
                     paddingVertical: 10,
                   }}
                 >
@@ -126,7 +124,10 @@ const useImageViewer = () => {
                         fontFamily: AppFonts.Bold,
                         fontSize: 12,
                         color: AppColor.WHITE,
-                        textAlign:'right'
+                        textAlign:'right',
+                        textShadowColor:AppColor.BLACK,
+                        textShadowOffset:{width:0.5,height:0.5},
+                        textShadowRadius:1
                       }}
                     >
                       {moment().format("MMM DD, YYYY")} at{" "}
@@ -140,11 +141,14 @@ const useImageViewer = () => {
                         fontFamily: AppFonts.Bold,
                         fontSize: 12,
                         color: AppColor.WHITE,
-                        textAlign:'right'
+                        textAlign:'right',
+                        textShadowColor:AppColor.BLACK,
+                        textShadowOffset:{width:0.5,height:0.5},
+                        textShadowRadius:1
 
                       }}
                     >
-                      Location : {location}
+                    {location}
                     </Text>
                   ) : null}
                 </View>

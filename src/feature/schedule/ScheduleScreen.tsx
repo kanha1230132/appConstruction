@@ -40,10 +40,11 @@ const ScheduleScreen: React.FC<ScheduleScreenProps> = () => {
       const restClient = new RestClient();
       setIsLoading(true);
       const response = await restClient.getSchedules();
+      console.log("response : ",JSON.stringify(response));
       if (response && typeof response != "string") {
         const list = response.sort(
           (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
         );
         setScheduleList(list);
       } else {
@@ -65,12 +66,18 @@ const ScheduleScreen: React.FC<ScheduleScreenProps> = () => {
         "Delete",
         "Cancel"
       );
-      return;
+      if(!status){
+        return;
+      }
+      
       const restClient = new RestClient();
       setIsLoading(true);
-      const response = "";
+      const response = await restClient.deleteSchedule({id:item.id});
       if (response && typeof response != "string") {
-        // fetchSchedules();
+        showToast("Schedule deleted successfully", "success");
+        const list = [...scheduleList];
+        list.splice(index, 1);
+        setScheduleList(list);
       } else {
         showToast(response || "Something went wrong", "danger");
       }
@@ -94,6 +101,7 @@ const ScheduleScreen: React.FC<ScheduleScreenProps> = () => {
       deleteSchedule={() => {
         deleteSchedule(item, index);
       }}
+      isBoss={IsBoss}
     />
   );
 
@@ -116,7 +124,7 @@ const ScheduleScreen: React.FC<ScheduleScreenProps> = () => {
             <FlatList
               data={scheduleList}
               keyExtractor={(item, index) =>
-                item?._id ? `${item._id}-${index}` : String(index)
+                item?.id ? `${item.id}-${index}` : String(index)
               }
               renderItem={renderItem}
               contentContainerStyle={styles.listContainer}
@@ -154,6 +162,6 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
   listContainer: {
-    paddingBottom: 80,
+    // paddingBottom: 80,
   },
 });

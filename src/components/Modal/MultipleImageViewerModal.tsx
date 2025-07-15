@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Image,
   FlatList,
+  Platform,
 } from "react-native";
 
 import moment from "moment";
@@ -29,7 +30,7 @@ const useMultipleImageViewer = () => {
   const [ImgHeight, setImgHeight] = useState(500);
   const [location, setLocation] = useState("");
   const [time, setTime] = useState("");
-  const [ImageList, setImageList] = useState<ImageType[]>([])
+  const [ImageList, setImageList] = useState<ImageType[]>([]);
 
   const showMultipleImageViewerPopup = (
     images: ImageType[],
@@ -42,7 +43,8 @@ const useMultipleImageViewer = () => {
         const temp = getImageDimensions(image.width, image.height);
         tempImage.height = temp.height;
         tempImage.width = temp.width
-        imageMap.push(tempImage)
+        imageMap.push(tempImage);
+
     })
     setImageList(imageMap)
     setLocation(location);
@@ -57,34 +59,14 @@ const useMultipleImageViewer = () => {
       const uris = await Promise.all(
         viewShotRefs.current.map(ref => ref?.capture?.())
       );
-      console.log('All captured URIs:', uris);
+      return uris;
     } catch (error) {
       console.error('Failed to capture images:', error);
+      return [];
     }
   };
   
-  const handleCapture = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
 
-    if (!imageRef.current) {
-      console.warn("View ref not available");
-      return "";
-    }
-    console.log("imageRef.current ,", imageRef.current);
-
-    // Delay capture to ensure render is complete.
-    try {
-      const uri = await captureRef(imageRef, {
-        quality: 1,
-        format: "png",
-      });
-      console.log("Captured image uri:", uri);
-      return uri;
-    } catch (error) {
-      console.error("Error capturing view:", error);
-      return "";
-    }
-  };
 
   const handleOK = async () => {
     const uri = await captureAllImages();
@@ -99,14 +81,14 @@ const useMultipleImageViewer = () => {
   };
 
   const renderImageItem = ({ item,index }:{item:ImageType,index:number}) => {
- 
+ const imageTime = Platform.OS == "ios" ? item?.exif?.["{Exif}"]?.DateTimeDigitized :item?.exif?.DateTime
     return (
       <ViewShot
                 style={[
 
                   styles.iconContainer,
-                  { width: item.width, height: item.height },
-                  {position:'relative',backgroundColor:'red',marginHorizontal:10}
+                  { width: item.width, height: item.height},
+                  {position:'relative',marginHorizontal:10}
                 ]}
                 ref={ref => (viewShotRefs.current[index] = ref)}
                 collapsable={false}
@@ -121,13 +103,14 @@ const useMultipleImageViewer = () => {
                     style={{
                       height: '100%',
                       width: '100%',
-                      zIndex:1
+                      zIndex:1,
+                      alignSelf:'center'
                     }}
                   />
                 ) : null}
                 <View
                   style={{
-                    width: item.width / 2.0,
+                    width: item.width / 1.5,
                     position: "absolute",
                     top: 0,
                     right: 0,
@@ -135,7 +118,7 @@ const useMultipleImageViewer = () => {
                     paddingHorizontal: 10,
                     paddingVertical: 10,
                     zIndex:5,
-                    // backgroundColor: "rgba(0, 0, 0, 0.2)",
+                    marginRight:5
                   }}
                 >
                   {time ? null : (
@@ -144,12 +127,14 @@ const useMultipleImageViewer = () => {
                         fontFamily: AppFonts.Bold,
                         fontSize: 12,
                         color: AppColor.WHITE,
-                        textAlign:'right'
+                        textAlign:'right',
+                        textShadowColor: AppColor.BLACK, // Shadow color
+  textShadowOffset: {width: 0.5, height: 0.5}, // Shadow offset
+  textShadowRadius: 1, // Shadow blur radius
 
                       }}
                     >
-                      {moment().format("MMM DD, YYYY")} at{" "}
-                      {moment().format("hh:mm A")}
+                      {moment(imageTime? imageTime: moment().format('YYYY-MM-DD HH:mm:ss'),'YYYY-MM-DD HH:mm:ss').format("MMM DD, YYYY")} at {moment(imageTime ? imageTime: moment().format('YYYY-MM-DD HH:mm:ss'),'YYYY-MM-DD HH:mm:ss').format("hh:mm A")}
                     </Text>
                   )}
 
@@ -159,7 +144,10 @@ const useMultipleImageViewer = () => {
                         fontFamily: AppFonts.Bold,
                         fontSize: 12,
                         color: AppColor.WHITE,
-                        textAlign:'right'
+                        textAlign:'right',
+                        textShadowColor: 'rgba(0, 0, 0, 0.75)', // Shadow color
+  textShadowOffset: {width:0.5, height:0.5}, // Shadow offset
+  textShadowRadius: 1, // Shadow blur radius
                       }}
                     >
                     {location}
@@ -185,12 +173,19 @@ const useMultipleImageViewer = () => {
                     flexDirection: "row",
                     justifyContent: "center",
                     alignItems: "center",
+                    alignSelf: "center",
                 }}>
  <FlatList
                   data={ImageList}
                   renderItem={renderImageItem}
                   keyExtractor={(item) => item.path}
                   horizontal={true}
+                  style={{flex:1}}
+                  contentContainerStyle={{
+                    flexGrow: 1,          // Allow the content to grow
+                    justifyContent: 'center', // Center items horizontally
+                    alignItems: 'center',  // Center items vertically (if needed)
+                  }}
                  />
                 </View>
 
@@ -243,7 +238,8 @@ const styles = StyleSheet.create({
   popup: {
     height: "100%",
     width: "100%",
-    backgroundColor: "white",
+       backgroundColor:AppColor.BLACK_10,
+
     padding: 20,
     borderRadius: 10,
     alignItems: "center",
@@ -251,7 +247,7 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     borderRadius: 25,
-    backgroundColor: "white",
+    backgroundColor:'transparent',
   },
   icon: {
     fontSize: 24,

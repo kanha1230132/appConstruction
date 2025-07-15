@@ -1,5 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { CompanyLogoResponse, SchedulesResponse } from "../api/apiInterface";
+import { ImageItem } from "../feature/photoFiles/PhotoFilesScreen";
 
 export type RootStackParamList = {
   SplashScreen: undefined;
@@ -16,7 +17,7 @@ export type RootStackParamList = {
   LogoScreen:undefined;
   LogoUploadScreen:{logo?: CompanyLogoResponse};
   ScheduleScreen:undefined;
-  CreateScheduleScreen:{schedule?:SchedulesResponse};
+  CreateScheduleScreen:{schedule?:SchedulesResponse,scheduleUpdate?:boolean};
   VerifyOTPScreen:{email:string};
   ResetPasswordScreen:{email:string,title:string};
   ScheduleListScreen :{type:string};
@@ -24,6 +25,10 @@ export type RootStackParamList = {
   DailyEntryScreen:{project:SchedulesResponse};
   WeeklyEntryScreen:{project:SchedulesResponse};
   DailyDairyEntryScreen:{project:SchedulesResponse};
+  JobHazardScreen:undefined;
+  ImageViewer:{image:string}
+  ViewAllPhotos:{Photos?:ImageItem[]}
+  PreviewJobHazard:undefined
 
 };
 
@@ -111,3 +116,16 @@ export type DailyDairyEntryScreenProps = NativeStackScreenProps<
   RootStackParamList,
   'DailyDairyEntryScreen'
 >;
+
+export type JobHazardScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'JobHazardScreen'
+>;
+
+export type ImageViewerProps = NativeStackScreenProps<
+  RootStackParamList,
+  'ImageViewer'
+>;
+
+export type ViewAllPhotosProps = NativeStackScreenProps<RootStackParamList,'ViewAllPhotos'>
+export type PreviewJobHazardProps = NativeStackScreenProps<RootStackParamList,'PreviewJobHazard'>

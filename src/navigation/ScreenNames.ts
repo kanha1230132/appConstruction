@@ -24,5 +24,11 @@ export enum screenNames {
     DailyEntryScreen = "DailyEntryScreen",
     WeeklyEntryScreen = "WeeklyEntryScreen",
     DailyDairyEntryScreen = "DailyDairyEntryScreen",
+    JobHazardScreen = "JobHazardScreen",
+    CreateJobHazard = "CreateJobHazard",
+    ImageViewer = "ImageViewer",
+    ViewAllPhotos = "ViewAllPhotos",
+    PreviewJobHazard = "PreviewJobHazard"
+    
 
 }

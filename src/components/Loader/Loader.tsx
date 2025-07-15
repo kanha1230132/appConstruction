@@ -5,6 +5,7 @@ import {  View, ActivityIndicator, StyleSheet, Text } from 'react-native';
 import { Modal, Portal } from 'react-native-paper';
 import { AppColor } from '../../themes/AppColor';
 import { AppFonts } from '../../themes/AppFonts';
+import { moderateScale } from 'react-native-size-matters';
 
 export interface LoaderModalProps {
   visible: boolean;
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
   },
   loaderContainer: {
     backgroundColor: 'white',
-    padding: 24,
+    padding: moderateScale(17), // 15,
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',

@@ -59,11 +59,11 @@ const VerifyOtpScreen: React.FC<VerifyOTPScreenProps> = ({ route }) => {
   const verifyOtp = async () => {
     try {
 
-        navigate(screenNames.ResetPasswordScreen, {
-          email,
-          title: "Reset your Password",
-        });
-        return;
+        // navigate(screenNames.ResetPasswordScreen, {
+        //   email,
+        //   title: "Reset your Password",
+        // });
+        // return;
       const enteredCode = code.join("");
       if (enteredCode.length < 4) {
         showToast("Please enter a valid code", "warning");
@@ -156,6 +156,7 @@ const VerifyOtpScreen: React.FC<VerifyOTPScreenProps> = ({ route }) => {
               value={digit}
               onChangeText={(value) => handleInputChange(index, value)}
               ref={inputRefs[index]}
+              returnKeyType="done"
             />
           ))}
         </View>
@@ -187,13 +188,16 @@ export default VerifyOtpScreen;
 
 const styles = StyleSheet.create({
   button: {
-    width: "95%",
+    width: "100%",
     alignSelf: "center",
     position: "absolute",
-    bottom: Platform.OS == "ios" ? 30 : 10,
+    bottom:0,
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
+     paddingHorizontal: Platform.OS === "ios" ? "4%" : "2%",
+        backgroundColor: AppColor.WHITE,
+        paddingBottom: Platform.OS === "ios" ? 35 : 15,
   },
   resendText: {
     textAlign: "center",

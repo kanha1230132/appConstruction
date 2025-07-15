@@ -1,4 +1,8 @@
+// react-native.config.js
 module.exports = {
-  assets: ['./assets/fonts']
- 
+  project: {
+    ios: {},
+    android: {},
+  },
+  assets: ['./assets/fonts'], // path to your fonts
 };

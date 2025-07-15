@@ -23,11 +23,14 @@ export enum AppText{
     WeeklyEntry = "Weekly Entry",
     DailyDairyEntry = "Daily Dairy Entry",
     DailyEntry = "Daily Entry",
-     EnterProjectDetails ='Enter Project Details',
-    EnterDescriptiondetails = 'Enter Description Details'
+
+    EnterDescriptiondetails = 'Enter Description Details',
+    JobHazardAnalysis ="Job Hazard Analysis",
     
-
-
-
-
+    EnterProjectDetails = 'Enter Project Details',
+    HazardSelection = "Hazard Selection",
+    TaskAddition = "Task Addition",
+    GeneralDetails = "General Details",
+    PreviousEntryMessage = "We found previous form data. Would you like to use it?",
+    Mileage = "Mileage",
 }

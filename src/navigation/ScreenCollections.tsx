@@ -22,6 +22,11 @@ import PhotoFilesScreen from "../feature/photoFiles/PhotoFilesScreen";
 import DailyEntryScreen from "../feature/reports/screens/dailyEntry/DailyEntryScreen";
 import DailyDairyEntryScreen from "../feature/reports/screens/dailyDairyEntry/DailyDairyEntryScreen";
 import WeeklyEntryScreen from "../feature/reports/screens/weeklyEntry/WeeklyEntryScreen";
+import JobHazardScreen from "../feature/jobHazard/JobHazardScreen";
+import CreateJobHazard from "../feature/jobHazard/screens/createJobHazard/CreateJobHazard";
+import ImageViewer from "../feature/imageViewer/ImageViewer";
+import ViewAllPhotos from "../feature/photoFiles/screens/ViewAllPhotos";
+import PreviewJobHazard from "../feature/jobHazard/screens/PreviewJobHazard/PreviewJobHazard";
 
 export const authStack = [
   {
@@ -106,6 +111,26 @@ export const authStack = [
     name: screenNames.WeeklyEntryScreen,
     component: WeeklyEntryScreen,
   },
+  {
+    name: screenNames.JobHazardScreen,
+    component: JobHazardScreen,
+  },
+  {
+    name: screenNames.CreateJobHazard,
+    component: CreateJobHazard,
+  },
+  {
+    name: screenNames.ImageViewer,
+    component: ImageViewer,
+  },{
+    name: screenNames.ViewAllPhotos,
+    component: ViewAllPhotos,
+  },
+  {
+    name: screenNames.PreviewJobHazard,
+    component: PreviewJobHazard,
+  }
+
 ];
 
 export const dashboardStack = [

@@ -1,5 +1,7 @@
 export const ImageType = {
     COMPANY :'company',
     SCHEDULE : 'schedule',
-    EXPENSE : 'expense'
+    EXPENSE : 'expense',
+    JOB_HAZARD : 'job_hazard',
+    LOGO: 'logos'
 }

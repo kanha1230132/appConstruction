@@ -10,20 +10,23 @@ import { SchedulesResponse } from "../../../api/apiInterface";
 import { Card } from "react-native-paper";
 import { navigate } from "../../../utils/NavigationUtil";
 import { screenNames } from "../../../navigation/ScreenNames";
+import { moderateScale } from "react-native-size-matters";
 
 interface ScheduleCardProps {
   item: SchedulesResponse;
   deleteSchedule: () => void;
+  isBoss?: boolean;
 }
 
 const ScheduleCard: React.FC<ScheduleCardProps> = ({
   item,
   deleteSchedule,
+  isBoss = true,
 }) => {
   const openPdf = () => {
     navigate(screenNames.WebViewScreen, {
       url: item?.pdfUrl,
-      title: item.projectName,
+      title: item.project_name,
       IsPdfViewer: true,
     });
   };
@@ -37,21 +40,63 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
       }}
     >
       <TouchableOpacity style={styles.card} activeOpacity={0.5} onPress={() => {
-        navigate(screenNames.CreateScheduleScreen,{
-          schedule: item})
-      }}>
+        if(isBoss){
+           navigate(screenNames.CreateScheduleScreen,{
+          schedule: item,scheduleUpdate: true})
+        }
+      }
+        }
+       
+      >
         <View style={styles.cardContent}>
           <View style={styles.textContainer}>
-            <Text style={styles.title}>{item.projectName}</Text>
+            <Text style={styles.title}>{item.project_name}</Text>
 
             <Text style={styles.subtitle}>
-              Project Number: {item.projectNumber}
+              <Text style={styles.titleHeading} ellipsizeMode="tail">Project No./Client PO :</Text>
+               {item.project_number}
             </Text>
-            <Text style={styles.subtitle}>Owner: {item.owner}</Text>
-            <Text style={styles.subtitle}>
-              Date:{" "}
-              {moment(item?.projectId?.startDate).format(DateFormat.DD_MM_YYYY)}
+            <View style={{
+              flexDirection:"row",
+              justifyContent:"space-between"
+            }}>
+            <Text style={styles.subtitle}><Text style={styles.titleHeading}>Client/Owner :</Text> {item.owner}</Text>
+
+  <Text style={[styles.subtitle,{width:"40%"}]}>
+            <Text style={styles.titleHeading}>Date :</Text>
+              {moment(item?.created_at).format(DateFormat.DD_MM_YYYY)}
             </Text>
+            </View>
+
+             <View style={{
+              flexDirection:"row",
+              justifyContent:"space-between"
+            }}>
+            <Text style={[styles.subtitle,]}><Text style={styles.titleHeading}>Invoice to : </Text>{item.invoice_to}</Text>
+           
+           
+         
+
+
+            </View>
+
+             {
+              isBoss ?
+               <Text style={styles.subtitle}><Text style={styles.titleHeading}>Rate :</Text> {item.rate}</Text> 
+              : null
+            }
+
+            
+            {
+              isBoss ?
+     <Text style={[styles.subtitle,{width:"90%"}]}  numberOfLines={1}
+  ellipsizeMode="tail" ><Text style={styles.titleHeading}>Description :</Text>  {item.description}</Text> 
+
+              : null
+            }
+
+       
+
 
             <TouchableOpacity
               style={{
@@ -63,7 +108,6 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
                 alignSelf: "flex-end",
               }}
               onPress={() => {
-                console.log("item : ", item);
                 openPdf();
               }}
             >
@@ -75,7 +119,9 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
           </View>
 
           <View style={styles.deleteContainer}>
-            <TouchableOpacity
+            {
+              isBoss ?
+ <TouchableOpacity
               style={styles.deleteButton}
               onPress={() => {
                 deleteSchedule();
@@ -83,6 +129,11 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
             >
               <Ionicons name="trash" size={24} color="red" />
             </TouchableOpacity>
+
+
+              : null
+            }
+           
             {/* <TouchableOpacity style={styles.deleteButton} onPress={() => { deleteSchedule()}}>
                     <Ionicons name="trash" size={24} color="red" />
                 </TouchableOpacity> */}
@@ -115,7 +166,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontSize: 16,
+    fontSize: moderateScale(16),
     fontFamily: AppFonts.Bold,
     color: AppColor.BLACK,
     marginBottom: 5,
@@ -140,4 +191,8 @@ const styles = StyleSheet.create({
     right: 0,
     gap: 5,
   },
+  titleHeading:{
+              color:AppColor.BLACK,
+              fontFamily:AppFonts.Medium
+            }
 });

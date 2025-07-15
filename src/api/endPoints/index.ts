@@ -1,6 +1,7 @@
 
 export const endPoints = {
-    BASE_URL: "http://35.182.106.152:3000/api",
+    BASE_URL: "http://35.182.106.152:8000/api",
+    // BASE_URL: "http://35.182.106.152:3000/api",
     URL_GET_ALL_PROJECTS: "/schedules/getScheduleData",
     URL_GET_WEEKLY_SCHEDULES: "/projects/weekly-schedules",
     URL_UPLOAD_DAILY_DIARY: '/diary/daily-diary',
@@ -14,9 +15,9 @@ export const endPoints = {
     URL_CREATE_WEEKLY_REPORT: '/weekly/weekly-entry',
     URL_GET_INVOICE_WEEKLY_REPORT: '/weekly/getWeeklyReport',
     URL_CREATE_INVOICE: '/invoices/create-invoice',
-    URL_ADD_COMPANY_EMAIL: '/auth/addCompanyEmail',
+    URL_ADD_COMPANY_EMAIL: '/auth/addUser',
     URL_UPLOAD_PHOTO_FILE: '/photos/photo-files',
-    URL_GET_PHOTO_FILE: '/photos/photo-files',
+    URL_GET_PHOTO_FILE: '/photos/getPhotoFiles',
     URL_LOGIN: '/auth/login',
     URL_INVOICE_EXCEL: '/invoices/generateInvoiceExcel',
     URL_FORGET_PASSWORD: '/auth/forgot-password',
@@ -24,7 +25,6 @@ export const endPoints = {
     URL_RESEND_CODE: '/auth/resend-code',
     URL_RESET_PASSWORD: '/auth/reset-password',
     URL_REGISTER: '/auth/register',
-    URL_DELETE_SCHEDULE: '/projects/remove?projectId=',
     URL_PDF_VIEWER_BASE_URL : 'https://docs.google.com/gview?embedded=true&url=',
     URL_GOOGLE_DIRECTION_API : 'https://maps.googleapis.com/maps/api/directions/json?',
     URL_GOOGLE_PLACE_API:'https://maps.googleapis.com/maps/api/place/autocomplete/json?',
@@ -37,7 +37,20 @@ export const endPoints = {
     URL_EXPENSE_APPROVE: '/expense/approve',
     URL_CREATE_EXPENSE: '/expense/addExpense',
     URL_NOTIFICATIONS:'/notification/getNotifications',
-    URL_ADD_LOGO:'/logos/add-logo'
+
+    URL_UPDATE_BOSS_PERMISSION: '/auth/updateBossPermission',
+    URL_CHANGE_PASSWORD: '/auth/changePassword',
+    URL_ADD_SCHEDULE: '/schedules/addScheduleData',
+    URL_UPDATE_SCHEDULE: '/schedules/updateScheduleData',
+    URL_DELETE_SCHEDULE: '/schedules/deleteScheduleData',
+    URL_GET_SCHEDULE: '/schedules/getScheduleData',
+    URL_CREATE_PHOTO_FILES: '/photos/createPhotoFiles',
+    URL_GET_WEATHER_DATA : '/location/getLocationAndWeather',
+    URL_ADD_LOGO: '/logos/addLogo',
+    URL_DELETE_LOGO: '/logos/deleteLogo',
+    URL_DELETE_PHOTO_FILE: '/photos/deletePhotoFiles',
+    URL_SAVE_JOB_HAZARD: '/jobHazard/saveJobHazard',
+    
 
 }
 export const GOOGLE_MAPS_API_KEY = "AIzaSyCQa4c8csh5QpPOiOSu8TktFToybBr996k";

@@ -1,11 +1,24 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { GetWeatherResponse, JobHazardRequest, UserLocation } from '../../api/apiInterface';
 
-const initialState = {
+interface UserState {
+  UserId: string;
+  UserToken: string;
+  IsBoss: boolean;
+  UserName: string;
+  UserEmail: string;
+  JobHazard: JobHazardRequest | undefined;
+  UserLocation: UserLocation | undefined;
+}
+
+const initialState : UserState= {
   UserId: '',
   UserToken: '',
   IsBoss: false,
   UserName: '',
-  UserEmail:''
+  UserEmail:'',
+  JobHazard : undefined,
+  UserLocation : undefined
 };
 
 export const UserSlice = createSlice({
@@ -29,12 +42,21 @@ export const UserSlice = createSlice({
     userIsBoss: (state, action) => {
       state.IsBoss = action.payload;
     },
+    updateJobHazard: (state, action) => {
+      state.JobHazard = action.payload;
+    },
+    resetJobHazard: (state) => {
+      state.JobHazard = undefined;
+    },
+    updateUserLocation: (state, action) => {
+      state.UserLocation = action.payload;
+    },
      rehydrate: (state, action) => {
       return { ...state, ...action.payload };
     },
   },
 });
 
-export const { updateUserDetails,rehydrate,logoutUser,userIsBoss } = UserSlice.actions;
+export const { updateUserDetails,rehydrate,logoutUser,userIsBoss,updateJobHazard,resetJobHazard ,updateUserLocation} = UserSlice.actions;
 
 export default UserSlice.reducer;

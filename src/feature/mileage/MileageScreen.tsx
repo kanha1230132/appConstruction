@@ -1,17 +1,28 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View } from "react-native";
+import React from "react";
+import { SafeAreaWrapper } from "../../components/SafeAreaWrapper/SafeAreaWrapper";
+import HeaderWithBackButton from "../../components/Button/HeaderWithBackButton";
+import { goBack } from "../../utils/NavigationUtil";
+import { AppText } from "../../constants/appText";
+import DateFilterCard from "./components/DateFilterCard";
 
-interface MileageScreenProps {
-}
+interface MileageScreenProps {}
 
 const MileageScreen: React.FC<MileageScreenProps> = () => {
   return (
-    <View>
-      <Text>MileageScreen</Text>
-    </View>
-  )
-}
+    <>
+      <SafeAreaWrapper>
+        <HeaderWithBackButton
+          title={AppText.Mileage}
+          onBackClick={() => goBack()}
+          customStyle={undefined}
+        />
+        {/* <DateFilterCard /> */}
+      </SafeAreaWrapper>
+    </>
+  );
+};
 
-export default MileageScreen
+export default MileageScreen;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

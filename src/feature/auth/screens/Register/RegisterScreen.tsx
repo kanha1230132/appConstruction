@@ -12,9 +12,7 @@ import { screenNames } from "../../../../navigation/ScreenNames";
 import { Image } from "react-native";
 import { images } from "../../../../assets";
 import { AppText } from "../../../../constants/appText";
-import { AppFonts } from "../../../../themes/AppFonts";
 import { AppColor } from "../../../../themes/AppColor";
-import { Checkbox } from "react-native-paper";
 import ScrollViewWrapper from "../../../../components/ScrollViewWrapper/ScrollViewWrapper";
 import useToastHook from "../../../../hooks/toast";
 import RestClient from "../../../../api/restClient";
@@ -26,7 +24,7 @@ const RegisterScreen: React.FC<RegisterScreenProps> = () => {
   const [Email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
   const [IsLoading, setIsLoading] = useState(false);
-  const [IsSecure, setIsSecure] = useState(false);
+  const [IsSecure, setIsSecure] = useState(true);
   const [checked, setChecked] = useState(false);
   const [UserName, setUserName] = useState("");
   const { showToast } = useToastHook();

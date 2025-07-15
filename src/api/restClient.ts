@@ -1,5 +1,9 @@
 import apiClient from "./apiClient";
-import { AuthResponse, CompanyLogoResponse, SchedulesResponse } from "./apiInterface";
+import {
+  AuthResponse,
+  CompanyLogoResponse,
+  SchedulesResponse,
+} from "./apiInterface";
 import { endPoints } from "./endPoints";
 
 class RestClient {
@@ -10,7 +14,7 @@ class RestClient {
       if (response.status == 200 || response.status == 201) {
         const output = response.data;
         if (output.status == "success") {
-          return {...output.data, message: output.message};
+          return { ...output.data, message: output.message };
         } else {
           return output.message;
         }
@@ -50,16 +54,18 @@ class RestClient {
     }
   }
 
-  async sendPasswordOtp(email: string): Promise<string | null | {message: string}> {
+  async sendPasswordOtp(
+    email: string
+  ): Promise<string | null | { message: string }> {
     try {
       const response = await apiClient.post(endPoints.URL_FORGET_PASSWORD, {
         email,
       });
       if (response.status == 200 || response.status == 201) {
         const output = response.data;
-        console.log("output : ", output)
+        console.log("output : ", output);
         if (output.status == "success") {
-          return {message:output.message};
+          return { message: output.message };
         } else {
           return output.message;
         }
@@ -73,13 +79,42 @@ class RestClient {
     }
   }
 
-  async resetPassword(param: any): Promise<string | null | {message: string}> {
+  async resetPassword(
+    param: any
+  ): Promise<string | null | { message: string }> {
     try {
-      const response = await apiClient.post(endPoints.URL_RESET_PASSWORD, param);
+      const response = await apiClient.post(
+        endPoints.URL_RESET_PASSWORD,
+        param
+      );
       if (response.status == 200 || response.status == 201) {
         const output = response.data;
         if (output.status == "success") {
-          return {message:output?.message};
+          return { message: output?.message };
+        } else {
+          return output.message;
+        }
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      return null;
+    }
+  }
+  async changePassword(
+    param: any
+  ): Promise<string | null | { message: string }> {
+    try {
+      const response = await apiClient.post(
+        endPoints.URL_CHANGE_PASSWORD,
+        param
+      );
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "success") {
+          return { message: output?.message };
         } else {
           return output.message;
         }
@@ -93,13 +128,16 @@ class RestClient {
     }
   }
 
-  async verifyOtp(param: any): Promise<string | null | {message: string}> {
+  async verifyOtp(param: any): Promise<string | null | { message: string }> {
     try {
-      const response = await apiClient.post(endPoints.URL_FORGOT_VERIFY_CODE, param);
+      const response = await apiClient.post(
+        endPoints.URL_FORGOT_VERIFY_CODE,
+        param
+      );
       if (response.status == 200 || response.status == 201) {
         const output = response.data;
         if (output.status == "success") {
-          return {message:output?.message};
+          return { message: output?.message };
         } else {
           return output.message;
         }
@@ -115,7 +153,7 @@ class RestClient {
 
   async getLogo(): Promise<CompanyLogoResponse[] | string | null> {
     try {
-      const response = await apiClient.get(endPoints.URL_LOGOS);
+      const response = await apiClient.post(endPoints.URL_LOGOS);
       if (response.status == 200 || response.status == 201) {
         const output = response.data;
         if (output.status == "success") {
@@ -134,13 +172,13 @@ class RestClient {
     }
   }
 
-  async addLogo(param: any): Promise<{message: string} | string | null> {
+  async addLogo(param: any): Promise<{ message: string } | string | null> {
     try {
-      const response = await apiClient.post(endPoints.URL_ADD_LOGO,param);
+      const response = await apiClient.post(endPoints.URL_ADD_LOGO, param);
       if (response.status == 200 || response.status == 201) {
         const output = response.data;
         if (output.status == "success") {
-          return {message: output.message};
+          return { message: output.message };
         } else {
           return output.message;
         }
@@ -153,6 +191,27 @@ class RestClient {
       console.log("Error getLogo : ", error);
       return null;
     }
+  }
+
+  async deleteLogo(id: number): Promise<{ message: string } | string | null> {
+    try {
+      const response = await apiClient.post(endPoints.URL_DELETE_LOGO, { id });
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "success") {
+          return { message: output.message };
+        } else {
+          return output.message;
+        }
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      console.log("Error getLogo : ", error);
+      return null;
+    } 
   }
 
   async getSchedules(): Promise<SchedulesResponse[] | string | null> {
@@ -176,13 +235,15 @@ class RestClient {
     }
   }
 
-  async createSchedule(body: any): Promise<{message: string} | string | null> {
+  async createSchedule(
+    body: any
+  ): Promise<{ message: string } | string | null> {
     try {
-      const response = await apiClient.post(endPoints.URL_UPLOAD_SCHEDULE,body);
+      const response = await apiClient.post(endPoints.URL_ADD_SCHEDULE, body);
       if (response.status == 200 || response.status == 201) {
         const output = response.data;
         if (output.status == "success") {
-          return {message: output.message};
+          return { message: output.message };
         } else {
           return output.message;
         }
@@ -197,13 +258,44 @@ class RestClient {
     }
   }
 
-  async addUser(body: any): Promise<{message: string} | string | null> {
+  async updateSchedule(
+    body: any
+  ): Promise<{ message: string } | string | null> {
     try {
-      const response = await apiClient.post(endPoints.URL_ADD_COMPANY_EMAIL,body);
+      const response = await apiClient.post(
+        endPoints.URL_UPDATE_SCHEDULE,
+        body
+      );
       if (response.status == 200 || response.status == 201) {
         const output = response.data;
         if (output.status == "success") {
-          return {message: output.message};
+          return { message: output.message };
+        } else {
+          return output.message;
+        }
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      console.log("Error getLogo : ", error);
+      return null;
+    }
+  }
+  
+  async deleteSchedule(
+    body: any
+  ): Promise<{ message: string } | string | null> {
+    try {
+      const response = await apiClient.post(
+        endPoints.URL_DELETE_SCHEDULE,
+        body
+      );
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "success") {
+          return { message: output.message };
         } else {
           return output.message;
         }
@@ -218,14 +310,38 @@ class RestClient {
     }
   }
 
-  async getAddress(url: string): Promise<{message: string} | string | null> {
+  async addUser(body: any): Promise<{ message: string } | string | null> {
+    try {
+      const response = await apiClient.post(
+        endPoints.URL_ADD_COMPANY_EMAIL,
+        body
+      );
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "success") {
+          return { message: output.message };
+        } else {
+          return output.message;
+        }
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      console.log("Error getLogo : ", error);
+      return null;
+    }
+  }
+
+  async getAddress(url: string): Promise<{ message: string } | string | null> {
     try {
       const response = await apiClient.get(url);
-      console.log("response getAddress : ", response)
+      console.log("response getAddress : ", response);
       if (response.status == 200 || response.status == 201) {
         const output = response.data;
         if (output.status == "success") {
-          return {message: output.message};
+          return { message: output.message };
         } else {
           return output.message;
         }
@@ -240,14 +356,19 @@ class RestClient {
     }
   }
 
-
-  async uploadAttachments(body: any): Promise<{message: string, data: any} | string | null> {
+  async uploadAttachments(
+    body: any
+  ): Promise<{ message: string; data: any } | string | null> {
     try {
-      const response = await apiClient.post(endPoints.URL_UPLOAD_ATTACHMENTS,body);
+      const response = await apiClient.post(
+        endPoints.URL_UPLOAD_ATTACHMENTS,
+        body
+      );
+      console.log("response : ", response)
       if (response.status == 200 || response.status == 201) {
         const output = response.data;
         if (output.status == "success") {
-          return {data:output.data, message: output.message};
+          return { data: output.data, message: output.message };
         } else {
           return output.message;
         }
@@ -262,7 +383,149 @@ class RestClient {
     }
   }
 
+  async updateBossPermission(permission: boolean) {
+    try {
+      const response = await apiClient.post(
+        endPoints.URL_UPDATE_BOSS_PERMISSION,
+        { is_boss: permission }
+      );
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "success") {
+          return { message: output.message };
+        } else {
+          return output.message;
+        }
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      return null;
+    }
+  }
 
+  async uploadPhotoFiles(
+    body: any
+  ): Promise<{ message: string; data: any } | string | null> {
+    try {
+      const response = await apiClient.post(
+        endPoints.URL_CREATE_PHOTO_FILES,
+        body
+      );
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "success") {
+          return { data: output.data, message: output.message };
+        } else {
+          return output.message;
+        }
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      console.log("Error getLogo : ", error);
+      return null;
+    }
+  }
+
+  async getCurrentWeather(
+    body: any
+  ): Promise<{ message: string; data: any } | string | null> {
+    try {
+      const response = await apiClient.post(
+        endPoints.URL_GET_WEATHER_DATA,
+        body
+      );
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "success") {
+          return { data: output.data, message: output.message };
+        } else {
+          return output.message;
+        }
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      console.log("Error getLogo : ", error);
+      return null;
+    }
+  }
+
+  async getPhotoFiles(param: any) {
+    try {
+      const response = await apiClient.post(
+        endPoints.URL_GET_PHOTO_FILE,
+        param
+      );
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "success") {
+          return { data: output.data, message: output.message };
+        } else {
+          return output.message;
+        }
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      console.log("Error getLogo : ", error);
+      return null;
+    }
+  }
+
+  async deletePhotoFiles(param: any) {
+    try {
+      const response = await apiClient.post(
+        endPoints.URL_DELETE_PHOTO_FILE,
+        param
+      );
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "success") {
+          return { data: output.data, message: output.message };
+        } else {
+          return output.message;
+        }
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      console.log("Error getLogo : ", error);
+      return null;
+    }
+  }
+
+  async addJobHazard(param: any) {
+    try {
+      const response = await apiClient.post(endPoints.URL_SAVE_JOB_HAZARD, param);
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "success") {
+          return { data: output.data, message: output.message };
+        } else {
+          return output.message;
+        }
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      console.log("Error getLogo : ", error);
+      return null;
+    }
+  }
 }
 
 export default RestClient;

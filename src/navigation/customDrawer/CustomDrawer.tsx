@@ -26,6 +26,7 @@ import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { AppText } from "../../constants/appText";
 import Divider from "../components/Divider";
 import useToastHook from "../../hooks/toast";
+import RestClient from "../../api/restClient";
 
 export interface CustomDrawerProps {
   navigation: any;
@@ -37,7 +38,16 @@ export default function CustomDrawer(props: CustomDrawerProps) {
     useConfirmationPopup();
     const {showToast} = useToastHook();
 
-  const onToggleSwitch = (value: boolean) => dispatch(userIsBoss(value));
+  const onToggleSwitch = async (value: boolean) => {
+    const restClient = new RestClient();
+    const response = await restClient.updateBossPermission(value);
+    if(response && typeof response != "string"){
+      showToast(response.message,'success');
+      dispatch(userIsBoss(value))
+      return;
+    }
+    showToast(response,'success');
+  };
   const dispatch = useDispatch();
 
   const comingSoon = () => {
@@ -104,7 +114,7 @@ export default function CustomDrawer(props: CustomDrawerProps) {
             {UserEmail}
           </Text>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => {}}
             style={{
               width: "100%",
@@ -135,7 +145,7 @@ export default function CustomDrawer(props: CustomDrawerProps) {
               value={IsBoss}
               onValueChange={(value) => onToggleSwitch(value)}
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
 
         <ScrollView

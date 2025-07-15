@@ -3,6 +3,7 @@ import React from 'react'
 import { AppColor } from '../../../themes/AppColor'
 import Ionicons from 'react-native-vector-icons/MaterialIcons'
 import { AppFonts } from '../../../themes/AppFonts'
+import { moderateScale } from 'react-native-size-matters'
 
 interface ReportButtonProps {
 onPress:()=>void,
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
 		justifyContent: "space-between",
 		alignItems: "center",
 		backgroundColor: AppColor.WHITE,
-		paddingVertical: 15,
+		paddingVertical: moderateScale(12),
 		paddingHorizontal: 20,
 		borderRadius: 10,
 		marginBottom: 20,
@@ -39,8 +40,8 @@ const styles = StyleSheet.create({
 		elevation:1,
 	},
 	entryButtonTextModified: {
-		fontSize: 16,
-		fontFamily: AppFonts.Bold,
+		fontSize: moderateScale(16),
+		fontFamily: AppFonts.Regular,
 		color: AppColor.BLACK,
 	},
 })

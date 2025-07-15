@@ -5,3 +5,9 @@ export  const DateFormat = {
     DD_MM_YYYY: 'DD-MM-YYYY',
     MMM_DD_YYYY: 'MMM DD, YYYY',
 }
+
+
+export const typeOfPicker = {
+    date: "date",
+    time: "time",
+  };

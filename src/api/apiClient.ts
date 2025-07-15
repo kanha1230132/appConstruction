@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { endPoints } from './endPoints';
 import { RootState } from '../store/store';
+import moment from 'moment';
 
 const apiClient = axios.create({
     baseURL: endPoints.BASE_URL, // Replace with actual backend URL or IP if using Expo Go
@@ -20,6 +21,8 @@ export const getGlobalStore = () => {
 apiClient.interceptors.request.use(async config => {
     const store:RootState = getGlobalStore().getState();
     const accessToken = store?.User?.UserToken;
+    
+    config.headers["dateTime"] = moment().format("YYYY-MM-DD HH:mm:ss");
     if (config.headers) {
         if (accessToken && config.url !== endPoints.URL_REGISTER) {
           config.headers['Authorization'] = `Bearer ${accessToken}`;

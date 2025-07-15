@@ -23,7 +23,7 @@ const SplashScreen: React.FC = () => {
     const initializeApp = async () => {
       await delay(3000);
       if(UserToken){
-         resetAndNavigate(screenNames.MainApp);
+      resetAndNavigate(screenNames.MainApp);
       }else{
         resetAndNavigate(screenNames.LoginScreen);
       }

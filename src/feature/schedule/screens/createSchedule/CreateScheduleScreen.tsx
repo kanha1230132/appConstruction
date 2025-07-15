@@ -23,42 +23,53 @@ import { CreateScheduleScreenProps } from "../../../../types/navigation";
 import { SchedulesResponse } from "../../../../api/apiInterface";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
+import { AppColor } from "../../../../themes/AppColor";
 
-
-const CreateScheduleScreen: React.FC<CreateScheduleScreenProps> = ({route}) => {
-  const {IsBoss} = useSelector((state:RootState)=> state.User)
+const CreateScheduleScreen: React.FC<CreateScheduleScreenProps> = ({
+  route,
+}) => {
+  const { IsBoss } = useSelector((state: RootState) => state.User);
   const [projectName, setProjectName] = useState("");
   const [projectNumber, setProjectNumber] = useState("");
   const [owner, setOwner] = useState("");
   const [rate, setRate] = useState(0);
   const [description, setDescription] = useState("");
-  const [invoiceTo, setInvoiceTo] = useState('')
+  const [invoiceTo, setInvoiceTo] = useState("");
   const [file, setFile] = useState("");
   const [IsLoading, setIsLoading] = useState(false);
   const { showToast } = useToastHook();
-
+  const [ScheduleId, setScheduleId] = useState(0);
   const projectNumberRef = useRef<any>(null);
   const ownerRef = useRef<any>(null);
   const rateRef = useRef<any>(null);
   const descriptionRef = useRef<any>(null);
   const invoiceToRef = useRef<any>(null);
-  const [IsEdit, setIsEdit] = useState(false)
+  const [IsEdit, setIsEdit] = useState(false);
 
-  useEffect(()=>{
-    const schedule = route?.params?.schedule
-    console.log("schedule : ", schedule)
-    if(schedule){
-      const {projectName, projectNumber, owner,pdfUrl} = schedule
-      setIsEdit(true)
-      setProjectName(projectName)
-      setProjectNumber(projectNumber)
-      setOwner(owner)
-      setRate(rate)
-      setDescription(description)
-      setInvoiceTo(invoiceTo);
-      setFile(pdfUrl)
+  useEffect(() => {
+    const schedule = route?.params?.schedule;
+    if (schedule) {
+      const {
+        project_number,
+        project_name,
+        owner,
+        pdfUrl,
+        invoice_to,
+        rate,
+        description,
+        id,
+      } = schedule;
+      setIsEdit(true);
+      setProjectName(project_name);
+      setProjectNumber(project_number);
+      setOwner(owner);
+      setRate(rate);
+      setDescription(description);
+      setInvoiceTo(invoice_to);
+      setFile(pdfUrl);
+      setScheduleId(id);
     }
-  },[])
+  }, []);
 
   const callToUploadSchedule = async () => {
     try {
@@ -85,20 +96,26 @@ const CreateScheduleScreen: React.FC<CreateScheduleScreenProps> = ({route}) => {
         return;
       }
 
-      const body = {
-        uid: getUuid(),
-        projectName: projectName,
-        projectNumber: projectNumber,
+      let body = {
+        project_name: projectName,
+        project_number: projectNumber,
         owner: owner,
         pdfUrl: file,
-        month: moment().format("MMMM"),
-        projectId: getUuid(),
-        rate: rate,
         description: description,
+        invoice_to: invoiceTo,
+        rate: rate,
       };
+      if (IsEdit) {
+        body = {
+          ...body,
+          id: ScheduleId,
+        };
+      }
       setIsLoading(true);
       const restClient = new RestClient();
-      const response = await restClient.createSchedule(body);
+      const response = IsEdit
+        ? await restClient.updateSchedule(body)
+        : await restClient.createSchedule(body);
       if (response && typeof response !== "string") {
         setIsLoading(false);
         showToast(response.message, "success");
@@ -136,7 +153,7 @@ const CreateScheduleScreen: React.FC<CreateScheduleScreenProps> = ({route}) => {
             ref={projectNumberRef}
             onChangeTextValue={(text) => setProjectNumber(text)}
             textValue={projectNumber}
-            label="Project Number"
+            label="Project No./Client PO"
             returnKeyType="next"
             onSubmitEditing={() => ownerRef.current?.focus()}
             editable={!IsEdit}
@@ -160,7 +177,7 @@ const CreateScheduleScreen: React.FC<CreateScheduleScreenProps> = ({route}) => {
             returnKeyType="next"
             onSubmitEditing={() => invoiceToRef.current?.focus()}
           />
-           <CustomTextInput
+          <CustomTextInput
             ref={invoiceToRef}
             onChangeTextValue={(text) => setInvoiceTo(text)}
             textValue={invoiceTo}
@@ -168,7 +185,6 @@ const CreateScheduleScreen: React.FC<CreateScheduleScreenProps> = ({route}) => {
             returnKeyType="next"
             onSubmitEditing={() => descriptionRef.current?.focus()}
           />
-
 
           <CustomTextInput
             ref={descriptionRef}
@@ -180,26 +196,22 @@ const CreateScheduleScreen: React.FC<CreateScheduleScreenProps> = ({route}) => {
             returnKeyType="done"
             returnKeyLabel="Done"
             onSubmitEditing={Keyboard.dismiss}
+            blurOnSubmit={true}
           />
 
           <FileUploadCard file={file} setFile={setFile} IsBoss={IsBoss} />
         </ScrollViewWrapper>
       </SafeAreaWrapper>
 
-      {
-        IsBoss ?
-<View style={styles.button}>
-        <LoaderButton
-          title={IsEdit ? "Update": "Upload"}
-          onPress={() => callToUploadSchedule()}
-          loading={IsLoading}
-        />
-      </View>
-
-        : null
-      }
-
-      
+      {IsBoss ? (
+        <View style={styles.button}>
+          <LoaderButton
+            title={IsEdit ? "Update" : "Upload"}
+            onPress={() => callToUploadSchedule()}
+            loading={IsLoading}
+          />
+        </View>
+      ) : null}
     </>
   );
 };
@@ -208,13 +220,17 @@ export default CreateScheduleScreen;
 
 const styles = StyleSheet.create({
   button: {
-    width: "95%",
+    width: "100%",
     alignSelf: "center",
     position: "absolute",
-    bottom: Platform.OS == "ios" ? 30 : 10,
+    bottom: 0,
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
+    paddingHorizontal: "2%",
+    backgroundColor: AppColor.WHITE,
+     paddingTop: 5,
+        paddingBottom: Platform.OS === "ios" ? 18 : 15,
   },
   inputContainer: {
     marginBottom: 20,

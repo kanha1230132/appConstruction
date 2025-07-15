@@ -9,7 +9,7 @@ import { AppColor } from '../../themes/AppColor';
 interface IconTextInputInterface {
   value: string;
   label: string;
-  onChangeText: (text: string) => void;
+  onChangeText?: (text: string) => void;
   editable?: boolean;
   onClickIcon?: () => void;
   isSecure?: boolean;
@@ -29,15 +29,18 @@ const IconTextInput = ({
 }: IconTextInputInterface) => {
   return (
     <TextInput
-      style={{ color: AppColor.BLACK, fontSize: inputFontSize,backgroundColor:AppColor.WHITE,
+      style={{ 
+        color: AppColor.BLACK, fontSize: inputFontSize,backgroundColor:AppColor.WHITE,
     marginBottom: 15,
 
        }}
       value={value}
+      
       editable={editable}
       onChangeText={onChangeText}
       label={label}
       secureTextEntry={isSecure}
+      placeholderTextColor={AppColor.BLACK_60}
       returnKeyType="done"
       contentStyle={{
         color: AppColor.BLACK
@@ -48,8 +51,12 @@ const IconTextInput = ({
      right={ <TextInput.Icon
               icon={rightIconName}
               onPress={onClickIcon}
+              color={AppColor.PRIMARY}
             />}
       mode="outlined"
+      outlineColor={AppColor.BLACK_60}
+      
+      
       
       activeOutlineColor={AppColor.PRIMARY}
       {...props}
