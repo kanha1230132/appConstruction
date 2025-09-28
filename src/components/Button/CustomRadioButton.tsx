@@ -14,7 +14,7 @@ interface CustomRadioButtonProps {
 const CustomRadioButton = ({ label, value, status, onPress }: CustomRadioButtonProps) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
-      <RadioButton
+      <RadioButton.Android
         value={value}
         status={status}
         onPress={onPress}

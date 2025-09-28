@@ -28,7 +28,21 @@ export enum screenNames {
     CreateJobHazard = "CreateJobHazard",
     ImageViewer = "ImageViewer",
     ViewAllPhotos = "ViewAllPhotos",
-    PreviewJobHazard = "PreviewJobHazard"
-    
+    PreviewJobHazard = "PreviewJobHazard",
+    CreateMileageScreen = "CreateMileageScreen",
+    CreateExpenseScreen = "CreateExpenseScreen",
+    PreviewExpenseScreen = "PreviewExpenseScreen",
+    ExpenseDetailScreen = "ExpenseDetailScreen",
+    DailyPreviewScreen = "DailyPreviewScreen",
+    WeeklyPreviewScreen = "WeeklyPreviewScreen",
+    DailyDairyPreviewScreen = "DailyDairyPreviewScreen",
+    NotificationScreen = "NotificationScreen",
+    ImageSelectionScreen = "ImageSelectionScreen",
+    WeeklyDetailScreen = "WeeklyDetailScreen",
+    CreateInvoiceScreen="CreateInvoiceScreen",
+    InvoicePreviewScreen="InvoicePreviewScreen",
+    WorkFromEntryScreen="WorkFromEntryScreen",
+    ReportPdfScreen="ReportPdfScreen"
 
+    
 }

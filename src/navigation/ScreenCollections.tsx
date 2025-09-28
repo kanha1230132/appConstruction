@@ -27,6 +27,21 @@ import CreateJobHazard from "../feature/jobHazard/screens/createJobHazard/Create
 import ImageViewer from "../feature/imageViewer/ImageViewer";
 import ViewAllPhotos from "../feature/photoFiles/screens/ViewAllPhotos";
 import PreviewJobHazard from "../feature/jobHazard/screens/PreviewJobHazard/PreviewJobHazard";
+import CreateMileageScreen from "../feature/mileage/screens/createMileage/CreateMileageScreen";
+import CreateExpenseScreen from "../feature/expense/screen/CreateExpense/CreateExpense";
+import PreviewExpenseScreen from "../feature/expense/screen/PreviewExpense/PreviewExpense";
+import ExpenseDetailScreen from "../feature/expense/screen/ExpenseDetail/ExpenseDetailScreen";
+import DailyPreviewScreen from "../feature/reports/screens/PreviewScreen/DailyPreview";
+import DailyDairyPreviewScreen from "../feature/reports/screens/PreviewScreen/DailyDairyPreview";
+import WeeklyPreviewScreen from "../feature/reports/screens/PreviewScreen/WeeklyPreview";
+import NotificationScreen from "../feature/notification/NotificationScreen";
+import ExpenseScreen from "../feature/expense/ExpenseScreen";
+import ImageSelectionScreen from "../feature/reports/screens/ImageSelectionScreen/ImageSelectionScreen";
+import WeeklyDetailScreen from "../feature/reports/screens/weeklyEntry/WeeklyDetailScreen";
+import CreateInvoiceScreen from "../feature/invoice/screens/createInvoice/CreateInvoice";
+import InvoicePreviewScreen from "../feature/invoice/screens/previewScreen/InvoicePreview";
+import WorkFromEntryScreen from "../feature/invoice/screens/workFromEntryScreen";
+import ReportPdfScreen from "../feature/reports/screens/pdfScreen";
 
 export const authStack = [
   {
@@ -49,10 +64,10 @@ export const authStack = [
     name: screenNames.MainApp,
     component: DrawerNavigator,
   },
-  {
-    name: screenNames.HomeScreen,
-    component: HomeScreen,
-  },
+  // {
+  //   name: screenNames.HomeScreen,
+  //   component: HomeScreen,
+  // },
   {
     name: screenNames.HomeTabs,
     component: BottomTabNavigator,
@@ -129,7 +144,64 @@ export const authStack = [
   {
     name: screenNames.PreviewJobHazard,
     component: PreviewJobHazard,
+  },
+  {
+    name: screenNames.CreateMileageScreen,
+    component: CreateMileageScreen,
+  },
+  {
+    name: screenNames.CreateExpenseScreen,
+    component: CreateExpenseScreen,
+  },
+  {
+    name: screenNames.PreviewExpenseScreen,
+    component: PreviewExpenseScreen,
+  },
+  {
+    name: screenNames.ExpenseDetailScreen,
+    component: ExpenseDetailScreen,
+  },
+  {
+    name: screenNames.DailyPreviewScreen,
+    component: DailyPreviewScreen,
+  },
+  {
+    name: screenNames.DailyDairyPreviewScreen,
+    component: DailyDairyPreviewScreen,
+  },
+  {
+    name: screenNames.WeeklyPreviewScreen,
+    component: WeeklyPreviewScreen,
+  },
+  {
+    name: screenNames.NotificationScreen,
+    component: NotificationScreen,
+  },
+  {
+    name: screenNames.ImageSelectionScreen,
+    component: ImageSelectionScreen,
+  },
+  {
+    name: screenNames.WeeklyDetailScreen,
+    component: WeeklyDetailScreen,
+  },
+  {
+    name: screenNames.CreateInvoiceScreen,
+    component: CreateInvoiceScreen,
+  },
+  {
+    name: screenNames.InvoicePreviewScreen,
+    component: InvoicePreviewScreen,
+  },
+  {
+    name: screenNames.WorkFromEntryScreen,
+    component: WorkFromEntryScreen,
+  },
+  {
+    name: screenNames.ReportPdfScreen,
+    component: ReportPdfScreen,
   }
+
 
 ];
 

@@ -10,7 +10,12 @@ import React, { useEffect, useState } from "react";
 import { PreviewJobHazardProps } from "../../../../types/navigation";
 import { SafeAreaWrapper } from "../../../../components/SafeAreaWrapper/SafeAreaWrapper";
 import HeaderWithBackButton from "../../../../components/Button/HeaderWithBackButton";
-import { goBack, navigate, push, resetAndNavigate } from "../../../../utils/NavigationUtil";
+import {
+  goBack,
+  navigate,
+  push,
+  resetAndNavigate,
+} from "../../../../utils/NavigationUtil";
 import { AppColor } from "../../../../themes/AppColor";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
@@ -34,34 +39,32 @@ const PreviewJobHazard: React.FC<PreviewJobHazardProps> = () => {
   const [JobHazardList, setJobHazardList] = useState<JobHazardRequest>();
   const [IsLoading, setIsLoading] = useState(false);
   const [IsSubmit, setIsSubmit] = useState(false);
-  const [OtherText, setOtherText] = useState()
+  const [OtherText, setOtherText] = useState();
 
   const { showToast } = useToastHook();
   useEffect(() => {
     if (JobHazard) {
       setIsLoading(false);
       setJobHazardList(JobHazard);
-      if(JobHazard?.OtherTextHazards?.length > 0){
+      if (JobHazard?.OtherTextHazards?.length > 0) {
         const result = JobHazard?.OtherTextHazards?.reduce((acc, item) => {
-  acc[`"${item.activityName}"`] = item.value;
-  return acc;
-}, {});
-console.log("result : ", result)
-if(result){
-  setOtherText(result)
-}
+          acc[`"${item.activityName}"`] = item.value;
+          return acc;
+        }, {});
+        if (result) {
+          setOtherText(result);
+        }
       }
     }
   }, [JobHazard]);
-
 
   const createJobHazardPdf = async () => {
     try {
       setIsLoading(true);
       if (JobHazardList) {
         await createJHAHarardPdf(JobHazardList);
-      } else {
-      }
+        resetAndNavigate(screenNames.MainApp);
+      } 
     } catch (error) {
       console.log("Error : <LoaderModal visible={IsLoading} /> ", error);
       setIsLoading(false);
@@ -79,7 +82,7 @@ if(result){
       tempJobHazard.selectedActivities = tempStaffActivity;
       setIsLoading(true);
       const restClient = new RestClient();
-      const data = { ...tempJobHazard, signature: "",time:"11:20:00" };
+      const data = { ...tempJobHazard, signature: "", time: "11:20:00" };
       console.log("data : ", JSON.stringify(data));
       const response = await restClient.addJobHazard(data);
       if (response && typeof response != "string") {
@@ -98,15 +101,16 @@ if(result){
   return (
     <>
       <SafeAreaWrapper>
-        <HeaderWithBackButton title={"Add JHA"} onBackClick={() =>{
-            if(IsSubmit){
-              navigate(screenNames.JobHazardScreen)
-            }else{
-           goBack()
-
+        <HeaderWithBackButton
+          title={"Add JHA"}
+          onBackClick={() => {
+            if (IsSubmit) {
+              navigate(screenNames.JobHazardScreen);
+            } else {
+              goBack();
             }
-           
-           }} />
+          }}
+        />
         <ScrollViewWrapper>
           <View style={styles.container}>
             {/* Project Details */}
@@ -150,33 +154,44 @@ if(result){
 
             <View style={{ marginVertical: 10 }} />
 
-             <Card style={styles.section}>
+            <Card style={styles.section}>
               <Text style={styles.sectionTitle}>Hazard Selection</Text>
-              {
-                JobHazardList?.selectedActivities?.map((item, index) => {
-                  
-                  if(item?.activities?.length == 0){
-                    return <></>
-                  }
-                  
-                  
-                 return (
+              {JobHazardList?.selectedActivities?.map((item, index) => {
+                if (item?.activities?.length == 0) {
+                  return <></>;
+                }
+
+                return (
                   <View
                     style={{
                       marginTop: 6,
                     }}
                   >
-                    <CustomText title={`${item.activityName}`} fontFamily={AppFonts.Medium} fontSize={moderateScale(15)} />
-                    {
-                      item?.activities?.map((item1, index) => (
-                        item1 == "Other" ? <CustomText title={`- ${item1} : ${OtherText?.[`"${item.activityName}"`]}`} fontFamily={AppFonts.Regular} fontSize={moderateScale(14)} /> :
-                        <CustomText title={`- ${item1}`} fontFamily={AppFonts.Regular} fontSize={moderateScale(14)} />
-                      ))
-                    }
+                    <CustomText
+                      title={`${item.activityName}`}
+                      fontFamily={AppFonts.Medium}
+                      fontSize={moderateScale(15)}
+                    />
+                    {item?.activities?.map((item1, index) =>
+                      item1 == "Other" ? (
+                        <CustomText
+                          title={`- ${item1} : ${
+                            OtherText?.[`"${item.activityName}"`]
+                          }`}
+                          fontFamily={AppFonts.Regular}
+                          fontSize={moderateScale(14)}
+                        />
+                      ) : (
+                        <CustomText
+                          title={`- ${item1}`}
+                          fontFamily={AppFonts.Regular}
+                          fontSize={moderateScale(14)}
+                        />
+                      )
+                    )}
                   </View>
-                )})
-              }
-            
+                );
+              })}
             </Card>
 
             <View style={{ marginVertical: 10 }} />
@@ -247,8 +262,7 @@ if(result){
               </Card>
             ) : null}
           </View>
-                      <View style={{ height: 50 }} />
-          
+          <View style={{ height: 50 }} />
         </ScrollViewWrapper>
       </SafeAreaWrapper>
 

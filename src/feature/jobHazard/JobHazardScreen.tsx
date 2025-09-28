@@ -3,12 +3,10 @@ import React from "react";
 import { SafeAreaWrapper } from "../../components/SafeAreaWrapper/SafeAreaWrapper";
 import ScrollViewWrapper from "../../components/ScrollViewWrapper/ScrollViewWrapper";
 import HeaderWithBackButton from "../../components/Button/HeaderWithBackButton";
-import { goBack, navigate, resetAndNavigate } from "../../utils/NavigationUtil";
+import {  navigate, resetAndNavigate } from "../../utils/NavigationUtil";
 import { AppText } from "../../constants/appText";
 import { images } from "../../assets";
-import { FAB } from "react-native-paper";
 import { screenNames } from "../../navigation/ScreenNames";
-import { AppColor } from "../../themes/AppColor";
 import AddButton from "../../components/Button/AddButton";
 
 interface JobHazardScreenProps {}

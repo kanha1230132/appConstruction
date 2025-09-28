@@ -211,7 +211,7 @@ class RestClient {
     } catch (error) {
       console.log("Error getLogo : ", error);
       return null;
-    } 
+    }
   }
 
   async getSchedules(): Promise<SchedulesResponse[] | string | null> {
@@ -283,7 +283,7 @@ class RestClient {
       return null;
     }
   }
-  
+
   async deleteSchedule(
     body: any
   ): Promise<{ message: string } | string | null> {
@@ -364,7 +364,6 @@ class RestClient {
         endPoints.URL_UPLOAD_ATTACHMENTS,
         body
       );
-      console.log("response : ", response)
       if (response.status == 200 || response.status == 201) {
         const output = response.data;
         if (output.status == "success") {
@@ -508,7 +507,10 @@ class RestClient {
 
   async addJobHazard(param: any) {
     try {
-      const response = await apiClient.post(endPoints.URL_SAVE_JOB_HAZARD, param);
+      const response = await apiClient.post(
+        endPoints.URL_SAVE_JOB_HAZARD,
+        param
+      );
       if (response.status == 200 || response.status == 201) {
         const output = response.data;
         if (output.status == "success") {
@@ -526,6 +528,442 @@ class RestClient {
       return null;
     }
   }
+
+  async getMileageHistory(param: any) {
+    try {
+      const response = await apiClient.post(
+        endPoints.URL_GET_MILEAGE_HISTORY,
+        param
+      );
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "success") {
+          return { data: output.data, message: output.message };
+        } else {
+          return output.message;
+        }
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      console.log("Error getLogo : ", error);
+      return null;
+    }
+  }
+
+  async getSugesstions(url: any) {
+    try {
+      const response = await apiClient.get(url);
+      console.log("response: ", response);
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "OK") {
+          return output.predictions;
+        } else {
+          return output.message;
+        }
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      console.log("Error getLogo : ", error);
+      return null;
+    }
+  }
+
+  async getDirections(url: any) {
+    try {
+      const response = await apiClient.get(url);
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "REQUEST_DENIED" || output?.error_message) {
+          return output?.error_message || "Something went wrong";
+        } else {
+          return output;
+        }
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      console.log("Error getLogo : ", error);
+      return null;
+    }
+  }
+
+  async createMileage(param: any) {
+    try {
+      const response = await apiClient.post(
+        endPoints.URL_CREATE_MILEAGE,
+        param
+      );
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "success") {
+          return { data: output.data, message: output.message };
+        } else {
+          return output.message;
+        }
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      console.log("Error getLogo : ", error);
+      return null;
+    }
+  }
+
+  async createExpense(param: any) {
+    try {
+      const response = await apiClient.post(
+        endPoints.URL_CREATE_EXPENSE,
+        param
+      );
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "success") {
+          return { data: output.data, message: output.message };
+        } else {
+          return output.message;
+        }
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      console.log("Error getLogo : ", error);
+      return null;
+    }
+  }
+
+  async getExpenses() {
+    try {
+      const response = await apiClient.post(endPoints.URL_GET_EXPENSES);
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "success") {
+          return { data: output.data, message: output.message };
+        } else {
+          return output.message;
+        }
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      console.log("Error getLogo : ", error);
+      return null;
+    }
+  }
+  async updateExpenseStatus(param: any) {
+    try {
+      const response = await apiClient.post(endPoints.URL_UPDATE_STATUS, param);
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "success") {
+          return { data: output.data, message: output.message };
+        } else {
+          return output.message;
+        }
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      console.log("Error getLogo : ", error);
+      return null;
+    }
+  }
+
+  async createDailyDairyReport(param: any) {
+    try {
+      const response = await apiClient.post(
+        endPoints.URL_CREATE_DAILY_DAIRY_REPORT,
+        param
+      );
+      console.log("response: ", JSON.stringify(response));
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "success") {
+          return { data: output.data, message: output.message };
+        } else {
+          return output.message;
+        }
+      } else if (response.status == 401) {
+        return 401;
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      console.log("Error getLogo : ", error);
+      return null;
+    }
+  }
+  async createDailyReport(param: any) {
+    try {
+      const response = await apiClient.post(
+        endPoints.URL_CREATE_DAILY_ENTRY_REPORT,
+        param
+      );
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "success") {
+          return { data: output.data, message: output.message };
+        } else {
+          return output.message;
+        }
+      } else if (response.status == 401) {
+        return 401;
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      console.log("Error getLogo : ", error);
+      return null;
+    }
+  }
+
+  async getNotifications() {
+    try {
+      const response = await apiClient.post(endPoints.URL_GET_NOTIFICATION);
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "success") {
+          return { data: output.data, message: output.message };
+        } else {
+          return output.message;
+        }
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      console.log("Error getLogo : ", error);
+      return null;
+    }
+  }
+
+  async updateNotificationStatus(param: any) {
+    try {
+      const response = await apiClient.post(
+        endPoints.URL_UPDATE_NOTIFICATION_STATUS,
+        param
+      );
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "success") {
+          return { data: output.data, message: output.message };
+        } else {
+          return output.message;
+        }
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      console.log("Error getLogo : ", error);
+      return null;
+    }
+  }
+
+  async getWeeklyReport(param: any) {
+    try {
+      const response = await apiClient.post(
+        endPoints.URL_GET_WEEKLY_REPORT,
+        param
+      );
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "success") {
+          return { data: output.data, message: output.message };
+        } else {
+          return output.message;
+        }
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      console.log("Error getLogo : ", error);
+      return null;
+    }
+  }
+
+  async createWeeklyReport(param: any) {
+    try {
+      const response = await apiClient.post(
+        endPoints.URL_CREATE_WEEKLY_REPORT,
+        param
+      );
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "success") {
+          return { data: output.data, message: output.message };
+        } else {
+          return output.message;
+        }
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      console.log("Error getLogo : ", error);
+      return null;
+    }
+  }
+
+  async getWeeklyInvoiceReport(param: any) {
+    try {
+      const response = await apiClient.post(
+        endPoints.URL_GET_INVOICE_WEEKLY_REPORT,
+        param
+      );
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "success") {
+          return { data: output.data, message: output.message };
+        } else {
+          return output.message;
+        }
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      console.log("Error getLogo : ", error);
+      return null;
+    }
+  }
+
+  async createInvoice(param: any) {
+    try {
+      const response = await apiClient.post(endPoints.URL_CREATE_INOICE, param);
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "success") {
+          return { data: output.data, message: output.message };
+        } else {
+          return output.message;
+        }
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      console.log("Error getLogo : ", error);
+      return null;
+    }
+  }
+
+  async createExcel(param: any) {
+    try {
+      const response = await apiClient.post(
+        endPoints.URL_GENERATE_INOVOICE_EXCEL,
+        param
+      );
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "success") {
+          return { data: output.data, message: output.message };
+        } else {
+          return output.message;
+        }
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      console.log("Error getLogo : ", error);
+      return null;
+    }
+  }
+
+  async getPdfDailyReport(param: any) {
+    try {
+      const response = await apiClient.post(endPoints.URL_GET_DAILY_PDF_ENTRY,param);
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "success") {
+          return { data: output.data, message: output.message };
+        } else {
+          return output.message;
+        }
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      console.log("Error getLogo : ", error);
+      return null;
+    }
+  
+  }
+
+  async getPdfWeeklyReport(param:any){
+    try {
+      const response = await apiClient.post(endPoints.URL_GET_WEEKLY_PDF_REPORT,param);
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "success") {
+          return { data: output.data, message: output.message };
+        } else {
+          return output.message;
+        }
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      console.log("Error getLogo : ", error);
+      return null;
+    }
+  
+  }
+
+  async getPdfDiaryReport(param: any) {
+    try {
+      const response = await apiClient.post(endPoints.URL_GET_DAILY_DIARY_ENTRY, param);
+      if (response.status == 200 || response.status == 201) {
+        const output = response.data;
+        if (output.status == "success") {
+          return { data: output.data, message: output.message };
+        } else {
+          return output.message;
+        }
+      } else {
+        return (
+          response?.data?.message || "Something went wrong please try again"
+        );
+      }
+    } catch (error) {
+      console.log("Error getLogo : ", error);
+      return null;
+    }
+  }
+
 }
 
 export default RestClient;

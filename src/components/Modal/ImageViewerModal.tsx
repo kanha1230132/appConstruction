@@ -56,8 +56,8 @@ const useImageViewer = () => {
     // Delay capture to ensure render is complete.
     try {
       const uri = await captureRef(imageRef, {
-        quality: 1,
-        format: "png",
+        quality: 0.7,
+        format: "jpg",
       });
       console.log("Captured image uri:", uri);
       return uri;

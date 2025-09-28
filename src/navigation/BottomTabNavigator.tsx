@@ -12,7 +12,7 @@ import { AppColor } from "../themes/AppColor";
 import { Platform } from "react-native";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import DailyEntryScreen from "../feature/reports/screens/dailyEntry/DailyEntryScreen";
+import { TouchableOpacity } from "react-native";
 
 const Tab = createBottomTabNavigator();
 
@@ -34,7 +34,7 @@ const  BottomTabNavigator: React.FC<BottomTabNavigatorProps> = (props)=> {
               size={size}
               color={focused ? AppColor.PRIMARY : color}
             />
-          ),
+          )
         }}
       />
       <Tab.Screen
@@ -74,8 +74,8 @@ const  BottomTabNavigator: React.FC<BottomTabNavigatorProps> = (props)=> {
         }}
       />
       <Tab.Screen
-        name={screenNames.DailyEntryScreen}
-        component={DailyEntryScreen}
+        name={screenNames.ReportScreen}
+        component={ReportScreen}
         options={{
           tabBarLabel: "Reports",
           tabBarActiveTintColor: AppColor.PRIMARY,

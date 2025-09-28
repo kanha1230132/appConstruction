@@ -51,10 +51,11 @@ export interface ImageItem {
   uri: string;
   _id: number;
   selected: boolean;
-  time: string; // ISO 8601 format date string
+  time: string; // ISO 8601 format date string,
+  description?: string;
 }
 
-interface DateWithImages {
+export interface DateWithImages {
   date: string; // ISO 8601 format date string
   images: ImageItem[];
   selected: boolean;
@@ -310,27 +311,14 @@ const PhotoFilesScreen: React.FC<PhotoFilesScreenProps> = ({ route }) => {
               >
                 <View style={styles.imageContainer}>
 
-                  <FastImage
-  style={styles.photo}
-  source={{
-    uri: image.uri,
-    priority: FastImage.priority.high,
-    // Cache control (iOS & Android)
-    cache: FastImage.cacheControl.immutable,
-  }}
-/>
-                  {/* <Image
-                    source={{ uri: image.uri }}
+                  <Image
                     style={styles.photo}
-                    // resizeMode="contain"
-                    onError={(e) =>
-                      console.log(
-                        "Error loading image:",
-                        image.uri,
-                        e.nativeEvent.error
-                      )
-                    }
-                  /> */}
+                    source={{
+                      uri: image.uri,
+                    }}
+                    resizeMode={FastImage.resizeMode.cover}
+                  />
+             
 
 
                   <View

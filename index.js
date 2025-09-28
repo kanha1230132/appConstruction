@@ -2,7 +2,7 @@
  * @format
  */
 
-import {AppRegistry} from 'react-native';
+import {AppRegistry, View} from 'react-native';
 import App from './src/App';
 import {name as appName} from './app.json';
 import { PaperProvider } from 'react-native-paper';
@@ -24,7 +24,9 @@ export default function Main() {
         warningIcon={ <MaterialIcons name="warning" size={24} color="white" />}
         dangerIcon={ <MaterialIcons name="error" size={24} color="white" />}
         normalColor={AppColor.PRIMARY}
-    
+        textStyle={{
+          marginRight:10
+        }}
         >
 
        <Provider store={store}>

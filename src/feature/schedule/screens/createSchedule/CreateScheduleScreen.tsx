@@ -170,7 +170,21 @@ const CreateScheduleScreen: React.FC<CreateScheduleScreenProps> = ({
 
           <CustomTextInput
             ref={rateRef}
-            onChangeTextValue={(text) => setRate(text ? Number(text) : 0)}
+            onChangeTextValue={(text) =>{
+                 if (text.split(".").length > 2) {
+            return; // more than one dot — invalid
+          }
+
+          if (
+            text.includes(".") &&
+            text.split(".")[text.split(".").length - 1].length > 2
+          ) {
+            return; // more than 2 decimal places — invalid
+          }
+          // Allow only digits, $, and ., remove everything else
+          text = text.replace(/[^0-9$.]/g, "");
+              
+              setRate(text)}}
             textValue={rate ? rate.toString() : ""}
             label="Rate"
             keyboardType="numeric"

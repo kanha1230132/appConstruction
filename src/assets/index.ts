@@ -21,5 +21,17 @@ export const images = {
     WATSAPP_SHARE: require('./Images/watsappShare.png'),
     WIND_SPEED : require('./Images/wind.png'),
     HUMIDITY : require('./Images/humidity.png'),
+    TIME : require('./Images/time.png'),
+    PIN : require('./Images/pin.png'),
+    MONEYBAG : require('./Images/money-bags.png'),
+    GPS : require('./Images/gps.png'),
+
+    PENDING: require('./Images/pending.png'),
+    APPROVED: require('./Images/approve.png'),
+    REJECTED: require('./Images/reject.png'),
+    LIST: require('./Images/list.png')
+   
+
+  
 
 }

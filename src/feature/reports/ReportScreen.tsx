@@ -1,5 +1,5 @@
 import { Animated, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useRef } from "react";
+import React, { use, useEffect, useRef } from "react";
 import { SafeAreaWrapper } from "../../components/SafeAreaWrapper/SafeAreaWrapper";
 import { AppFonts } from "../../themes/AppFonts";
 import { AppColor } from "../../themes/AppColor";
@@ -13,11 +13,14 @@ import { screenNames } from "../../navigation/ScreenNames";
 import { ScreenType } from "../../types/screenTypes";
 import { AppText } from "../../constants/appText";
 import { moderateScale } from "react-native-size-matters";
+import { useDispatch } from "react-redux";
+import { updateDailyDairyReports, updateDailyReports, updateWeeklyReports } from "../../store/slice/Reports";
 
 interface ReportScreenProps {}
 
 const ReportScreen: React.FC<ReportScreenProps> = () => {
   const cloudAnimation = useRef(new Animated.Value(0)).current;
+
 
   useEffect(() => {
     Animated.loop(
@@ -33,9 +36,14 @@ const ReportScreen: React.FC<ReportScreenProps> = () => {
     inputRange: [0, 1],
     outputRange: ["-20%", "120%"],
   });
+
+
   return (
     <>
+        {/* <RestrictedScreen /> */}
+
       <SafeAreaWrapper>
+
         <Text style={styles.headerLeftBlue}>Reports</Text>
         <ScrollViewWrapper>
           <View
@@ -72,6 +80,7 @@ const ReportScreen: React.FC<ReportScreenProps> = () => {
             }}
           >
             <ReportButton
+              key={1}
               onPress={() =>
                 navigate(screenNames.ScheduleListScreen, {
                   type: ScreenType.DAILY_ENTRY,
@@ -80,14 +89,18 @@ const ReportScreen: React.FC<ReportScreenProps> = () => {
               title={AppText.AddDailyEntry}
             />
             <ReportButton
+              key={2}
+
               onPress={() =>
                 navigate(screenNames.ScheduleListScreen, {
                   type: ScreenType.WEEKLY_ENTRY,
                 })
               }
-              title={AppText.AddDailyEntry}
+              title={AppText.AddWeeklyEntry}
             />
             <ReportButton
+              key={3}
+
               onPress={() =>
                 navigate(screenNames.ScheduleListScreen, {
                   type: ScreenType.DAILY_DAIRY_ENTRY,
@@ -96,8 +109,10 @@ const ReportScreen: React.FC<ReportScreenProps> = () => {
               title={AppText.AddDailyDiary}
             />
           </View>
+
         </ScrollViewWrapper>
       </SafeAreaWrapper>
+
     </>
   );
 };

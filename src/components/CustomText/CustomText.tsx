@@ -22,7 +22,7 @@ const CustomText: React.FC<CustomTextProps> = ({
 }) => {
 
   return (
-    <Text style={[{ color, fontSize, fontFamily }, style]}>{title}</Text>
+    <Text  style={[{ color, fontSize, fontFamily }, style]}>{title}</Text>
   );
 };
 

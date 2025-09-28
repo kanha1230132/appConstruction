@@ -18,9 +18,10 @@ interface HeaderWithBackButtonProps {
     RightIcon?:string
     onClickRightIcon2 ?:()=> void 
     RightIcon2?:string
+    RightIcon2Color?:string
 }
 
-const HeaderWithBackButton = ({ title, onBackClick, customStyle, textFontSize = 18,onClickRightIcon,showRightIcon ,RightIcon,onClickRightIcon2,RightIcon2,showRightIcon2}: HeaderWithBackButtonProps) => {
+const HeaderWithBackButton = ({ title, onBackClick, customStyle, textFontSize = 18,onClickRightIcon,showRightIcon ,RightIcon,onClickRightIcon2,RightIcon2,showRightIcon2,RightIcon2Color = AppColor.REJECT}: HeaderWithBackButtonProps) => {
     return (
         <View style={[styles.headerRow, customStyle]}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -46,9 +47,9 @@ const HeaderWithBackButton = ({ title, onBackClick, customStyle, textFontSize = 
             }
 
              {
-               showRightIcon2 || RightIcon2 ? 
+               showRightIcon2 && RightIcon2 ? 
   <TouchableOpacity onPress={onClickRightIcon2}>
-             <Ionicons name={RightIcon2 ? RightIcon2 : "trash"} size={30} color={AppColor.REJECT}/>
+             <Ionicons name={RightIcon2 ? RightIcon2 : "trash"} size={30} color={RightIcon2Color}/>
             </TouchableOpacity>
 
                 : null

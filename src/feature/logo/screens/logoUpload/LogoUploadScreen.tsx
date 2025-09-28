@@ -168,14 +168,15 @@ const LogoUploadScreen: React.FC<LogoUploadScreenProps> = ({
               <Card
                 elevation={1}
                 style={{
-                  width:'98%',
+                  width:'100%',
                   backgroundColor: AppColor.WHITE,
                   marginVertical: 5,
                   padding: 10,
-                  alignItems: "center",
+                  // alignItems: "center",
                   marginHorizontal: '1%',
                   paddingVertical: 20,
                   borderRadius: 10,
+                  position: "relative",
                 }}
               >
                 {SelectedImage ? (
@@ -255,31 +256,29 @@ const LogoUploadScreen: React.FC<LogoUploadScreenProps> = ({
                         marginTop: 10,
                         color: AppColor.BLACK_50,
                         fontFamily: AppFonts.Medium,
-                        fontSize: 13,
+                        fontSize: moderateScale(14),
                         textAlign: "center",
                         marginHorizontal: 20,
                       }}
                     >
-                      You can upload a logo by importing or taking a photo to
-                      submit from your phone.
+                    You can upload a logo by importing from your phone. 1024x1024 pixels.
                     </Text>
                   </>
                 )}
 
+              
                 {SelectedImage && IsNew ? (
                   <TouchableOpacity
                     onPress={() => {
                       setSelectedImage(undefined);
                     }}
                     style={{
-                      flexDirection: "row",
                       alignItems: "center",
-                      gap: 10,
-                      width: 50,
-                      height: 50,
+                      width: 35,
+                      height: 35,
                       position: "absolute",
-                      top: -25,
-                      right: -90,
+                      top: 0,
+                      right: 0,
                     }}
                   >
                     <MaterialIcons
@@ -368,6 +367,7 @@ const LogoUploadScreen: React.FC<LogoUploadScreenProps> = ({
               {/* </View> */}
               {/* ) : null} */}
             </View>
+
           </View>
         </ScrollViewWrapper>
       </SafeAreaWrapper>

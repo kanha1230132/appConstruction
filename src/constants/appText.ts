@@ -21,16 +21,43 @@ export enum AppText{
     AddDailyDiary = "Add a Daily Diary",
 
     WeeklyEntry = "Weekly Entry",
-    DailyDairyEntry = "Daily Dairy Entry",
+    DailyDairyEntry = "Daily Diary Entry",
     DailyEntry = "Daily Entry",
 
-    EnterDescriptiondetails = 'Enter Description Details',
+    EnterDescriptiondetails = 'Enter Details',
+    EnterEquipmentDetails = 'Equipment Details',
+    EnterLabourDetails = 'Labour Details',
+    EnterVisitorDetails = 'Visitor Details',
+    FillDeclerationForm = "Fill Decleration Form",
     JobHazardAnalysis ="Job Hazard Analysis",
     
-    EnterProjectDetails = 'Enter Project Details',
+    EnterProjectDetails = 'Project Details',
     HazardSelection = "Hazard Selection",
     TaskAddition = "Task Addition",
     GeneralDetails = "General Details",
     PreviousEntryMessage = "We found previous form data. Would you like to use it?",
     Mileage = "Mileage",
+    MileageTracker = "Mileage Tracker",
+    StartRide = "Swipe to Start Ride",
+    EndRide = "Swipe to End Ride",
+    RideCompleted = "Ride Completed",
+    Expense = "Expense",
+    CreateNewExpense = "Create New Expense",
+    ExpensePreview = "Expense Preview",
+    ExpenseDetails = "Expense Details",
+    HighTemp = "HighTemp",
+    LowTemp = "LowTemp",
+    Pending = "Pending",
+    Approved = "Approved",
+    Rejected = "Rejected",
+    Notification = "Notification",
+    Done= "Done",
+    ImageSelection="Photo files Selection",
+
+    EnterInvoiceDetails = 'Enter Invoice Details',
+    InspectorNameTheirDetails = 'Inspector Name & Their Details',
+    Invoice = 'Invoice',
+   
+
 }
+

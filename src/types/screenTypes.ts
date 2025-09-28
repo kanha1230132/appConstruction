@@ -3,5 +3,7 @@ export enum ScreenType {
     DAILY_ENTRY = "DAILY_ENTRY",
     WEEKLY_ENTRY = "WEEKLY_ENTRY",
     DAILY_DAIRY_ENTRY = "DAILY_DAIRY_ENTRY",
+    INVOICE = "INVOICE",
+    PDF = "PDF"
     
 }

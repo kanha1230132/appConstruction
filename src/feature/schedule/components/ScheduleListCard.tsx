@@ -14,20 +14,23 @@ import { moderateScale } from "react-native-size-matters";
 interface ScheduleListCardProps {
   item: SchedulesResponse;
   onPress: () => void;
+  isShowPhotoIcon?: boolean;
 }
 
 const ScheduleListCard: React.FC<ScheduleListCardProps> = ({
   item,
   onPress,
+  isShowPhotoIcon
 }) => {
   return (
+    
     <Card
       style={{
         marginVertical: 7,
         paddingVertical: 10,
         marginHorizontal: 2,
         paddingHorizontal: 10,
-        backgroundColor: AppColor.GREY_F9,
+        backgroundColor: AppColor.WHITE,
       }}
     >
       <TouchableOpacity
@@ -86,8 +89,12 @@ const ScheduleListCard: React.FC<ScheduleListCardProps> = ({
           <MaterialIcons name="chevron-right" size={24} color={AppColor.PRIMARY} />
         </View>
       </TouchableOpacity>
-
+{
+  isShowPhotoIcon? 
       <Image source={images.PHOTO_FILES} style={{width:20,height:20,position:'absolute',right:0,tintColor:AppColor.PRIMARY}}  />
+
+  : null
+}
     </Card>
   );
 };

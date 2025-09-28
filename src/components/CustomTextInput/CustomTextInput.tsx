@@ -46,11 +46,21 @@ const CustomTextInput = forwardRef<any, CustomTextInputProps>(({
         numberOfLines={numberOfLines}
         multiline={multiline}
         returnKeyType={returnKeyType}
-        outlineColor={AppColor.BLACK_60}
-         contentStyle={{
-                color: AppColor.BLACK,
-                fontFamily: AppFonts.Regular,
-              }}
+        outlineColor={AppColor.BLACK}
+        textColor={AppColor.BLACK}
+       
+        contentStyle={{
+          color: AppColor.BLACK,
+          fontFamily: AppFonts.Regular,
+
+        }}
+        theme={{
+    colors: {
+      primary: AppColor.PRIMARY,   // active label color (when focused)
+      onSurfaceVariant: AppColor.BLACK, // default label color (when not focused)
+    },
+  }}
+              
         {...props}
       />
     </View>

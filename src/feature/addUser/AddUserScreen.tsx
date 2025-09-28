@@ -43,7 +43,7 @@ const AddUserScreen: React.FC<AddUserScreenProps> = () => {
         email: email,
         mileageRate: mileageRate,
         allowanceDistance: mileageDistance,
-        isBoss: false,
+        isBoss: isBoss,
       };
       setIsLoading(true);
       const restClient = new RestClient();
@@ -84,18 +84,27 @@ const AddUserScreen: React.FC<AddUserScreenProps> = () => {
 
           <CustomTextInput
             onChangeTextValue={(text) => {
+              text = text.replaceAll("$", "")
+              if(text.split('.').length > 1 && text.split('.')[text.split('.').length-1].length > 2){
+                return;
+              }
               if ([",", " "].includes(text) || isNaN(Number(text))) {
                 return;
               }
               setMileageRate(text);
             }}
-            textValue={mileageRate ? mileageRate.toString() : ""}
+            textValue={mileageRate ? "$"+mileageRate.toString() : ""}
             label={"Mileage Rate"}
             keyboardType="numeric"
+            placeholder="Ex: $0.00"
+
           />
 
           <CustomTextInput
             onChangeTextValue={(text) => {
+              if(text.split('.').length > 1 && text.split('.')[text.split('.').length-1].length > 2){
+                return;
+              }
               if ([",", " "].includes(text) || isNaN(Number(text))) {
                 return;
               }
@@ -104,6 +113,7 @@ const AddUserScreen: React.FC<AddUserScreenProps> = () => {
             textValue={mileageDistance ? mileageDistance.toString() : ""}
             label={"Mileage Distance"}
             keyboardType="numeric"
+            placeholder="Ex: 0.00 Kms"
           />
 
           <View
@@ -156,8 +166,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: "2%",
     backgroundColor: AppColor.WHITE,
-    paddingVertical: 15,
+      paddingHorizontal: Platform.OS === "ios" ? "4%" : "2%",
+        paddingBottom: Platform.OS === "ios" ? 35 : 15,
   },
 });

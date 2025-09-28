@@ -41,12 +41,12 @@ const styles = StyleSheet.create({
   },
   label: {
     fontFamily: AppFonts.Medium,
-    fontSize: moderateScale(14) ,
+    fontSize: moderateScale(13) ,
     color:AppColor.BLACK
   },
   text: {
     fontFamily: AppFonts.Regular,
-    fontSize: moderateScale(14),
+    fontSize: moderateScale(13),
     color:AppColor.BLACK_80
 
   },

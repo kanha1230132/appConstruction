@@ -20,6 +20,7 @@ import ScrollViewWrapper from "../../../../components/ScrollViewWrapper/ScrollVi
 import PrivacyPolicyView from "../../components/PrivacyPolicyView";
 import PrivacyPolicyModal from "../../components/PrivacyPolicyModal";
 import styles from "./Login.styles";
+import ImageDescriptionModal from "../../../reports/Modal/ImageDescriptionModal";
 
 const LoginScreen: React.FC<LoginScreenProps> = () => {
   const [Email, setEmail] = useState("");
@@ -162,6 +163,7 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
         </ScrollViewWrapper>
       </SafeAreaWrapper>
       <PoweredText />
+
     </>
   );
 };

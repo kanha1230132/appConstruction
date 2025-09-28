@@ -1,6 +1,7 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { CompanyLogoResponse, SchedulesResponse } from "../api/apiInterface";
+import { CompanyLogoResponse, ExpenseListResponse, ExpenseReportResponse, SchedulesResponse } from "../api/apiInterface";
 import { ImageItem } from "../feature/photoFiles/PhotoFilesScreen";
+import { IWorkFromEntry } from "../store/slice/Reports";
 
 export type RootStackParamList = {
   SplashScreen: undefined;
@@ -29,7 +30,20 @@ export type RootStackParamList = {
   ImageViewer:{image:string}
   ViewAllPhotos:{Photos?:ImageItem[]}
   PreviewJobHazard:undefined
-
+  CreateMileageScreen:{selectedDate:Date };
+  CreateExpenseScreen:undefined;
+  PreviewExpenseScreen: undefined;
+ExpenseDetailScreen   : {item: ExpenseListResponse};
+  DailyPreviewScreen: {isSubmit?:boolean};
+  DailyDairyPreviewScreen: {isSubmit?:boolean};
+  WeeklyPreviewScreen: {isSubmit?:boolean};
+  NotificationScreen  : undefined;
+  ImageSelectionScreen: {project:SchedulesResponse,FromScreen?:string};
+  WeeklyDetailScreen: {type:string,list:any};
+  CreateInvoiceScreen:{project:SchedulesResponse};
+  InvoicePreviewScreen:undefined;
+  WorkFromEntryScreen:{workFromEntry:IWorkFromEntry[]};
+  ReportPdfScreen:{reportType:string,schedule:SchedulesResponse};
 };
 
 
@@ -125,7 +139,20 @@ export type JobHazardScreenProps = NativeStackScreenProps<
 export type ImageViewerProps = NativeStackScreenProps<
   RootStackParamList,
   'ImageViewer'
->;
-
+>
 export type ViewAllPhotosProps = NativeStackScreenProps<RootStackParamList,'ViewAllPhotos'>
 export type PreviewJobHazardProps = NativeStackScreenProps<RootStackParamList,'PreviewJobHazard'>
+export type CreateMileageScreenProps = NativeStackScreenProps<RootStackParamList,'CreateMileageScreen'>
+export type CreateExpenseScreenProps = NativeStackScreenProps<RootStackParamList,'CreateExpenseScreen'>
+export type PreviewExpenseScreenProps = NativeStackScreenProps<RootStackParamList,'PreviewExpenseScreen'>
+export type ExpenseDetailScreenProps = NativeStackScreenProps<RootStackParamList,'ExpenseDetailScreen'>
+export type DailyPreviewScreenProps = NativeStackScreenProps<RootStackParamList,'DailyPreviewScreen'>
+export type DailyDairyPreviewScreenProps = NativeStackScreenProps<RootStackParamList,'DailyDairyPreviewScreen'>
+export type WeeklyPreviewScreenProps = NativeStackScreenProps<RootStackParamList,'WeeklyPreviewScreen'>
+export type NotificationScreenProps = NativeStackScreenProps<RootStackParamList,'NotificationScreen'>
+export type ImageSelectionScreenProps = NativeStackScreenProps<RootStackParamList,'ImageSelectionScreen'>
+export type WeeklyDetailScreenProps = NativeStackScreenProps<RootStackParamList,'WeeklyDetailScreen'>
+export type CreateInvoiceScreenProps = NativeStackScreenProps<RootStackParamList,'CreateInvoiceScreen'>
+export type InvoicePreviewScreenProps = NativeStackScreenProps<RootStackParamList,'InvoicePreviewScreen'>
+export type WorkFromEntryScreenProps = NativeStackScreenProps<RootStackParamList,'WorkFromEntryScreen'>
+export type ReportPdfScreenProps = NativeStackScreenProps<RootStackParamList,'ReportPdfScreen'>

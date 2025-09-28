@@ -12,11 +12,17 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { Card } from "react-native-paper";
 import moment from "moment";
 import CustomText from "../../../components/CustomText/CustomText";
+import { moderateScale } from "react-native-size-matters";
+import GradientWrapper from "../../../components/Wrapper/GradientWrapper";
 
-interface DateFilterCardProps {}
-interface GetMonthDataProps {
-  year: number;
-  month: number;
+interface DateFilterCardProps {
+  onPressMonth: () => void,
+  selectedMonth: number
+  setSelectedMonth?: (month: number) => void,
+  selectedDate?: string
+  setSelectedDate: (date: string) => void
+  onPressDate:(date: string) => void
+
 }
 
 const getMonthData = (year: number, month: number): string[] => {
@@ -32,23 +38,12 @@ const getMonthData = (year: number, month: number): string[] => {
   return dates;
 };
 
-const DateFilterCard: React.FC<DateFilterCardProps> = () => {
+const DateFilterCard: React.FC<DateFilterCardProps> = ({onPressMonth,selectedMonth,selectedDate,setSelectedDate,onPressDate}) => {
   const today = new Date();
-  const [selectedMonth, setSelectedMonth] = useState(today.getMonth());
-  const [selectedDate, setSelectedDate] = useState(
-    `${today.getFullYear()}-${(today.getMonth() + 1)
-      .toString()
-      .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`
-  );
-
   const [monthDates, setMonthDates] = useState(
     getMonthData(today.getFullYear(), today.getMonth())
   );
 
-  interface GetDatesInMonthProps {
-    year: number;
-    month: number;
-  }
 
   function getDatesInMonth(year: number, month: number): string[] {
     const startDate = moment([year, month]);
@@ -67,7 +62,6 @@ const DateFilterCard: React.FC<DateFilterCardProps> = () => {
 
   useEffect(() => {
     const currentMonthDates = getDatesInMonth(today.getFullYear(), selectedMonth );
-    console.log("currentMonthDates : ", currentMonthDates);
     if (currentMonthDates && currentMonthDates.length > 0) {
       setMonthDates(currentMonthDates);
       setSelectedDate(moment().format("YYYY-MM-DD"));
@@ -76,7 +70,8 @@ const DateFilterCard: React.FC<DateFilterCardProps> = () => {
 
   return (
     <Card style={styles.calendarContainer}>
-      <TouchableOpacity style={styles.monthSelector}>
+
+      <TouchableOpacity style={styles.monthSelector} onPress={() => {onPressMonth()}}>
         <CustomText title={moment().month(selectedMonth).format("MMMM")} />
 
         <Ionicons
@@ -90,11 +85,14 @@ const DateFilterCard: React.FC<DateFilterCardProps> = () => {
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View style={styles.dateContainer}>
           {monthDates.map((dayDate, index) => (
-            <TouchableOpacity key={index} style={styles.dayContainer}>
+            <TouchableOpacity onPress={() => {
+              onPressDate(dayDate)
+              
+              }} key={index} style={[styles.dayContainer,selectedDate == dayDate && styles.selectedDateText]}>
               <Text
                 style={[
                   styles.dateText,
-                  selectedDate == dayDate && styles.selectedDateText,
+                  selectedDate == dayDate &&{color:AppColor.WHITE, textShadowColor:AppColor.WHITE, textShadowOffset:{width: 0.5, height: 0.5}, textShadowRadius:2}
                 ]}
               >
                 {dayDate.split("-")[2]}
@@ -104,6 +102,7 @@ const DateFilterCard: React.FC<DateFilterCardProps> = () => {
         </View>
       </ScrollView>
     </Card>
+
   );
 };
 
@@ -111,10 +110,10 @@ export default DateFilterCard;
 
 const styles = StyleSheet.create({
   calendarContainer: {
-    backgroundColor: AppColor.BLACK_5,
-    padding: 10,
+    backgroundColor: AppColor.PRIMARY_100,
     borderRadius: 6,
-    elevation: 1,
+    marginTop:10,
+    padding:10
   },
   monthSelector: {
     flexDirection: "row",
@@ -131,23 +130,23 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   dayContainer: {
-    alignItems: "center",
     marginHorizontal: 5,
+    borderRadius:100,
+    width:35,
+    height:35,
+    backgroundColor:AppColor.WHITE,
+    justifyContent:'center',
+    alignItems:'center'
   },
   dateText: {
-    fontSize: 15,
+    fontSize: moderateScale(15),
     fontFamily: AppFonts.Medium,
-    padding: 5,
-    backgroundColor: AppColor.WHITE,
-    borderRadius: 5,
+    borderRadius: 100,
+    color: AppColor.BLACK
   },
   selectedDateText: {
     backgroundColor: AppColor.PRIMARY,
     color: AppColor.WHITE,
-    elevation:5,
-    width: 30,
-    height: 30,
-    justifyContent:'center',
-    alignItems:'center'
+    elevation:5
   },
 });

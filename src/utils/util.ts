@@ -6,7 +6,7 @@ import * as DocumentPicker from '@react-native-documents/picker';
 export const openCamera = async () => {
   try {
     const image = await ImagePicker.openCamera({
-      cropping: true, // enable cropping
+      // cropping: true, // enable cropping
       compressImageQuality: 0.8,
       includeExif: true,
       mediaType: 'photo',

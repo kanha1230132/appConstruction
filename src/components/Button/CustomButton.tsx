@@ -33,6 +33,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
       style={[styles.button, buttonStyle, (disabled || loading) && styles.disabled]}
       activeOpacity={0.7}
       disabled={disabled || loading}
+      
     >
       <Text style={[styles.text, textStyle]}>{title}</Text>
     </TouchableOpacity>

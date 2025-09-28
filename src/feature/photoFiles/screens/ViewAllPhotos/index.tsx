@@ -56,13 +56,13 @@ const ViewAllPhotos: React.FC<ViewAllPhotosProps> = ({ route }) => {
       }
 
       // Check if WhatsApp is installed
-      const isWhatsAppInstalled = await Linking.canOpenURL(
-        "whatsapp://send?text=hello"
-      );
-      if (!isWhatsAppInstalled) {
-        showToast("WhatsApp is not installed", "warning");
-        return;
-      }
+      // const isWhatsAppInstalled = await Linking.canOpenURL(
+      //   "whatsapp://send?text=hello"
+      // );
+      // if (!isWhatsAppInstalled) {
+      //   showToast("WhatsApp is not installed", "warning");
+      //   return;
+      // }
 
       // Download all images first
       const downloadPromises = selectedPhotos.map(async (item, index) => {
@@ -186,17 +186,18 @@ const ViewAllPhotos: React.FC<ViewAllPhotosProps> = ({ route }) => {
         />
         <ScrollViewWrapper>
           <View style={{
+            width:'100%',
             flexDirection: "row",
             flexWrap: "wrap",
-            gap:10,
-            justifyContent:"space-evenly",
             marginTop:20,
-           
+    
+  
+
           }}>
  {
             Photos.map((item,index)=>{
               return(
-                <Card style={styles.imageWrapper}>
+                <Card style={[styles.imageWrapper]}>
                   <TouchableOpacity
         onLongPress={() => handleLongPress(item, index)}
         onPress={() => {
@@ -288,6 +289,7 @@ const styles = StyleSheet.create({
     width: "30%",
     borderColor: AppColor.DISABLED,
     borderRadius: 6,
+    margin:'1.666%'
   },
   photoList: {
     width: "100%",

@@ -85,7 +85,9 @@ const CreateJobHazard: React.FC<CreateJobHazardProps> = () => {
   const [toolBoxMeetingChecked, setToolBoxMeetingChecked] = useState(false);
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
-  const [OtherTextHazards, setOtherTextHazards] = useState<{activityName: string, value: string}[]>([])
+  const [OtherTextHazards, setOtherTextHazards] = useState<
+    { activityName: string; value: string }[]
+  >([]);
 
   const locationRef = useRef<any>(null);
   const projectNameRef = useRef<any>(null);
@@ -170,7 +172,7 @@ const CreateJobHazard: React.FC<CreateJobHazardProps> = () => {
       signature,
       siteOrientationChecked,
       toolBoxMeetingChecked,
-      OtherTextHazards
+      OtherTextHazards,
     };
     dispatch(updateJobHazard(data));
   };
@@ -241,8 +243,6 @@ const CreateJobHazard: React.FC<CreateJobHazardProps> = () => {
                 setSelectedActivities(tempSelectActivity);
               }}
             />
-
-
           </View>
         </Card>
 
@@ -250,28 +250,36 @@ const CreateJobHazard: React.FC<CreateJobHazardProps> = () => {
           <CustomTextInput
             placeholder="Please specify..."
             onChangeText={(text) => {
-             let tempOtherText = [...OtherTextHazards];
-             const index = tempOtherText.findIndex((item) => activeCategory  === item?.activityName);
-             if (index !== -1) {
-              tempOtherText[index].value = text;
-             } else {
-              tempOtherText.push({
-                activityName: activeCategory,
-                value: text
-              });
-             }
-             console.log("tempOtherText: ", tempOtherText)
-             setOtherTextHazards(tempOtherText);
-            } }
+              let tempOtherText = [...OtherTextHazards];
+              const index = tempOtherText.findIndex(
+                (item) => activeCategory === item?.activityName
+              );
+              if (index !== -1) {
+                tempOtherText[index].value = text;
+              } else {
+                tempOtherText.push({
+                  activityName: activeCategory,
+                  value: text,
+                });
+              }
+              console.log("tempOtherText: ", tempOtherText);
+              setOtherTextHazards(tempOtherText);
+            }}
             placeholderTextColor="#666"
             multiline
             returnKeyType="done"
             blurOnSubmit={true}
             onSubmitEditing={() => {
               Keyboard.dismiss();
-            } } textValue={OtherTextHazards.find((item) => item?.activityName === activeCategory)?.value} label={"Other"}          />
+            }}
+            textValue={
+              OtherTextHazards.find(
+                (item) => item?.activityName === activeCategory
+              )?.value
+            }
+            label={"Other"}
+          />
         ) : null}
-                                                       
       </View>
     );
   };
@@ -370,9 +378,9 @@ const CreateJobHazard: React.FC<CreateJobHazardProps> = () => {
                 multiline
                 numberOfLines={4}
                 returnKeyType="done"
-                           returnKeyLabel="Done"
-                           onSubmitEditing={Keyboard.dismiss}
-                           blurOnSubmit={true}
+                returnKeyLabel="Done"
+                onSubmitEditing={Keyboard.dismiss}
+                blurOnSubmit={true}
               />
             </View>
           </KeyboardAwareScrollView>
@@ -380,8 +388,8 @@ const CreateJobHazard: React.FC<CreateJobHazardProps> = () => {
       case 2:
         return (
           <>
-          <View>
- <ScrollView
+            <View>
+              <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={styles.categoryScrollContainer}
@@ -408,46 +416,38 @@ const CreateJobHazard: React.FC<CreateJobHazardProps> = () => {
                   </TouchableOpacity>
                 ))}
               </ScrollView>
-          </View>
-           
+            </View>
 
-          <KeyboardAwareScrollView
-            style={styles.content}
-            keyboardShouldPersistTaps="handled"
-            showsVerticalScrollIndicator={false}
-          >
-          {/* <View style={styles.tab2Container}> */}
+            <KeyboardAwareScrollView
+              style={styles.content}
+              keyboardShouldPersistTaps="handled"
+              showsVerticalScrollIndicator={false}
+            >
+              {/* <View style={styles.tab2Container}> */}
 
-          
+              <ScrollViewWrapper>
+                {activitiesList.length > 0 ? (
+                  <FlatList
+                    data={activitiesList}
+                    renderItem={renderActivities}
+                    keyExtractor={(item, index) => index.toString()}
+                    contentContainerStyle={styles.activitiesListContainer}
+                    showsVerticalScrollIndicator={false}
+                  />
+                ) : (
+                  <View style={styles.emptyStateContainer}>
+                    <Text style={styles.emptyStateText}>
+                      Select a category to view activities
+                    </Text>
+                  </View>
+                )}
 
-              
-            <ScrollViewWrapper>
-              
+                {/* <View style={{ height: 100 }} /> */}
+              </ScrollViewWrapper>
 
-              {activitiesList.length > 0 ? (
-                <FlatList
-                  data={activitiesList}
-                  renderItem={renderActivities}
-                  keyExtractor={(item, index) => index.toString()}
-                  contentContainerStyle={styles.activitiesListContainer}
-                  showsVerticalScrollIndicator={false}
-                />
-              ) : (
-                <View style={styles.emptyStateContainer}>
-                  <Text style={styles.emptyStateText}>
-                    Select a category to view activities
-                  </Text>
-                </View>
-              )}
-
-              {/* <View style={{ height: 100 }} /> */}
-            </ScrollViewWrapper>
-
-
-          {/* </View> */}
-          </KeyboardAwareScrollView>
+              {/* </View> */}
+            </KeyboardAwareScrollView>
           </>
-
         );
       case 3:
         return (
@@ -466,7 +466,7 @@ const CreateJobHazard: React.FC<CreateJobHazardProps> = () => {
                     marginBottom: 20,
                     backgroundColor: AppColor.WHITE,
                     borderWidth: 0.3,
-                    borderColor: AppColor.LIGHT_GRAY,
+                    borderColor: AppColor.BLACK,
                     marginHorizontal: 2,
                   }}
                 >
@@ -502,14 +502,15 @@ const CreateJobHazard: React.FC<CreateJobHazardProps> = () => {
 
                   <View
                     style={{
+                      width: "100%",
                       flexDirection: "row",
                       justifyContent: "space-between",
                     }}
                   >
                     <View
                       style={{
-                        flex: 1,
                         marginRight: 10,
+                        width: "20%",
                       }}
                     >
                       <Text
@@ -565,8 +566,8 @@ const CreateJobHazard: React.FC<CreateJobHazardProps> = () => {
 
                     <View
                       style={{
-                        flex: 1,
                         marginRight: 10,
+                        width: "75%",
                       }}
                     >
                       <Text
@@ -590,13 +591,13 @@ const CreateJobHazard: React.FC<CreateJobHazardProps> = () => {
                           borderWidth: 1,
                           borderColor: "#d3d3d3",
                           borderRadius: 5,
-                          overflow: "hidden",
                           backgroundColor: "#fff",
                           position: "relative",
                           flexDirection: "row",
                           alignItems: "center",
                           paddingHorizontal: 10,
                           height: 50,
+                          overflow: "scroll",
                         }}
                       >
                         <Text
@@ -605,9 +606,10 @@ const CreateJobHazard: React.FC<CreateJobHazardProps> = () => {
                             fontSize: 16,
                             color: "#000",
                             fontFamily: AppFonts.Medium,
+                            lineHeight: 50,
                           }}
                         >
-                          {task.hazard}
+                          {task.hazard || "Select Hazard"}
                           {/* {hazardOptions.find((option) => option.value == task.hazard)
                                                         ?.label || "Select Hazard"} */}
                         </Text>
@@ -686,7 +688,7 @@ const CreateJobHazard: React.FC<CreateJobHazardProps> = () => {
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
           >
-            <View style={styles.tabContent} >
+            <View style={styles.tabContent}>
               <Card
                 style={{
                   padding: 10,
@@ -745,6 +747,8 @@ const CreateJobHazard: React.FC<CreateJobHazardProps> = () => {
                 onChangeTextValue={(text) => setWorkerName(text)}
                 textValue={WorkerName}
                 label="Worker Name"
+                multiline={true}
+                numberOfLines={10}
               />
 
               <View
@@ -764,7 +768,10 @@ const CreateJobHazard: React.FC<CreateJobHazardProps> = () => {
                     alignItems: "center",
                     marginTop: 10,
                   }}
-                  onPress={() => {Keyboard.dismiss();setShowSignatureModal(true)}}
+                  onPress={() => {
+                    Keyboard.dismiss();
+                    setShowSignatureModal(true);
+                  }}
                 >
                   {signature ? (
                     <View>
@@ -879,9 +886,6 @@ const CreateJobHazard: React.FC<CreateJobHazardProps> = () => {
             handleSelect={(item) => {
               // Create a deep copy of tasks to avoid modifying the original state
               let tempTask = tasks.map((task) => ({ ...task }));
-
-              console.log("SelectionType: ", SelectionType);
-
               if (SelectionType === selectionType.severity) {
                 tempTask[SelectedIndex] = {
                   ...tempTask[SelectedIndex],
@@ -907,6 +911,7 @@ const CreateJobHazard: React.FC<CreateJobHazardProps> = () => {
           mode={selectedPickerType === typeOfPicker.date ? "date" : "time"}
           onConfirm={onDateChange}
           onCancel={() => setShowPickerModal(false)}
+          isDarkModeEnabled={false}
         />
       </SafeAreaWrapper>
       <NextPreviewButton
@@ -960,7 +965,7 @@ const styles = StyleSheet.create({
   },
   categoryScrollContainer: {
     // paddingHorizontal: moderateScale(8),
-    
+
     paddingVertical: moderateScale(8),
   },
   categoryButton: {

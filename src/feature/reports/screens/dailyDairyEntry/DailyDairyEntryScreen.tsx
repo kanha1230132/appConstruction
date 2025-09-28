@@ -11,34 +11,37 @@ import React, { useEffect, useRef, useState } from "react";
 import { DailyDairyEntryScreenProps } from "../../../../types/navigation";
 import { SafeAreaWrapper } from "../../../../components/SafeAreaWrapper/SafeAreaWrapper";
 import HeaderWithBackButton from "../../../../components/Button/HeaderWithBackButton";
-import { goBack } from "../../../../utils/NavigationUtil";
+import { goBack, navigate } from "../../../../utils/NavigationUtil";
 import { AppText } from "../../../../constants/appText";
 import ScrollViewWrapper from "../../../../components/ScrollViewWrapper/ScrollViewWrapper";
 import CircleTabs from "../../components/CircleTabs";
 import IconTextInput from "../../../../components/CustomTextInput/CustomIconTextInput";
 import CustomTextInput from "../../../../components/CustomTextInput/CustomTextInput";
-import CustomButton from "../../../../components/Button/CustomButton";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { typeOfPicker } from "../../../../utils/dateUtil";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import moment from "moment";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateDailyDairyReports } from "../../../../store/slice/Reports";
 import { AppFonts } from "../../../../themes/AppFonts";
 import { AppColor } from "../../../../themes/AppColor";
 import { moderateScale } from "react-native-size-matters";
 import { TextInput } from "react-native-paper";
-import VoiceToTextButton from "../../../../components/VoiceRecordButton/VoiceRecordButton";
 import SignatureModal from "../../../../components/Modal/SignatureModal";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { images } from "../../../../assets";
 import CustomText from "../../../../components/CustomText/CustomText";
 import CustomRadioButton from "../../../../components/Button/CustomRadioButton";
 import NextPreviewButton from "../../../../components/Button/NextPreviewButton";
+import { screenNames } from "../../../../navigation/ScreenNames";
+import { RootState } from "../../../../store/store";
+import useCreateInvoice from "../../../invoice/hooks/createInvoice.hook";
 
 const DailyDairyEntryScreen: React.FC<DailyDairyEntryScreenProps> = ({
   route,
 }) => {
+  const { UserName } = useSelector((state: RootState) => state.User);
+
   const [ActiveTab, setActiveTabs] = useState(1);
   const ownerRef = useRef<any>(null);
   const reportNumberRef = useRef<any>(null);
@@ -55,6 +58,14 @@ const DailyDairyEntryScreen: React.FC<DailyDairyEntryScreenProps> = ({
   const [Contractor, setContractor] = useState("");
   const [OwnerContact, setOwnerContact] = useState("");
   const [OwnerProjectManager, setOwnerProjectManager] = useState("");
+  const [siteInspector, setSiteInspector] = useState(UserName);
+  const [timeIn, setTimeIn] = useState("");
+  const [timeOut, setTimeOut] = useState("");
+  const {calculateTotalHours,
+     showConfirmationPopup,
+    ConfirmationPopup,
+    popupVisible,
+  } = useCreateInvoice();
   const [ActiveTabTitle, setActiveTabTitle] = useState(
     AppText.EnterProjectDetails
   );
@@ -64,25 +75,18 @@ const DailyDairyEntryScreen: React.FC<DailyDairyEntryScreenProps> = ({
   );
   const [signature, setSignature] = useState("");
   const [showSignatureModal, setShowSignatureModal] = useState(false);
-  const [selected, setSelected] = useState("option1");
 
   const [Description, setDescription] = useState("");
   const [IsChargable, setIsChargable] = useState(true);
   const dispatch = useDispatch();
 
+  const { DailyDairyReports } = useSelector(
+    (state: RootState) => state.Reports
+  );
+
   const clickOnPicker = (type: string) => {
     setSelectedPickerType(type);
     setShowPickerModal(true);
-  };
-
-  const onDateChange = (date: Date) => {
-    if (date) {
-      const formattedDate = moment(date).format("YYYY-MM-DD");
-      if (selectedPickerType === typeOfPicker.date) {
-        setSelectedDate(formattedDate);
-      }
-    }
-    setShowPickerModal(false);
   };
 
   const handleSignatureOK = (signatureBase64: string) => {
@@ -96,8 +100,8 @@ const DailyDairyEntryScreen: React.FC<DailyDairyEntryScreenProps> = ({
     if (route?.params?.project) {
       const schedule = route?.params?.project;
       setSelectedDate(moment().format("YYYY-MM-DD"));
-      setProjectName(schedule?.projectName);
-      setProjectNumber(schedule?.projectNumber);
+      setProjectName(schedule?.project_name);
+      setProjectNumber(schedule?.project_number);
       setOwner(schedule?.owner);
       setReportNumber(ReportNumber);
       setContractNumber(ContractNumber);
@@ -109,6 +113,10 @@ const DailyDairyEntryScreen: React.FC<DailyDairyEntryScreenProps> = ({
 
   const updateDetails = () => {
     Keyboard.dismiss();
+    let logos = [];
+    if (DailyDairyReports) {
+      logos = DailyDairyReports?.selectedLogo;
+    }
     const data = {
       selectedDate,
       ProjectName,
@@ -119,9 +127,16 @@ const DailyDairyEntryScreen: React.FC<DailyDairyEntryScreenProps> = ({
       Contractor,
       OwnerContact,
       OwnerProjectManager,
+      Description,
+      IsChargable,
+      signature,
+      siteInspector,
+      timeIn,
+      timeOut,
+      schedule: route?.params?.project,
+      selectedLogo: logos,
     };
     dispatch(updateDailyDairyReports(data));
-    console.log("updateDetails : ", data);
   };
 
   const clickOnTabs = (step: number) => {
@@ -132,6 +147,12 @@ const DailyDairyEntryScreen: React.FC<DailyDairyEntryScreenProps> = ({
     } else if (step === 2) {
       setActiveTabTitle(AppText.EnterDescriptiondetails);
     }
+  };
+
+  const callToPreview = () => {
+    Keyboard.dismiss();
+    updateDetails();
+    navigate(screenNames.DailyDairyPreviewScreen);
   };
 
   return (
@@ -151,271 +172,343 @@ const DailyDairyEntryScreen: React.FC<DailyDairyEntryScreenProps> = ({
         />
         <ScrollViewWrapper>
           <KeyboardAwareScrollView
-              style={styles.content}
-              keyboardShouldPersistTaps="handled"
-              showsVerticalScrollIndicator={false}
-            >
-        {ActiveTab == 1 ? (
-          <>
-            
-              <IconTextInput
-                value={selectedDate}
-                label={"Date"}
-                onChangeText={(text) => {}}
-                editable={false}
-                rightIconName={"calendar"}
-                onClickIcon={() => {
-                  clickOnPicker(typeOfPicker.date);
-                }}
-              />
+            style={styles.content}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
+            {ActiveTab == 1 ? (
+              <>
+                <IconTextInput
+                  value={selectedDate}
+                  label={"Date"}
+                  editable={false}
+                  rightIconName={"calendar"}
+                  onClickIcon={() => {
+                    clickOnPicker(typeOfPicker.date);
+                  }}
+                />
 
-              <CustomTextInput
-                onChangeTextValue={(text) => {}}
-                textValue={ProjectName}
-                label="Project Name"
-                editable={false}
-              />
+                <CustomTextInput
+                  textValue={ProjectName}
+                  label="Project Name"
+                  editable={false}
+                />
 
-              <CustomTextInput
-                onChangeTextValue={(text) => {}}
-                textValue={ProjectNumber}
-                label="Project Number"
-                editable={false}
-              />
+                <CustomTextInput
+                  textValue={ProjectNumber}
+                  label="Project No./Client PO"
+                  editable={false}
+                />
 
-              <CustomTextInput
-                ref={ownerRef}
-                onChangeTextValue={(text) => {
-                  setOwner(text);
-                }}
-                textValue={Owner}
-                label="Owner"
-                editable={false}
-                onSubmitEditing={() => reportNumberRef.current?.focus()}
-                returnKeyLabel="next"
-              />
+                <CustomTextInput
+                  ref={ownerRef}
+                  onChangeTextValue={(text) => {
+                    setOwner(text);
+                  }}
+                  textValue={Owner}
+                  label="Owner"
+                  editable={false}
+                  onSubmitEditing={() => reportNumberRef.current?.focus()}
+                  returnKeyLabel="next"
+                />
 
-              <CustomTextInput
-                ref={reportNumberRef}
-                onChangeTextValue={(text) => {
-                  setReportNumber(text);
-                }}
-                textValue={ReportNumber}
-                label="Report Number"
-                onSubmitEditing={() => contractNumberRef.current?.focus()}
-                returnKeyLabel="next"
-              />
+                <CustomTextInput
+                  ref={reportNumberRef}
+                  onChangeTextValue={(text) => {
+                    setReportNumber(text);
+                  }}
+                  textValue={ReportNumber}
+                  label="Report Number"
+                  onSubmitEditing={() => contractNumberRef.current?.focus()}
+                  returnKeyLabel="next"
+                />
 
-              <CustomTextInput
-                ref={contractNumberRef}
-                onChangeTextValue={(text) => {
-                  setContractNumber(text);
-                }}
-                textValue={ContractNumber}
-                label="Contract Number"
-                onSubmitEditing={() => contractorRef.current?.focus()}
-                returnKeyLabel="next"
-              />
+                <CustomTextInput
+                  ref={contractNumberRef}
+                  onChangeTextValue={(text) => {
+                    setContractNumber(text);
+                  }}
+                  textValue={ContractNumber}
+                  label="Contract Number"
+                  onSubmitEditing={() => contractorRef.current?.focus()}
+                  returnKeyLabel="next"
+                />
 
-              <CustomTextInput
-                ref={contractorRef}
-                onChangeTextValue={(text) => {
-                  setContractor(text);
-                }}
-                textValue={Contractor}
-                label="Contractor"
-                onSubmitEditing={() => ownerContactRef.current?.focus()}
-                returnKeyLabel="next"
-              />
+                <CustomTextInput
+                  ref={contractorRef}
+                  onChangeTextValue={(text) => {
+                    setContractor(text);
+                  }}
+                  textValue={Contractor}
+                  label="Contractor"
+                  onSubmitEditing={() => ownerContactRef.current?.focus()}
+                  returnKeyLabel="next"
+                />
 
-              <CustomTextInput
-                ref={ownerContactRef}
-                onChangeTextValue={(text) => {
-                  setOwnerContact(text);
-                }}
-                textValue={OwnerContact}
-                label="Owner Contact"
-                onSubmitEditing={() => ownerProjectManagerRef.current?.focus()}
-                returnKeyLabel="next"
-              />
+                <CustomTextInput
+                  ref={ownerContactRef}
+                  onChangeTextValue={(text) => {
+                    setOwnerContact(text);
+                  }}
+                  textValue={OwnerContact}
+                  label="Owner Contact"
+                  onSubmitEditing={() =>
+                    ownerProjectManagerRef.current?.focus()
+                  }
+                  returnKeyLabel="next"
+                />
 
-              <CustomTextInput
-                onChangeTextValue={(text) => {
-                  setOwnerProjectManager(text);
-                }}
-                textValue={OwnerProjectManager}
-                label="Owner Project Manager"
-                ref={ownerProjectManagerRef}
-                onSubmitEditing={() => Keyboard.dismiss()}
-                returnKeyLabel="done"
-              />
+                <CustomTextInput
+                  onChangeTextValue={(text) => {
+                    setOwnerProjectManager(text);
+                  }}
+                  textValue={OwnerProjectManager}
+                  label="Owner Project Manager"
+                  ref={ownerProjectManagerRef}
+                  onSubmitEditing={() => Keyboard.dismiss()}
+                  returnKeyLabel="done"
+                />
 
-            {ShowPickerModal ? (
-              <DateTimePicker
-                testID="dateTimePicker"
-                isVisible={ShowPickerModal}
-                date={selectedDate ? new Date(selectedDate) : new Date()}
-                mode={selectedPickerType == typeOfPicker.date ? "date" : "time"}
-                onConfirm={(date) => onDateChange(date)}
-                onCancel={() => setShowPickerModal(false)}
-                textColor="black" // Force text color (iOS 14+)
-                themeVariant="light"
-              />
-            ) : null}
-          </>
-        ) : null}
-
-        {ActiveTab == 2 ? (
-          <>
-            <CustomText title="Description" fontFamily={AppFonts.Medium} />
-            <TextInput
-              mode="outlined" // or 'flat' based on your design preference
-              style={[styles.textArea]}
-              label={"Add Project Description"}
-              multiline={true}
-              numberOfLines={6} // Set minimum number of lines
-              value={""}
-              onChangeText={(text) => {}}
-              returnKeyType="done"
-              activeOutlineColor={AppColor.PRIMARY}
-              blurOnSubmit={true}
-              onSubmitEditing={() => Keyboard.dismiss()}
-            />
-
-            <VoiceToTextButton setDescription={setDescription} />
-            <CustomText title="Signature" fontFamily={AppFonts.Medium} />
-
-            <View
-              style={{
-                borderColor: "#ddd",
-                borderWidth: 1,
-                marginBottom: 20,
-                backgroundColor: "white",
-                borderRadius: 6,
-                minHeight: 45,
-              }}
-            >
-              <TouchableOpacity
-                style={{
-                  padding: 10,
-                  borderRadius: 5,
-                  alignItems: "center",
-                  marginTop: 10,
-                }}
-                onPress={() => setShowSignatureModal(true)}
-              >
-                {signature ? (
-                  <View>
-                    <Image
-                      resizeMode="contain"
-                      source={{ uri: signature }}
-                      style={{
-                        width: 200,
-                        borderWidth: 0.5,
-                        borderColor: "#00000039",
-                        height: 150,
-                      }}
+                <CustomTextInput
+                  onChangeTextValue={(text) => setSiteInspector(text)}
+                  textValue={siteInspector}
+                  label="Site Inspector"
+                  editable={false}
+                />
+                <View style={styles.formGroupRow}>
+                  {/* Inspector In Time */}
+                  <View style={styles.formGroupHalf}>
+                    <IconTextInput
+                      rightIconName={"clock"}
+                      onClickIcon={() => clickOnPicker(typeOfPicker.timeIn)}
+                      value={timeIn}
+                      label="Time In"
+                      editable={false}
+                      inputFontSize={moderateScale(15)}
                     />
+                  </View>
 
-                    <TouchableOpacity
-                      onPress={() => {
-                        // setDairyEntry({ ...dairyEntry, signature: "" })
-                        if (signature) {
-                          setSignature("");
+                  {/* Inspector Out Time */}
+                  <View style={styles.formGroupHalf}>
+                    <IconTextInput
+                      rightIconName={"clock"}
+                      onClickIcon={() => clickOnPicker(typeOfPicker.timeOut)}
+                      value={timeOut}
+                      label="Time Out"
+                      editable={false}
+                      inputFontSize={moderateScale(15)}
+                    />
+                  </View>
+                </View>
+
+                {ShowPickerModal ? (
+                  <DateTimePicker
+                    testID="dateTimePicker"
+                    isVisible={ShowPickerModal}
+                    mode={
+                      selectedPickerType == typeOfPicker.date ? "date" : "time"
+                    }
+                    date={
+                      selectedPickerType == typeOfPicker.date
+                        ? selectedDate
+                          ? new Date(selectedDate)
+                          : new Date()
+                        : selectedPickerType == typeOfPicker.timeIn
+                        ? timeIn
+                          ? moment(timeIn, "hh:mm A").toDate()
+                          : new Date()
+                        : selectedPickerType == typeOfPicker.timeOut
+                        ? timeOut
+                          ? moment(timeOut,"hh:mm A").toDate()
+                          : new Date()
+                        : new Date()
+                    }
+                    onConfirm={(date) => {
+                      if (date) {
+                        const formattedDate = moment(date).format(
+                          selectedPickerType == typeOfPicker.date
+                            ? "YYYY-MM-DD"
+                            : "hh:mm A"
+                        );
+                        if (selectedPickerType === typeOfPicker.date) {
+                          setSelectedDate(formattedDate);
                         }
-                      }}
-                      style={{
-                        position: "absolute",
-                        top: 5,
-                        right: 5,
-                        zIndex: 6,
-                      }}
-                    >
-                      <Ionicons name="close" size={24} color="red" />
-                    </TouchableOpacity>
-                  </View>
-                ) : (
-                  <View
-                    style={{
-                      gap: 20,
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      marginTop: -10,
+                        if (selectedPickerType === typeOfPicker.timeIn) {
+                          setTimeIn(formattedDate);
+                        }
+                        if (selectedPickerType === typeOfPicker.timeOut) {
+                          // setTimeOut(formattedDate);
+                            const totalHours = calculateTotalHours(timeIn,formattedDate);
+                            if(totalHours){
+                              console.log("totalHours: ", totalHours)
+                              setTimeOut(formattedDate);
+                            }
+                        }
+                      }
+                      setShowPickerModal(false);
                     }}
+                    onCancel={() => setShowPickerModal(false)}
+                    textColor="black" // Force text color (iOS 14+)
+                    themeVariant="light"
+                    isDarkModeEnabled={false}
+                  />
+                ) : null}
+
+                    {
+          popupVisible ? (
+            <ConfirmationPopup />
+          ) : null
+        }
+              </>
+            ) : null}
+
+            {ActiveTab == 2 ? (
+              <>
+                <CustomText title="Description" fontFamily={AppFonts.Medium} />
+                <TextInput
+                  mode="outlined" // or 'flat' based on your design preference
+                  style={[styles.textArea]}
+                  label={"Add Project Description"}
+                  multiline={true}
+                  numberOfLines={6} // Set minimum number of lines
+                  value={Description}
+                  onChangeText={(text) => setDescription(text)}
+                  returnKeyType="done"
+                  activeOutlineColor={AppColor.PRIMARY}
+                  blurOnSubmit={false}
+                  onSubmitEditing={() => Keyboard.dismiss()}
+                />
+
+                <CustomText title="Signature" fontFamily={AppFonts.Medium} />
+
+                <View
+                  style={{
+                    borderColor: "#ddd",
+                    borderWidth: 1,
+                    marginBottom: 20,
+                    backgroundColor: "white",
+                    borderRadius: 6,
+                    minHeight: 45,
+                  }}
+                >
+                  <TouchableOpacity
+                    style={{
+                      padding: 10,
+                      borderRadius: 5,
+                      alignItems: "center",
+                      marginTop: 10,
+                    }}
+                    onPress={() => setShowSignatureModal(true)}
                   >
-                    <Image
-                      resizeMode="contain"
-                      source={images.SIGNATURE}
-                      style={{
-                        width: 35,
-                        height: 35,
-                      }}
-                    />
-                    <Text
-                      style={{
-                        color: AppColor.PRIMARY,
-                        fontSize: moderateScale(16),
-                        marginLeft: 5,
-                        fontFamily: AppFonts.Medium,
-                        marginTop: 5,
-                      }}
-                    >
-                      Add Signature
-                    </Text>
-                  </View>
+                    {signature ? (
+                      <View>
+                        <Image
+                          resizeMode="contain"
+                          source={{ uri: signature }}
+                          style={{
+                            width: 200,
+                            borderWidth: 0.5,
+                            borderColor: "#00000039",
+                            height: 150,
+                          }}
+                        />
+
+                        <TouchableOpacity
+                          onPress={() => {
+                            if (signature) {
+                              setSignature("");
+                            }
+                          }}
+                          style={{
+                            position: "absolute",
+                            top: 5,
+                            right: 5,
+                            zIndex: 6,
+                          }}
+                        >
+                          <Ionicons name="close" size={24} color="red" />
+                        </TouchableOpacity>
+                      </View>
+                    ) : (
+                      <View
+                        style={{
+                          gap: 20,
+                          flexDirection: "row",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          marginTop: -10,
+                        }}
+                      >
+                        <Image
+                          resizeMode="contain"
+                          source={images.SIGNATURE}
+                          style={{
+                            width: 35,
+                            height: 35,
+                          }}
+                        />
+                        <Text
+                          style={{
+                            color: AppColor.PRIMARY,
+                            fontSize: moderateScale(16),
+                            marginLeft: 5,
+                            fontFamily: AppFonts.Medium,
+                            marginTop: 5,
+                          }}
+                        >
+                          Add Signature
+                        </Text>
+                      </View>
+                    )}
+                  </TouchableOpacity>
+                </View>
+
+                <CustomText title="Chargeable" fontFamily={AppFonts.Medium} />
+
+                <View style={styles.container}>
+                  <CustomRadioButton
+                    label="Yes"
+                    value="option1"
+                    status={IsChargable ? "checked" : "unchecked"}
+                    onPress={() => setIsChargable(true)}
+                  />
+                  <CustomRadioButton
+                    label="No"
+                    value="option2"
+                    status={!IsChargable ? "checked" : "unchecked"}
+                    onPress={() => setIsChargable(false)}
+                  />
+                </View>
+
+                {showSignatureModal && (
+                  <SignatureModal
+                    handleSignatureOK={handleSignatureOK}
+                    showSignatureModal={showSignatureModal}
+                    onclose={() => {
+                      setShowSignatureModal(false);
+                    }}
+                  />
                 )}
-              </TouchableOpacity>
-            </View>
+              </>
+            ) : null}
+          </KeyboardAwareScrollView>
+        </ScrollViewWrapper>
 
-            <CustomText title="Chargable" fontFamily={AppFonts.Medium} />
-
-            <View style={styles.container}>
-              <CustomRadioButton
-                label="Yes"
-                value="option1"
-                status={IsChargable ? "checked" : "unchecked"}
-                onPress={() => setIsChargable(true)}
-              />
-              <CustomRadioButton
-                label="No"
-                value="option2"
-                status={!IsChargable ? "checked" : "unchecked"}
-                onPress={() => setIsChargable(false)}
-              />
-            </View>
-
-
- 
-
-            {showSignatureModal && (
-              <SignatureModal
-                handleSignatureOK={handleSignatureOK}
-                showSignatureModal={showSignatureModal}
-                onclose={() => {
-                  setShowSignatureModal(false);
-                }}
-              />
-            )}
-          </>
-        ) : null}
-        </KeyboardAwareScrollView>
-          </ScrollViewWrapper>
-
+        
       </SafeAreaWrapper>
 
-       <NextPreviewButton
+      <NextPreviewButton
         ActiveTab={ActiveTab}
         clickOnPrevious={() => {
           if (ActiveTab > 1) {
             clickOnTabs(ActiveTab - 1);
           } else {
-            // navigation.goBack();
+            goBack();
           }
         }}
         clickOnNext={() => {
           if (ActiveTab == 2) {
-            // callToPreview();
+            callToPreview();
           } else {
             clickOnTabs(ActiveTab + 1);
           }
@@ -453,5 +546,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingHorizontal: 20,
     gap: 20,
+  },
+  formGroupRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  formGroupHalf: {
+    width: "48%",
   },
 });

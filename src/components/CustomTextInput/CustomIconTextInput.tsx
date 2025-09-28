@@ -29,13 +29,13 @@ const IconTextInput = ({
 }: IconTextInputInterface) => {
   return (
     <TextInput
-      style={{ 
-        color: AppColor.BLACK, fontSize: inputFontSize,backgroundColor:AppColor.WHITE,
-    marginBottom: 15,
-
-       }}
+      style={{
+        color: AppColor.BLACK,
+        fontSize: inputFontSize,
+        backgroundColor: AppColor.WHITE,
+        marginBottom: 15,
+      }}
       value={value}
-      
       editable={editable}
       onChangeText={onChangeText}
       label={label}
@@ -43,21 +43,24 @@ const IconTextInput = ({
       placeholderTextColor={AppColor.BLACK_60}
       returnKeyType="done"
       contentStyle={{
-        color: AppColor.BLACK
-        ,
-                        fontFamily: AppFonts.Regular,
-        
+        color: AppColor.BLACK,
+        fontFamily: AppFonts.Regular,
       }}
-     right={ <TextInput.Icon
-              icon={rightIconName}
-              onPress={onClickIcon}
-              color={AppColor.PRIMARY}
-            />}
+      right={
+        <TextInput.Icon
+          icon={rightIconName}
+          onPress={onClickIcon}
+          color={AppColor.PRIMARY}
+        />
+      }
       mode="outlined"
       outlineColor={AppColor.BLACK_60}
-      
-      
-      
+      theme={{
+        colors: {
+          primary: AppColor.PRIMARY, // active label color (when focused)
+          onSurfaceVariant: AppColor.BLACK, // default label color (when not focused)
+        },
+      }}
       activeOutlineColor={AppColor.PRIMARY}
       {...props}
     />

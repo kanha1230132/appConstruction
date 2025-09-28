@@ -39,14 +39,23 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME) needs access to your camera</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>We need your location to provide location-based services</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>We need access to your microphone for speech recognition.</string>
+	
+
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>$(PRODUCT_NAME) needs access to your photo library</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>We need access to your speech recognition for voice input.</string>
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>We need your location to show nearby data.</string>
+<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+<string>We need your location to show nearby data.</string>
+<key>io.flutter.embedded_views_preview</key>
+<true/>
+<key>NSMicrophoneUsageDescription</key>
+<string>This app uses the microphone to convert speech to text.</string>
+
+
+
 	<key>RCTNewArchEnabled</key>
 	<true/>
 	<key>UIAppFonts</key>

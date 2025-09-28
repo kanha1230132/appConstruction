@@ -4,6 +4,7 @@ export enum AppColor {
   WHITE = "#ffffff",
   APPROVE = "#008000",
   REJECT = "#FF0000",
+  REJECT_50 = "#e74c3c",
   PENDING = "#FFA500",
   DISABLED = "#aaaaaa",
   LIGHT_GRAY = "#F5F5F5",
@@ -20,6 +21,8 @@ export enum AppColor {
   BLACK_5=   '#f2f2f2',
   GREY_F9=  '#F9F9F9',
 
+  BORDER_COLOR='#e0e0e0',
+
   PRIMARY_900= '#0e3f7f',
   PRIMARY_800= '#104e99',
   PRIMARY_700= '#155db2',
@@ -30,6 +33,7 @@ export enum AppColor {
   PRIMARY_200= '#99bce2',
   PRIMARY_100= '#b5cfec',
   PRIMARY_50=  '#d1e3f5',
+  PRIMARY_TRANSPARENT = "#155db230",
   
 }
 

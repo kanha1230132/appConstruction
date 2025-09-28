@@ -1,6 +1,6 @@
 
 export const endPoints = {
-    BASE_URL: "http://35.182.106.152:8000/api",
+    BASE_URL: "http://35.182.106.152:8000/app/api",
     // BASE_URL: "http://35.182.106.152:3000/api",
     URL_GET_ALL_PROJECTS: "/schedules/getScheduleData",
     URL_GET_WEEKLY_SCHEDULES: "/projects/weekly-schedules",
@@ -12,7 +12,7 @@ export const endPoints = {
     URL_GET_EXPENSES: '/expense/getExpense',
     URL_GET_EXPENSES_APPROVALS: '/expense/approvals',
     URL_UPLOAD_ATTACHMENTS: '/upload/uploadAttachment',
-    URL_CREATE_WEEKLY_REPORT: '/weekly/weekly-entry',
+    URL_CREATE_WEEKLY_REPORT: '/weekly/createWeeklyEntry',
     URL_GET_INVOICE_WEEKLY_REPORT: '/weekly/getWeeklyReport',
     URL_CREATE_INVOICE: '/invoices/create-invoice',
     URL_ADD_COMPANY_EMAIL: '/auth/addUser',
@@ -35,7 +35,6 @@ export const endPoints = {
     URL_JOB_HAZARD : '/jha/job-hazard',
     URL_UPDATE_LOCATION :'/auth/update-location',
     URL_EXPENSE_APPROVE: '/expense/approve',
-    URL_CREATE_EXPENSE: '/expense/addExpense',
     URL_NOTIFICATIONS:'/notification/getNotifications',
 
     URL_UPDATE_BOSS_PERMISSION: '/auth/updateBossPermission',
@@ -50,6 +49,25 @@ export const endPoints = {
     URL_DELETE_LOGO: '/logos/deleteLogo',
     URL_DELETE_PHOTO_FILE: '/photos/deletePhotoFiles',
     URL_SAVE_JOB_HAZARD: '/jobHazard/saveJobHazard',
+    URL_GET_MILEAGE_HISTORY: '/mileage/getUserMileage',
+    URL_CREATE_MILEAGE: '/mileage/addUserMileage',
+    URL_CREATE_EXPENSE: '/expense/addExpense',
+    URL_GET_EXPENSE: '/expense/getExpense',
+    URL_UPDATE_STATUS: '/expense/updateExpenseItemStatus',
+    
+    URL_CREATE_DAILY_DAIRY_REPORT : '/diary/createDailyDiary',
+    URL_CREATE_DAILY_ENTRY_REPORT : '/daily/createDailyEntry',
+    URL_GET_NOTIFICATION:'/notification/getNotifications',
+    URL_UPDATE_NOTIFICATION_STATUS:'/notification/updateNotificationStatus',
+
+    URL_GET_WEEKLY_REPORT: '/weekly/getDailyDiaryAndEntryUserDetails',
+    URL_CREATE_INOICE: '/invoices/createInvoice',
+    URL_GENERATE_INOVOICE_EXCEL: '/invoices/generateInvoiceExcel',
+    URL_GET_DAILY_DIARY_ENTRY: '/diary/getDailyDiary',
+    URL_GET_DAILY_PDF_ENTRY: '/diary/getDailyEntry',
+    URL_GET_WEEKLY_PDF_REPORT: '/weekly/getWeeklyReport',
+
+
     
 
 }

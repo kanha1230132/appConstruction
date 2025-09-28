@@ -9,7 +9,7 @@ import {
 import React, { use, useEffect, useState } from "react";
 import { SafeAreaWrapper } from "../../components/SafeAreaWrapper/SafeAreaWrapper";
 import { HomeScreenProps } from "../../types/navigation";
-import { DrawerActions, useIsFocused } from "@react-navigation/native";
+import { DrawerActions, useIsFocused, useNavigation } from "@react-navigation/native";
 import { images } from "../../assets";
 import { getLocation } from "../../utils/Location";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,16 +23,16 @@ import { navigate } from "../../utils/NavigationUtil";
 import { screenNames } from "../../navigation/ScreenNames";
 import { ScreenType } from "../../types/screenTypes";
 import RestClient from "../../api/restClient";
-import { BannerInfo, GetWeatherResponse } from "../../api/apiInterface";
+import { BannerInfo, GetWeatherResponse, NotificationRespionse } from "../../api/apiInterface";
 import { moderateScale } from "react-native-size-matters";
 import CustomText from "../../components/CustomText/CustomText";
 import BannerSlider from "./components/BannerSlider";
 import ScrollViewWrapper from "../../components/ScrollViewWrapper/ScrollViewWrapper";
 import ActivityLoader from "../../components/Loader/ActivityLoader";
-import { updateUserLocation } from "../../store/slice/UserSlice";
+import { updateNoficaitions, updateUserLocation } from "../../store/slice/UserSlice";
 
-const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
-  const { UserId,UserLocation} = useSelector((state: RootState) => state.User);
+const HomeScreen: React.FC<HomeScreenProps> = ({navigation  }) => {
+  const {UserLocation} = useSelector((state: RootState) => state.User);
   const [isLoading, setIsLoading] = useState(false);
   const [weatherData, setWeatherData] = useState({
     city: "Fetching Location...",
@@ -44,18 +44,26 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   });
 
   const [BannerImages, setBannerImages] = useState<BannerInfo[]>([]);
-  const [IsBannerLoading, setIsBannerLoading] = useState(false)
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
+  const [notificationCount, setNotificationCount] = useState(0)
+// const navigation = useNavigation()
+  useEffect(() => {
+    if(isFocused){
+       getNotifications();
+    }
+   
+  }, [isFocused]);
 
   useEffect(() => {
+    getNotifications();
       getWeatherData();
   }, []);
 
+
+  
   useEffect(() => {
-    console.log("UserLocation : ",UserLocation)
     if (UserLocation && isFocused) {
-      console.log("one ----->")
       setWeatherData(UserLocation);
       setBannerImages(UserLocation.bannerInfo)
     }
@@ -64,7 +72,6 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   const getWeatherData = async () => {
     {
       try {
-        // setIsLoading(true);
         const restClient = new RestClient();
         const location = await getLocation();
         if (location) {
@@ -73,7 +80,6 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
             longitude: location?.longitude,
           });
 
-          console.log("response : ", response);
           if (response && typeof response !== "string") {
             const output: GetWeatherResponse = response.data;
             const userLocation  = {
@@ -98,6 +104,25 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
       } finally {
         setIsLoading(false);
       }
+    }
+  };
+
+    const getNotifications = async () => {
+    try {
+      const restClient = new RestClient();
+      const response = await restClient.getNotifications();
+      if (response && typeof response !== "string") {
+        const output:NotificationRespionse[] = response.data;
+        let unreadCount = 0;
+        for (const notification of output) {
+          if(!notification.is_read){
+            unreadCount++;
+          }
+        }
+        setNotificationCount(unreadCount);
+      
+      } 
+    } catch (error) {
     }
   };
 
@@ -134,12 +159,27 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
             Home
           </Text>
 
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity onPress={() => {
+            navigate(screenNames.NotificationScreen);
+          }}>
             <MaterialIcons
               name={"notifications"}
               size={33}
-              color={AppColor.BLACK}
+              color={AppColor.PRIMARY}
             />
+            {
+              notificationCount === 0 ? null :
+               <View style={{
+              width: 20, height: 20,
+ position: "absolute", top: -5, right: -3,
+ backgroundColor: AppColor.REJECT_50,borderRadius:100,
+ justifyContent:"center",
+            }}>
+            <CustomText  fontSize={moderateScale(8)} style={{padding:3,alignItems:"center",alignSelf:"center"}} color={AppColor.WHITE} title={notificationCount.toString()} />
+
+            </View>
+            }
+           
           </TouchableOpacity>
         </View>
         <ScrollViewWrapper>

@@ -27,32 +27,36 @@ import { AppText } from "../../constants/appText";
 import Divider from "../components/Divider";
 import useToastHook from "../../hooks/toast";
 import RestClient from "../../api/restClient";
+import { useNavigation } from "@react-navigation/native";
+import { ScreenType } from "../../types/screenTypes";
 
 export interface CustomDrawerProps {
   navigation: any;
 }
 
 export default function CustomDrawer(props: CustomDrawerProps) {
-  const { UserName, UserEmail,IsBoss } = useSelector((state: RootState) => state.User);
+  const { UserName, UserEmail, IsBoss } = useSelector(
+    (state: RootState) => state.User
+  );
   const { showConfirmationPopup, ConfirmationPopup, popupVisible } =
     useConfirmationPopup();
-    const {showToast} = useToastHook();
+  const { showToast } = useToastHook();
 
   const onToggleSwitch = async (value: boolean) => {
     const restClient = new RestClient();
     const response = await restClient.updateBossPermission(value);
-    if(response && typeof response != "string"){
-      showToast(response.message,'success');
-      dispatch(userIsBoss(value))
+    if (response && typeof response != "string") {
+      showToast(response.message, "success");
+      dispatch(userIsBoss(value));
       return;
     }
-    showToast(response,'success');
+    showToast(response, "success");
   };
   const dispatch = useDispatch();
 
   const comingSoon = () => {
     showToast(AppText.ComingSoon, "normal");
-  }
+  };
 
   const callToLogout = async () => {
     props.navigation.closeDrawer();
@@ -166,7 +170,6 @@ export default function CustomDrawer(props: CustomDrawerProps) {
                 icon={"person-add-alt-1"}
               />
               <Divider />
-             
             </>
           ) : null}
 
@@ -225,7 +228,21 @@ export default function CustomDrawer(props: CustomDrawerProps) {
           />
           <Divider />
 
-          <TabButton label={"Help"} onPress={() => comingSoon()} icon={"help"} />
+          <TabButton
+            label={"Help"}
+            onPress={() => comingSoon()}
+            icon={"help"}
+          />
+          <Divider />
+          <TabButton
+            label={"Share Report"}
+            onPress={() =>
+              navigate(screenNames.ScheduleListScreen, {
+                type: ScreenType.PDF,
+              })
+            }
+            icon={"picture-as-pdf"}
+          />
           <Divider />
         </ScrollView>
       </View>
